@@ -225,15 +225,20 @@
 
 <style>
 .logo-image {
-    height: 100px; /* Dostosuj rozmiar */
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+    max-height: 120px; /* Jeśli chcemy kontrolować rozmiar */
     width: auto;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
 }
 
+.logo-image:hover {
+    transform: scale(1.03);
+}
+
+/* Responsywność logo */
 @media (max-width: 480px) {
     .logo-image {
-        height: 80px;
+        max-height: 80px;
     }
 }
 </style>
