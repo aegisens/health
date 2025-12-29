@@ -216,50 +216,53 @@
     </style>
 </head>
 <body>
-    <section class="hero" style="min-height: 90vh; display: flex; align-items: center; padding: 4rem 2rem; background: linear-gradient(135deg, #0a0e17 0%, #1a1b2e 100%); color: white; position: relative; overflow: hidden;">
-    <div style="position: absolute; top: -50%; right: -30%; width: 80%; height: 200%; background: radial-gradient(circle, rgba(159, 122, 234, 0.07) 0%, transparent 70%); z-index: 0;"></div>
-    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1;">
-        <!-- LEWA KOLUMNA - TEKST -->
-        <div>
-            <h1 style="font-size: 3.5rem; font-weight: 800; line-height: 1.1; color: #e2e8f0; margin-bottom: 2rem; letter-spacing: -0.5px;">
-                An AI that <span style="color: #9f7aea;">listens to your voice</span><br>
-                and understands your <span style="color: #00d4ff;">hormonal rhythms</span>.
-            </h1>
-            <p style="font-size: 1.5rem; line-height: 1.6; color: #cbd5e0; margin-bottom: 3rem;">
-                Steady, reliable support through <strong>every phase of life</strong><br>
-                and <strong>changing day</strong> — so you don’t have to figure it all out alone.
-            </p>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                <a href="#waitlist" style="display: inline-block; background: linear-gradient(90deg, #9f7aea 0%, #00d4ff 100%); color: white; padding: 1.2rem 3rem; font-size: 1.2rem; font-weight: bold; border-radius: 50px; text-decoration: none; box-shadow: 0 6px 25px rgba(159, 122, 234, 0.4); transition: transform 0.3s, box-shadow 0.3s;">
-                    Join the Waitlist for Empathetic Support →
-                </a>
-                <a href="#how-it-works" style="display: inline-block; border: 2px solid #4a5568; color: #cbd5e0; padding: 1.2rem 2.5rem; font-size: 1.2rem; font-weight: 600; border-radius: 50px; text-decoration: none; transition: all 0.3s;">
-                    How It Works
-                </a>
-            </div>
-            <p style="color: #718096; font-size: 0.95rem; margin-top: 1.5rem;">
-                Be among the first to experience health that <em>senses</em> you.
-            </p>
+    <div class="container">
+        <div class="logo">
+            <h1>AEGISENS</h1>
+            <div class="subtitle">Health That Senses You</div>
         </div>
-        <!-- PRAWA KOLUMNA - FORMULARZ -->
-        <div style="background: rgba(26, 32, 44, 0.7); backdrop-filter: blur(10px); border-radius: 20px; padding: 3rem; border: 1px solid #2d3748; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);">
-            <div id="waitlist" style="text-align: center;">
-                <div style="font-size: 1.8rem; font-weight: bold; color: #e2e8f0; margin-bottom: 1rem;">✨ Join Our Private Beta</div>
-                <p style="color: #a0aec0; margin-bottom: 2rem;">Limited spots for health pioneers.</p>
-                <!-- TYMCZASOWY FORMULARZ-ATRAPA -->
-                <form id="waitlist-form" style="display: flex; flex-direction: column; gap: 1rem;" onsubmit="event.preventDefault(); alert('Dziękujemy! Formularz wkrótce aktywny. Tymczasowo zapisz się na: aegisenshealth@gmail.com');">
-                    <input type="email" name="EMAIL" placeholder="Your best email address" required style="padding: 1rem; border-radius: 12px; border: 1px solid #4a5568; background: #2d3748; color: white; font-size: 1rem;">
-                    <button type="submit" style="background: #9f7aea; color: white; border: none; padding: 1rem; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: background 0.3s;">
-                        Secure My Spot
-                    </button>
-                </form>
-                <p style="color: #718096; font-size: 0.9rem; margin-top: 1.5rem;">
-                    ✅ No spam. 🔒 Privacy-first.
-                </p>
+
+        <div class="main-content">
+            <div class="coming-soon">
+                <h2>Coming Soon</h2>
+                <p>Healt That Senses You</p>
             </div>
-        </div>
-    </div>
-</section>
+
+<div class="language-switcher">
+    <button onclick="changeLanguage('pl')">🇵🇱 PL</button>
+    <button onclick="changeLanguage('en')">🇺🇸 EN</button>
+    <button onclick="changeLanguage('es')">🇪🇸 ES</button>
+    <button onclick="changeLanguage('de')">🇩🇪 DE</button>
+</div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🧠</div>
+                    <div class="feature-text">
+                        <h3>Mind & Body Connection</h3>
+                        <p>Understanding the complete picture of your health</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">❤️</div>
+                    <div class="feature-text">
+                        <h3>Empathetic AI</h3>
+                        <p>Technology that truly listens and understands</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-text">
+                        <h3>Holistic Protection</h3>
+                        <p>Caring for your complete wellbeing</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="launch-countdown">
+                <div class="countdown-text">Launching our revolution in</div>
+                <div class="countdown-timer" id="countdown">00:00:00</div>
+            </div>
 
 <section class="future-vision">
     <h3 class="vision-title">🚀 The Aegisens Vision</h3>
