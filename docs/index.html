@@ -1,674 +1,700 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aegisens - Health That Senses You</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            color: white;
-        }
-
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .logo h1 {
-            font-size: 2.5em;
-            font-weight: 300;
-            letter-spacing: 3px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .logo .subtitle {
-            font-size: 1.1em;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-
-        .main-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .coming-soon {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .coming-soon h2 {
-            font-size: 1.8em;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-
-        .coming-soon p {
-            opacity: 0.8;
-            line-height: 1.6;
-        }
-
-        .features {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .feature {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            transition: transform 0.3s ease;
-        }
-
-        .feature:hover {
-            transform: translateX(10px);
-        }
-
-        .feature-icon {
-            font-size: 1.5em;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-        }
-
-        .feature-text h3 {
-            font-size: 1.1em;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .feature-text p {
-            font-size: 0.9em;
-            opacity: 0.8;
-        }
-
-        .launch-countdown {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .countdown-text {
-            font-size: 1.1em;
-            margin-bottom: 15px;
-            opacity: 0.9;
-        }
-
-        .countdown-timer {
-            font-size: 2em;
-            font-weight: 200;
-            letter-spacing: 2px;
-        }
-
-        .cta-button {
-            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            color: white;
-            font-size: 1.1em;
-            font-weight: 500;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            opacity: 0.7;
-            font-size: 0.9em;
-        }
-
-        .tech-badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-size: 0.8em;
-            margin-top: 10px;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .logo h1 {
-                font-size: 2em;
-            }
-            
-            .main-content {
-                padding: 20px;
-            }
-        }
-.language-switcher {
-    text-align: center;
-    margin: 20px 0 30px 0;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegisens - Health That Senses You</title>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
 }
 
-.language-switcher button {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    padding: 10px 20px;
-    margin: 0 8px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: all 0.3s ease;
-    font-weight: 500;
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+color: white;
 }
 
-.language-switcher button:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+.container {
+max-width: 400px;
+margin: 0 auto;
+padding: 20px;
+flex: 1;
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+
+.logo {
+text-align: center;
+margin-bottom: 40px;
+}
+
+.logo h1 {
+font-size: 2.5em;
+font-weight: 300;
+letter-spacing: 3px;
+margin-bottom: 10px;
+text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.logo .subtitle {
+font-size: 1.1em;
+opacity: 0.9;
+font-weight: 300;
+}
+
+.main-content {
+background: rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(10px);
+border-radius: 20px;
+padding: 30px;
+box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.coming-soon {
+text-align: center;
+margin-bottom: 30px;
+}
+
+.coming-soon h2 {
+font-size: 1.8em;
+margin-bottom: 10px;
+font-weight: 300;
+}
+
+.coming-soon p {
+opacity: 0.8;
+line-height: 1.6;
+}
+
+.features {
+display: flex;
+flex-direction: column;
+gap: 15px;
+margin-bottom: 30px;
+}
+
+.feature {
+display: flex;
+align-items: center;
+gap: 15px;
+padding: 15px;
+background: rgba(255, 255, 255, 0.1);
+border-radius: 12px;
+transition: transform 0.3s ease;
+}
+
+.feature:hover {
+transform: translateX(10px);
+}
+
+.feature-icon {
+font-size: 1.5em;
+width: 40px;
+height: 40px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: rgba(255, 255, 255, 0.2);
+border-radius: 50%;
+}
+
+.feature-text h3 {
+font-size: 1.1em;
+margin-bottom: 5px;
+font-weight: 500;
+}
+
+.feature-text p {
+font-size: 0.9em;
+opacity: 0.8;
+}
+
+.launch-countdown {
+text-align: center;
+margin-bottom: 30px;
+}
+
+.countdown-text {
+font-size: 1.1em;
+margin-bottom: 15px;
+opacity: 0.9;
+}
+
+.countdown-timer {
+font-size: 2em;
+font-weight: 200;
+letter-spacing: 2px;
+}
+
+.cta-button {
+background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+border: none;
+padding: 15px 30px;
+border-radius: 25px;
+color: white;
+font-size: 1.1em;
+font-weight: 500;
+cursor: pointer;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+width: 100%;
+box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+
+.cta-button:hover {
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+}
+
+.footer {
+text-align: center;
+margin-top: 40px;
+opacity: 0.7;
+font-size: 0.9em;
+}
+
+.tech-badge {
+display: inline-block;
+background: rgba(255, 255, 255, 0.2);
+padding: 5px 15px;
+border-radius: 15px;
+font-size: 0.8em;
+margin-top: 10px;
 }
 
 @media (max-width: 480px) {
-    .language-switcher button {
-        padding: 8px 15px;
-        margin: 0 5px;
-        font-size: 0.85em;
-    }
+.container {
+padding: 15px;
 }
-    </style>
+
+.logo h1 {
+font-size: 2em;
+}
+
+.main-content {
+padding: 20px;
+}
+}
+.language-switcher {
+text-align: center;
+margin: 20px 0 30px 0;
+}
+
+.language-switcher button {
+background: rgba(255, 255, 255, 0.15);
+border: 1px solid rgba(255, 255, 255, 0.3);
+color: white;
+padding: 10px 20px;
+margin: 0 8px;
+border-radius: 25px;
+cursor: pointer;
+font-size: 0.9em;
+transition: all 0.3s ease;
+font-weight: 500;
+}
+
+.language-switcher button:hover {
+background: rgba(255, 255, 255, 0.25);
+transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 480px) {
+.language-switcher button {
+padding: 8px 15px;
+margin: 0 5px;
+font-size: 0.85em;
+}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <h1>AEGISENS</h1>
-            <div class="subtitle">Health That Senses You</div>
-        </div>
-
-        <div class="main-content">
-            <div class="coming-soon">
-                <h2>Coming Soon</h2>
-                <p>Healt That Senses You</p>
-            </div>
-
-<div class="language-switcher">
-    <button onclick="changeLanguage('pl')">🇵🇱 PL</button>
-    <button onclick="changeLanguage('en')">🇺🇸 EN</button>
-    <button onclick="changeLanguage('es')">🇪🇸 ES</button>
-    <button onclick="changeLanguage('de')">🇩🇪 DE</button>
+<div class="container">
+<div class="logo">
+<div class="logo">
+<img src="/image/logo.png" alt="Aegisens Logo" class="logo-image">
+<div class="subtitle">Health That Senses You</div>
 </div>
 
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">🧠</div>
-                    <div class="feature-text">
-                        <h3>Mind & Body Connection</h3>
-                        <p>Understanding the complete picture of your health</p>
-                    </div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">❤️</div>
-                    <div class="feature-text">
-                        <h3>Empathetic AI</h3>
-                        <p>Technology that truly listens and understands</p>
-                    </div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🛡️</div>
-                    <div class="feature-text">
-                        <h3>Holistic Protection</h3>
-                        <p>Caring for your complete wellbeing</p>
-                    </div>
-                </div>
-            </div>
+<style>
+.logo-image {
+    height: 100px; /* Dostosuj rozmiar */
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+    max-height: 120px; /* Jeśli chcemy kontrolować rozmiar */
+width: auto;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+}
 
-            <div class="launch-countdown">
-                <div class="countdown-text">Launching our revolution in</div>
-                <div class="countdown-timer" id="countdown">00:00:00</div>
-            </div>
+.logo-image:hover {
+    transform: scale(1.03);
+}
+
+/* Responsywność logo */
+@media (max-width: 480px) {
+.logo-image {
+        height: 80px;
+        max-height: 80px;
+}
+}
+</style>
+</div>
+
+<div class="main-content">
+<div class="coming-soon">
+<h2>Coming Soon</h2>
+<p>Healt That Senses You</p>
+</div>
+
+<div class="language-switcher">
+<button onclick="changeLanguage('pl')">🇵🇱 PL</button>
+<button onclick="changeLanguage('en')">🇺🇸 EN</button>
+<button onclick="changeLanguage('es')">🇪🇸 ES</button>
+<button onclick="changeLanguage('de')">🇩🇪 DE</button>
+</div>
+
+<div class="features">
+<div class="feature">
+<div class="feature-icon">🧠</div>
+<div class="feature-text">
+<h3>Mind & Body Connection</h3>
+<p>Understanding the complete picture of your health</p>
+</div>
+</div>
+<div class="feature">
+<div class="feature-icon">❤️</div>
+<div class="feature-text">
+<h3>Empathetic AI</h3>
+<p>Technology that truly listens and understands</p>
+</div>
+</div>
+<div class="feature">
+<div class="feature-icon">🛡️</div>
+<div class="feature-text">
+<h3>Holistic Protection</h3>
+<p>Caring for your complete wellbeing</p>
+</div>
+</div>
+</div>
+
+<div class="launch-countdown">
+<div class="countdown-text">Launching our revolution in</div>
+<div class="countdown-timer" id="countdown">00:00:00</div>
+</div>
 
 <section class="future-vision">
-    <h3 class="vision-title">🚀 The Aegisens Vision</h3>
-    <p class="vision-subtitle">Where we're heading in 2025</p>
-    
-    <div class="vision-grid">
-        <!-- CARD 1 -->
-        <div class="vision-card">
-            <div class="vision-icon">🍲</div>
-            <div class="vision-content">
-                <h4>AI-Powered Nutrition</h4>
-                <p class="vision-desc">Meals tailored to your real-time health needs, delivered when you need them most.</p>
-                <div class="vision-timeline">
-                    <span class="timeline-dot"></span>
-                    <span class="timeline-text">Launch: Q2 2025</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- CARD 2 -->
-        <div class="vision-card">
-            <div class="vision-icon">👥</div>
-            <div class="vision-content">
-                <h4>Health Community</h4>
-                <p class="vision-desc">Connect with people sharing similar health journeys. Exchange experiences and support.</p>
-                <div class="vision-timeline">
-                    <span class="timeline-dot"></span>
-                    <span class="timeline-text">Launch: Q3 2025</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- CARD 3 -->
-        <div class="vision-card">
-            <div class="vision-icon">🌸</div>
-            <div class="vision-content">
-                <h4>Hormonal Harmony</h4>
-                <p class="vision-desc">Personalized support for women's health through every life stage.</p>
-                <div class="vision-timeline">
-                    <span class="timeline-dot"></span>
-                    <span class="timeline-text">Launch: Q4 2025</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="vision-footer">
-        <p>This is just the beginning. The future of healthcare is proactive, personalized, and powered by empathy.</p>
-    </div>
+<h3 class="vision-title">🚀 The Aegisens Vision</h3>
+<p class="vision-subtitle">Where we're heading in 2025</p>
+
+<div class="vision-grid">
+<!-- CARD 1 -->
+<div class="vision-card">
+<div class="vision-icon">🍲</div>
+<div class="vision-content">
+<h4>AI-Powered Nutrition</h4>
+<p class="vision-desc">Meals tailored to your real-time health needs, delivered when you need them most.</p>
+<div class="vision-timeline">
+<span class="timeline-dot"></span>
+<span class="timeline-text">Launch: Q2 2025</span>
+</div>
+</div>
+</div>
+
+<!-- CARD 2 -->
+<div class="vision-card">
+<div class="vision-icon">👥</div>
+<div class="vision-content">
+<h4>Health Community</h4>
+<p class="vision-desc">Connect with people sharing similar health journeys. Exchange experiences and support.</p>
+<div class="vision-timeline">
+<span class="timeline-dot"></span>
+<span class="timeline-text">Launch: Q3 2025</span>
+</div>
+</div>
+</div>
+
+<!-- CARD 3 -->
+<div class="vision-card">
+<div class="vision-icon">🌸</div>
+<div class="vision-content">
+<h4>Hormonal Harmony</h4>
+<p class="vision-desc">Personalized support for women's health through every life stage.</p>
+<div class="vision-timeline">
+<span class="timeline-dot"></span>
+<span class="timeline-text">Launch: Q4 2025</span>
+</div>
+</div>
+</div>
+</div>
+
+<div class="vision-footer">
+<p>This is just the beginning. The future of healthcare is proactive, personalized, and powered by empathy.</p>
+</div>
 </section>
 
 <style>
 /* FUTURE VISION STYLES */
 .future-vision {
-    margin: 40px 0;
-    padding: 25px;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+margin: 40px 0;
+padding: 25px;
+background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+border-radius: 20px;
+border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .vision-title {
-    text-align: center;
-    font-size: 1.5em;
-    margin-bottom: 5px;
-    font-weight: 500;
+text-align: center;
+font-size: 1.5em;
+margin-bottom: 5px;
+font-weight: 500;
 }
 
 .vision-subtitle {
-    text-align: center;
-    opacity: 0.8;
-    margin-bottom: 25px;
-    font-size: 0.95em;
+text-align: center;
+opacity: 0.8;
+margin-bottom: 25px;
+font-size: 0.95em;
 }
 
 .vision-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 20px;
+display: flex;
+flex-direction: column;
+gap: 20px;
+margin-bottom: 20px;
 }
 
 .vision-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    transition: transform 0.3s ease;
+display: flex;
+align-items: flex-start;
+gap: 20px;
+padding: 20px;
+background: rgba(255, 255, 255, 0.1);
+border-radius: 15px;
+transition: transform 0.3s ease;
 }
 
 .vision-card:hover {
-    transform: translateY(-5px);
+transform: translateY(-5px);
 }
 
 .vision-icon {
-    font-size: 2.2em;
-    min-width: 60px;
-    text-align: center;
+font-size: 2.2em;
+min-width: 60px;
+text-align: center;
 }
 
 .vision-content {
-    flex: 1;
+flex: 1;
 }
 
 .vision-content h4 {
-    font-size: 1.2em;
-    margin-bottom: 8px;
-    font-weight: 500;
+font-size: 1.2em;
+margin-bottom: 8px;
+font-weight: 500;
 }
 
 .vision-desc {
-    opacity: 0.85;
-    font-size: 0.9em;
-    line-height: 1.5;
-    margin-bottom: 15px;
+opacity: 0.85;
+font-size: 0.9em;
+line-height: 1.5;
+margin-bottom: 15px;
 }
 
 .vision-timeline {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+display: flex;
+align-items: center;
+gap: 10px;
 }
 
 .timeline-dot {
-    width: 8px;
-    height: 8px;
-    background: linear-gradient(45deg, #FF6B6B, #FF8E53);
-    border-radius: 50%;
+width: 8px;
+height: 8px;
+background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+border-radius: 50%;
 }
 
 .timeline-text {
-    font-size: 0.85em;
-    opacity: 0.7;
+font-size: 0.85em;
+opacity: 0.7;
 }
 
 .vision-footer {
-    text-align: center;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    font-style: italic;
-    opacity: 0.8;
-    font-size: 0.95em;
+text-align: center;
+padding-top: 20px;
+border-top: 1px solid rgba(255, 255, 255, 0.1);
+font-style: italic;
+opacity: 0.8;
+font-size: 0.95em;
 }
 
 @media (max-width: 480px) {
-    .vision-card {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-    }
-    
-    .vision-icon {
-        min-width: auto;
-    }
+.vision-card {
+flex-direction: column;
+text-align: center;
+gap: 15px;
+}
+
+.vision-icon {
+min-width: auto;
+}
 }
 </style>
 <div class="nutrition-preview">
-    <button class="nutrition-button" onclick="showNutritionPreview()" id="nutritionButton">
-        🍽️ Personalize Your Nutrition
-    </button>
-    <p class="nutrition-hint" id="nutritionHint">
-        Future feature: Verified restaurants + AI = meals tailored to YOUR health needs
-    </p>
+<button class="nutrition-button" onclick="showNutritionPreview()" id="nutritionButton">
+🍽️ Personalize Your Nutrition
+</button>
+<p class="nutrition-hint" id="nutritionHint">
+Future feature: Verified restaurants + AI = meals tailored to YOUR health needs
+</p>
 </div>
 
 <style>
 .nutrition-preview {
-    text-align: center;
-    margin: 25px 0;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 15px;
-    border: 1px dashed rgba(255, 255, 255, 0.2);
+text-align: center;
+margin: 25px 0;
+padding: 20px;
+background: rgba(255, 255, 255, 0.08);
+border-radius: 15px;
+border: 1px dashed rgba(255, 255, 255, 0.2);
 }
 
 .nutrition-button {
-    background: linear-gradient(45deg, #2196F3, #21CBF3);
-    border: none;
-    padding: 15px 25px;
-    border-radius: 25px;
-    color: white;
-    font-size: 1em;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
+background: linear-gradient(45deg, #2196F3, #21CBF3);
+border: none;
+padding: 15px 25px;
+border-radius: 25px;
+color: white;
+font-size: 1em;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.3s;
+display: inline-flex;
+align-items: center;
+gap: 10px;
 }
 
 .nutrition-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+transform: translateY(-3px);
+box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
 }
 
 .nutrition-hint {
-    margin-top: 10px;
-    opacity: 0.7;
-    font-size: 0.9em;
-    font-style: italic;
-    max-width: 300px;
-    margin-left: auto;
-    margin-right: auto;
+margin-top: 10px;
+opacity: 0.7;
+font-size: 0.9em;
+font-style: italic;
+max-width: 300px;
+margin-left: auto;
+margin-right: auto;
 }
 </style>
-            <button class="cta-button" onclick="notifyUser()">
-                Notify Me on Launch
-            </button>
-        </div>
+<button class="cta-button" onclick="notifyUser()">
+Notify Me on Launch
+</button>
+</div>
 
-        <div class="footer">
-            <div>Powered by Aegisync Technology</div>
-            <div class="tech-badge">AI-Driven Health Innovation</div>
-        </div>
-    </div>
+<div class="footer">
+<div>Powered by Aegisync Technology</div>
+<div class="tech-badge">AI-Driven Health Innovation</div>
+</div>
+</div>
 
-    <script>
-        function updateCountdown() {
-            const launchDate = new Date('2024-12-01T00:00:00').getTime();
-            const now = new Date().getTime();
-            const distance = launchDate - now;
+<script>
+function updateCountdown() {
+const launchDate = new Date('2024-12-01T00:00:00').getTime();
+const now = new Date().getTime();
+const distance = launchDate - now;
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById("countdown").innerHTML = 
-                `${days}d ${hours}h ${minutes}m ${seconds}s`;
+document.getElementById("countdown").innerHTML = 
+`${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-            if (distance < 0) {
-                document.getElementById("countdown").innerHTML = "LAUNCHED!";
-            }
-        }
+if (distance < 0) {
+document.getElementById("countdown").innerHTML = "LAUNCHED!";
+}
+}
 
-        function notifyUser() {
-            alert('Thank you for your interest! We will notify you when Aegisens launches.');
-        }
+function notifyUser() {
+alert('Thank you for your interest! We will notify you when Aegisens launches.');
+}
 
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
+setInterval(updateCountdown, 1000);
+updateCountdown();
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(function(registration) {
-                        console.log('ServiceWorker registration successful');
-                    })
-                    .catch(function(error) {
-                        console.log('ServiceWorker registration failed');
-                    });
-            });
-        }
+if ('serviceWorker' in navigator) {
+window.addEventListener('load', function() {
+navigator.serviceWorker.register('/sw.js')
+.then(function(registration) {
+console.log('ServiceWorker registration successful');
+})
+.catch(function(error) {
+console.log('ServiceWorker registration failed');
+});
+});
+}
 const translations = {
-    pl: {
-        title: "AEGISENS",
-        subtitle: "Zdrowie które Cię wyczuwa",
-        comingSoon: "Wkrótce",
-        description: "Rewolucjonizujemy opiekę zdrowotną przez empatyczną technologię AI, która rozumie Cię holistycznie.",
-        feature1: "Połączenie Umysłu i Ciała",
-        feature1desc: "Zrozumienie pełnego obrazu Twojego zdrowia",
-        feature2: "Empatyczne AI", 
-        feature2desc: "Technologia która naprawdę słucha i rozumie",
-        feature3: "Holistyczna Ochrona",
-        feature3desc: "Troska o Twoje kompletne zdrowie",
-        countdownText: "Innowacja w Akcji. Dołącz do zmiany!",
-        buttonText: "Powiadom mnie ",
-        poweredBy: "Aegisync Technology",
-        badgeText: "Innowacja AI w zdrowiu"
-    },
-    en: {
-        title: "AEGISENS",
-        subtitle: "Health That Senses You",
-        comingSoon: "Coming Soon",
-        description: "Revolutionizing healthcare through empathetic AI technology that understands you holistically.",
-        feature1: "Mind & Body Connection",
-        feature1desc: "Understanding the complete picture of your health",
-        feature2: "Empathetic AI",
-        feature2desc: "Technology that truly listens and understands",
-        feature3: "Holistic Protection",
-        feature3desc: "Caring for your complete wellbeing",
-        countdownText: "Innovation in Action. Join Us!",
-        buttonText: "Notify Me on Launch",
-        poweredBy: "Powered by Aegisync Technology", 
-        badgeText: "AI-Driven Health Innovation"
-    },
-    es: {
-        title: "AEGISENS",
-        subtitle: "Salud Que Te Siente",
-        comingSoon: "Próximamente",
-        description: "Revolucionando la atención médica a través de tecnología AI empática que te entiende holísticamente.",
-        feature1: "Conexión Mente-Cuerpo",
-        feature1desc: "Comprendiendo la imagen completa de tu salud",
-        feature2: "AI Empático",
-        feature2desc: "Tecnología que realmente escucha y entiende",
-        feature3: "Protección Holística",
-        feature3desc: "Cuidando tu bienestar completo",
-        countdownText: "Lanzando nuestra revolución en",
-        buttonText: "Notifícame del lanzamiento",
-        poweredBy: "Desarrollado por Aegisync Technology",
-        badgeText: "Innovación en Salud con AI"
-    },
-    de: {
-        title: "AEGISENS",
-        subtitle: "Gesundheit, die dich spürt",
-        comingSoon: "Demnächst",
-        description: "Revolutionierung des Gesundheitswesens durch einfühlsame KI-Technologie, die dich ganzheitlich versteht.",
-        feature1: "Geist-Körper-Verbindung",
-        feature1desc: "Das vollständige Bild Ihrer Gesundheit verstehen",
-        feature2: "Einfühlsame KI",
-        feature2desc: "Technologie, die wirklich zuhört und versteht",
-        feature3: "Ganzheitlicher Schutz",
-        feature3desc: "Für Ihr vollständiges Wohlbefinden sorgen",
-        countdownText: "Innovation in Action. Join Us",
-        buttonText: "Bei Launch benachrichtigen",
-        poweredBy: "Unterstützt von Aegisync Technology",
-        badgeText: "KI-gesteuerte Gesundheitsinnovation"
-    }
+pl: {
+title: "AEGISENS",
+subtitle: "Zdrowie które Cię wyczuwa",
+comingSoon: "Wkrótce",
+description: "Rewolucjonizujemy opiekę zdrowotną przez empatyczną technologię AI, która rozumie Cię holistycznie.",
+feature1: "Połączenie Umysłu i Ciała",
+feature1desc: "Zrozumienie pełnego obrazu Twojego zdrowia",
+feature2: "Empatyczne AI", 
+feature2desc: "Technologia która naprawdę słucha i rozumie",
+feature3: "Holistyczna Ochrona",
+feature3desc: "Troska o Twoje kompletne zdrowie",
+countdownText: "Innowacja w Akcji. Dołącz do zmiany!",
+buttonText: "Powiadom mnie ",
+poweredBy: "Aegisync Technology",
+badgeText: "Innowacja AI w zdrowiu"
+},
+en: {
+title: "AEGISENS",
+subtitle: "Health That Senses You",
+comingSoon: "Coming Soon",
+description: "Revolutionizing healthcare through empathetic AI technology that understands you holistically.",
+feature1: "Mind & Body Connection",
+feature1desc: "Understanding the complete picture of your health",
+feature2: "Empathetic AI",
+feature2desc: "Technology that truly listens and understands",
+feature3: "Holistic Protection",
+feature3desc: "Caring for your complete wellbeing",
+countdownText: "Innovation in Action. Join Us!",
+buttonText: "Notify Me on Launch",
+poweredBy: "Powered by Aegisync Technology", 
+badgeText: "AI-Driven Health Innovation"
+},
+es: {
+title: "AEGISENS",
+subtitle: "Salud Que Te Siente",
+comingSoon: "Próximamente",
+description: "Revolucionando la atención médica a través de tecnología AI empática que te entiende holísticamente.",
+feature1: "Conexión Mente-Cuerpo",
+feature1desc: "Comprendiendo la imagen completa de tu salud",
+feature2: "AI Empático",
+feature2desc: "Tecnología que realmente escucha y entiende",
+feature3: "Protección Holística",
+feature3desc: "Cuidando tu bienestar completo",
+countdownText: "Lanzando nuestra revolución en",
+buttonText: "Notifícame del lanzamiento",
+poweredBy: "Desarrollado por Aegisync Technology",
+badgeText: "Innovación en Salud con AI"
+},
+de: {
+title: "AEGISENS",
+subtitle: "Gesundheit, die dich spürt",
+comingSoon: "Demnächst",
+description: "Revolutionierung des Gesundheitswesens durch einfühlsame KI-Technologie, die dich ganzheitlich versteht.",
+feature1: "Geist-Körper-Verbindung",
+feature1desc: "Das vollständige Bild Ihrer Gesundheit verstehen",
+feature2: "Einfühlsame KI",
+feature2desc: "Technologie, die wirklich zuhört und versteht",
+feature3: "Ganzheitlicher Schutz",
+feature3desc: "Für Ihr vollständiges Wohlbefinden sorgen",
+countdownText: "Innovation in Action. Join Us",
+buttonText: "Bei Launch benachrichtigen",
+poweredBy: "Unterstützt von Aegisync Technology",
+badgeText: "KI-gesteuerte Gesundheitsinnovation"
+}
 };
 
 function changeLanguage(lang) {
-    console.log("Zmieniam język na:", lang);
-    
-    const t = translations[lang];
-    if (!t) {
-        console.error("Brak tłumaczenia dla:", lang);
-        return;
-    }
-    
-    // Proste przypisania - mniej podatne na błędy
-    try {
-        // Tytuł
-        const title = document.querySelector('.logo h1');
-        if (title) title.textContent = t.title;
-        
-        // Podtytuł
-        const subtitle = document.querySelector('.logo .subtitle');
-        if (subtitle) subtitle.textContent = t.subtitle;
-        
-        // Coming Soon
-        const comingSoon = document.querySelector('.coming-soon h2');
+console.log("Zmieniam język na:", lang);
+
+const t = translations[lang];
+if (!t) {
+console.error("Brak tłumaczenia dla:", lang);
+return;
+}
+
+// Proste przypisania - mniej podatne na błędy
+try {
+// Tytuł
+const title = document.querySelector('.logo h1');
+if (title) title.textContent = t.title;
+
+// Podtytuł
+const subtitle = document.querySelector('.logo .subtitle');
+if (subtitle) subtitle.textContent = t.subtitle;
+
+// Coming Soon
+const comingSoon = document.querySelector('.coming-soon h2');
 
 if (comingSoon) comingSoon.textContent = t.comingSoon;
-        
-        // Opis
-        const description = document.querySelector('.coming-soon p');
-        if (description) description.textContent = t.description;
-        
-        // Features
-        const features = document.querySelectorAll('.feature-text h3');
-        if (features.length >= 3) {
-            features[0].textContent = t.feature1;
-            features[1].textContent = t.feature2;
-            features[2].textContent = t.feature3;
-        }
-        
-        // Descriptions
-        const descs = document.querySelectorAll('.feature-text p');
-        if (descs.length >= 3) {
-            descs[0].textContent = t.feature1desc;
-            descs[1].textContent = t.feature2desc;
-            descs[2].textContent = t.feature3desc;
-        }
-        
-        // Countdown text
-        const countdownText = document.querySelector('.countdown-text');
-        if (countdownText) countdownText.textContent = t.countdownText;
-        
-        // Button
-        const button = document.querySelector('.cta-button');
-        if (button) button.textContent = t.buttonText;
-        
-        // Footer
-        const footerDivs = document.querySelectorAll('.footer div');
-        if (footerDivs.length >= 2) {
-            footerDivs[0].textContent = t.poweredBy;
-            if (footerDivs[1].classList.contains('tech-badge')) {
-                footerDivs[1].textContent = t.badgeText;
-            }
-        }
-        
-        console.log("Język zmieniony pomyślnie na:", lang);
-        
-        // Podświetl aktywny przycisk
-        document.querySelectorAll('.language-switcher button').forEach(btn => {
-            btn.style.opacity = '0.7';
-        });
-        const activeBtn = document.querySelector(button[onclick*="${lang}"]);
-        if (activeBtn) {
-            activeBtn.style.opacity = '1';
-            activeBtn.style.fontWeight = 'bold';
-        }
-        
-    } catch (error) {
-        console.error("Błąd zmiany języka:", error);
-    }
+
+// Opis
+const description = document.querySelector('.coming-soon p');
+if (description) description.textContent = t.description;
+
+// Features
+const features = document.querySelectorAll('.feature-text h3');
+if (features.length >= 3) {
+features[0].textContent = t.feature1;
+features[1].textContent = t.feature2;
+features[2].textContent = t.feature3;
+}
+
+// Descriptions
+const descs = document.querySelectorAll('.feature-text p');
+if (descs.length >= 3) {
+descs[0].textContent = t.feature1desc;
+descs[1].textContent = t.feature2desc;
+descs[2].textContent = t.feature3desc;
+}
+
+// Countdown text
+const countdownText = document.querySelector('.countdown-text');
+if (countdownText) countdownText.textContent = t.countdownText;
+
+// Button
+const button = document.querySelector('.cta-button');
+if (button) button.textContent = t.buttonText;
+
+// Footer
+const footerDivs = document.querySelectorAll('.footer div');
+if (footerDivs.length >= 2) {
+footerDivs[0].textContent = t.poweredBy;
+if (footerDivs[1].classList.contains('tech-badge')) {
+footerDivs[1].textContent = t.badgeText;
+}
+}
+
+console.log("Język zmieniony pomyślnie na:", lang);
+
+// Podświetl aktywny przycisk
+document.querySelectorAll('.language-switcher button').forEach(btn => {
+btn.style.opacity = '0.7';
+});
+const activeBtn = document.querySelector(button[onclick*="${lang}"]);
+if (activeBtn) {
+activeBtn.style.opacity = '1';
+activeBtn.style.fontWeight = 'bold';
+}
+
+} catch (error) {
+console.error("Błąd zmiany języka:", error);
+}
 }
 
 // Automatyczna zmiana przy ładowaniu
 window.addEventListener('DOMContentLoaded', function() {
-    console.log("Strona załadowana, inicjuję język...");
-    const savedLang = localStorage.getItem('aegisens_lang') || 'en';
-    changeLanguage(savedLang);
+console.log("Strona załadowana, inicjuję język...");
+const savedLang = localStorage.getItem('aegisens_lang') || 'en';
+changeLanguage(savedLang);
 });
-    </script>
+</script>
 </body>
 </html>
