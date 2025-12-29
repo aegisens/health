@@ -3,365 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Aegisens - Health That Senses You </title>
+    <title>Aegisens | Health That Senses You</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* GLOBAL STYLES */
+        /* ===== GLOBAL STYLES ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    color: white;
-}
-        
-        /* HEADER STYLES */
-        header {
-            display: flex;
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
+            min-height: 100vh; color: white; line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HEADER ===== */
+        .header {
+            padding: 1.5rem 0; background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.8rem; font-weight: 800; color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .logo i { color: #a3bffa; }
+        .logo .slogan { font-size: 0.9rem; font-weight: 300; color: rgba(255, 255, 255, 0.7); margin-left: 0.5rem; }
+        .nav a { color: rgba(255, 255, 255, 0.85); text-decoration: none; margin-left: 2rem; transition: color 0.3s; font-weight: 500; }
+        .nav a:hover { color: #ffffff; }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            min-height: 90vh; display: flex; align-items: center; padding: 4rem 2rem;
+            position: relative; overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; top: -50%; right: -30%; width: 80%; height: 200%;
+            background: radial-gradient(circle, rgba(163, 191, 250, 0.15) 0%, transparent 70%); z-index: 0;
+        }
+        .hero-grid {
+            max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr;
+            gap: 4rem; align-items: center; position: relative; z-index: 1;
+        }
+        /* Central Brand Name */
+        .brand-main {
+            font-size: 4.5rem; font-weight: 900; color: #D4AF37; line-height: 1;
+            margin-bottom: 0.5rem; letter-spacing: -1px; text-align: center;
+        }
+        .hero-text h1 {
+            font-size: 3.5rem; font-weight: 800; line-height: 1.1; color: #ffffff;
+            margin-bottom: 2rem; text-align: center;
+        }
+        .hero-text h1 span.voice { color: #ffb8d9; }
+        .hero-text h1 span.rhythm { color: #a3bffa; }
+        .hero-text .subtitle {
+            font-size: 1.5rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 3rem; text-align: center;
+        }
+        .cta-buttons {
+            display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;
             justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-            padding: 2rem 5%;
-            min-height: 30vh;
         }
-        
-        .AEGISEANS {
-            color: #D4AF37;
-            font-size: 4rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            letter-spacing: 3px;
+        .btn-primary {
+            display: inline-block; background: linear-gradient(90deg, #ffb8d9 0%, #a3bffa 100%);
+            color: #2d1b69; padding: 1.2rem 3rem; font-size: 1.2rem; font-weight: bold;
+            border-radius: 50px; text-decoration: none;
+            box-shadow: 0 6px 20px rgba(255, 184, 217, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        
-        .brand-subtitle {
-            color: #F5F5F5;
-            font-size: 1.5rem;
-            font-weight: 300;
-            text-align: center;
-            margin-top: 0;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255, 184, 217, 0.6); }
+        .btn-secondary {
+            display: inline-block; border: 2px solid rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.9); padding: 1.2rem 2.5rem;
+            font-size: 1.2rem; font-weight: 600; border-radius: 50px;
+            text-decoration: none; transition: all 0.3s; background: transparent;
         }
-        
-        @media (max-width: 768px) {
-            .brand-title {
-                font-size: 2.5rem;
-            }
-            .brand-subtitle {
-                font-size: 1.2rem;
-            }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); border-color: #ffffff; color: #ffffff; }
+        .hero-note {
+            color: rgba(255, 255, 255, 0.7); font-size: 0.95rem; text-align: center;
         }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
-
-/* HEADER - Lighter, transparent */
-.header {
-    padding: 1.5rem 0;
-    background: rgba(255, 255, 255, 0.08); /* Subtle transparency */
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-.header .container { display: flex; justify-content: space-between; align-items: center; }
-.logo { font-size: 1.8rem; font-weight: 800; color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
-.logo i { color: #a3bffa; } /* Light blue from gradient */
-.nav a { color: rgba(255, 255, 255, 0.85); text-decoration: none; margin-left: 2rem; transition: color 0.3s; font-weight: 500; }
-.nav a:hover { color: #ffffff; }
-
-/* HERO SECTION - Transparent card on gradient */
-.hero {
-    min-height: 90vh; display: flex; align-items: center; padding: 4rem 2rem;
-    /* Background is now the global gradient */
-    position: relative; overflow: hidden;
-}
-.hero-bg {
-    /* Optional: a subtle extra glow */
-    position: absolute; top: -50%; right: -30%; width: 80%; height: 200%;
-    background: radial-gradient(circle, rgba(163, 191, 250, 0.15) 0%, transparent 70%);
-    z-index: 0;
-}
-.hero-grid {
-    max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr;
-    gap: 4rem; align-items: center; position: relative; z-index: 1;
-}
-.hero-text h1 {
-    font-size: 3.5rem; font-weight: 800; line-height: 1.1;
-    color: #ffffff; /* Pure white on dark gradient */
-    margin-bottom: 2rem;
-}
-.hero-text h1 span.voice { color: #ffb8d9; } /* Soft pink accent */
-.hero-text h1 span.rhythm { color: #a3bffa; } /* Light blue accent */
-.hero-text .subtitle {
-    font-size: 1.5rem; line-height: 1.6;
-    color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
-    margin-bottom: 3rem;
-}
-.btn-primary {
-    display: inline-block;
-    background: linear-gradient(90deg, #ffb8d9 0%, #a3bffa 100%); /* Pink to Light Blue */
-    color: #2d1b69; /* Dark text for contrast */
-    padding: 1.2rem 3rem; font-size: 1.2rem; font-weight: bold;
-    border-radius: 50px; text-decoration: none;
-    box-shadow: 0 6px 20px rgba(255, 184, 217, 0.4);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255, 184, 217, 0.6); }
-.btn-secondary {
-    display: inline-block; border: 2px solid rgba(255, 255, 255, 0.5); color: rgba(255, 255, 255, 0.9);
-    padding: 1.2rem 2.5rem; font-size: 1.2rem; font-weight: 600;
-    border-radius: 50px; text-decoration: none; transition: all 0.3s;
-    background: transparent;
-}
-.btn-secondary:hover { background: rgba(255, 255, 255, 0.1); border-color: #ffffff; color: #ffffff; }
-.hero-note { color: rgba(255, 255, 255, 0.7); font-size: 0.95rem; }
-
-/* WAITLIST CARD - Light translucent card */
-.waitlist-card {
-    background: rgba(255, 255, 255, 0.92); /* Light, semi-transparent */
-    backdrop-filter: blur(10px); border-radius: 20px; padding: 3rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-    color: #5a4a6a; /* Dark text inside card */
-}
-.waitlist-card h3 { font-size: 1.8rem; font-weight: bold; color: #5a4a6a; margin-bottom: 1rem; }
-.waitlist-card p { color: #8a7a9c; margin-bottom: 2rem; }
-#waitlist-form input {
-    padding: 1rem; border-radius: 12px; border: 1px solid #e1d5ed;
-    background: #faf7fc; color: #5a4a6a; font-size: 1rem;
-}
-#waitlist-form button {
-    background: linear-gradient(90deg, #ffb8d9 0%, #a3bffa 100%); /* Matching button gradient */
-    color: #2d1b69; border: none; padding: 1rem;
-    border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
-    transition: background 0.3s;
-}
-#waitlist-form button:hover { background: linear-gradient(90deg, #f5a5cc 0%, #8daef5 100%); }
-.form-note { color: #b8abc6; font-size: 0.9rem; margin-top: 1.5rem; }
-
-/* VISION SECTION */
-.section { margin-top: 5rem; padding: 3rem 0; }
-.section h2 { text-align: center; color: #ffffff; font-size: 2.5rem; margin-bottom: 3rem; }
-.vision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-.vision-card {
-    background: rgba(255, 255, 255, 0.92); /* Light translucent cards */
-    backdrop-filter: blur(10px); border-radius: 16px; padding: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s, box-shadow 0.3s;
-    color: #5a4a6a;
-}
-.vision-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25); }
-.vision-card h3 { color: #a3bffa; margin-bottom: 1rem; } /* Light blue */
-.vision-card p { color: #8a7a9c; }
-.launch-tag {
-    display: inline-block; background: rgba(163, 191, 250, 0.2); color: #a3bffa;
-    padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; margin-top: 1rem;
-}
-
-/* FOUNDER SECTION */
-.founder-section {
-    background: rgba(255, 255, 255, 0.08); /* Very subtle tint */
-    padding: 4rem 0; margin-top: 4rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-.founder-info h3 { font-size: 2rem; color: #ffffff; margin-bottom: 1rem; }
-.founder-info .title { color: #ffb8d9; /* Pink accent */ font-size: 1.2rem; margin-bottom: 2rem; }
-.founder-bio { color: rgba(255, 255, 255, 0.85); font-size: 1.1rem; line-height: 1.7; }
-.avatar {
-    width: 200px; height: 200px; border-radius: 50%;
-    background: linear-gradient(135deg, #ffb8d9, #a3bffa); /* Pink to blue gradient */
-    margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center;
-    font-size: 4rem; color: #ffffff;
-}
-
-/* FOOTER */
-.footer { border-top: 1px solid rgba(255, 255, 255, 0.1); padding: 3rem 0; margin-top: 4rem; text-align: center; color: rgba(255, 255, 255, 0.7); }
-.footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; }
-.footer-links a { color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s; }
-.footer-links a:hover { color: #ffffff; }
-
-/* RESPONSIVE RULES REMAIN THE SAME */
-@media (max-width: 992px) { ... }
-@media (max-width: 768px) { ... }
-        /* WAITLIST CARD */
+/* ===== WAITLIST CARD ===== */
         .waitlist-card {
-background: rgba(26, 32, 44, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem;
-            border: 1px solid #2d3748;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 3rem; border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2); color: #5a4a6a;
         }
-        .waitlist-card h3 {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #e2e8f0;
-            margin-bottom: 1rem;
-            text-align: center;
+        .waitlist-card h3 { font-size: 1.8rem; font-weight: bold; color: #5a4a6a; margin-bottom: 1rem; text-align: center; }
+        .waitlist-card p { color: #8a7a9c; margin-bottom: 2rem; text-align: center; }
+        /* Live Counter Styling */
+        .counter-container {
+            text-align: center; margin-bottom: 2rem; padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05); border-radius: 16px;
         }
-        .waitlist-card p {
-            color: #a0aec0;
-            margin-bottom: 2rem;
-            text-align: center;
+        .counter-number {
+            font-size: 3.5rem; font-weight: 800; color: #D4AF37; line-height: 1;
+            transition: opacity 0.3s ease;
         }
-        #waitlist-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        .counter-label { color: rgba(255, 255, 255, 0.9); font-size: 1.1rem; margin-top: 0.5rem; }
+        .counter-incentive {
+            color: #a3bffa; font-size: 0.95rem; margin-top: 0.75rem; font-weight: 600;
         }
+        .counter-incentive i { margin-right: 5px; }
+        /* Form Styles */
+        #waitlist-form { display: flex; flex-direction: column; gap: 1rem; }
         #waitlist-form input {
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid #4a5568;
-            background: #2d3748;
-            color: white;
-            font-size: 1rem;
+            padding: 1rem; border-radius: 12px; border: 1px solid #e1d5ed;
+            background: #faf7fc; color: #5a4a6a; font-size: 1rem;
         }
         #waitlist-form button {
-            background: #9f7aea;
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
+            background: linear-gradient(90deg, #ffb8d9 0%, #a3bffa 100%);
+            color: #2d1b69; border: none; padding: 1rem; border-radius: 12px;
+            font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: background 0.3s;
         }
-        #waitlist-form button:hover {
-            background: #805ad5;
-        }
-        .form-note {
-            color: #718096;
-            font-size: 0.9rem;
-            margin-top: 1.5rem;
-            text-align: center;
-        }
-        
-        /* VISION SECTION */
-        .section {
-            margin-top: 5rem;
-            padding: 3rem 0;
-        }
-        .section h2 {
-            text-align: center;
-            color: #e2e8f0;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-        }
-        .vision-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
+        #waitlist-form button:hover { background: linear-gradient(90deg, #f5a5cc 0%, #8daef5 100%); }
+        .form-note { color: #b8abc6; font-size: 0.9rem; margin-top: 1.5rem; text-align: center; }
+
+        /* ===== VISION SECTION ===== */
+        .section { margin-top: 5rem; padding: 3rem 0; }
+        .section h2 { text-align: center; color: #ffffff; font-size: 2.5rem; margin-bottom: 3rem; }
+        .vision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .vision-card {
-            background: #1a202c;
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid #2d3748;
-            transition: transform 0.3s, border-color 0.3s;
+            background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px);
+            border-radius: 16px; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); transition: transform 0.3s, box-shadow 0.3s;
+            color: #5a4a6a;
         }
-        .vision-card:hover {
-            transform: translateY(-5px);
-            border-color: #9f7aea;
-        }
-        .vision-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        .vision-card h3 {
-            color: #90cdf4;
-            margin-bottom: 1rem;
-        }
-        .vision-card p {
-            color: #cbd5e0;
-        }
+        .vision-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25); }
+        .vision-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .vision-card h3 { color: #a3bffa; margin-bottom: 1rem; }
+        .vision-card p { color: #8a7a9c; }
         .launch-tag {
-            display: inline-block;
-            background: #2d3748;
-            color: #68d391;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-top: 1rem;
+            display: inline-block; background: rgba(163, 191, 250, 0.2); color: #a3bffa;
+            padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; margin-top: 1rem;
         }
-        
-        /* FOUNDER SECTION */
+
+        /* ===== FOUNDER SECTION ===== */
         .founder-section {
-            background: #1a1b2e;
-            padding: 4rem 0;
-            margin-top: 4rem;
+            background: rgba(255, 255, 255, 0.08); padding: 4rem 0; margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         .founder-container {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 3rem;
-            align-items: center;
+            display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: center;
         }
-        .founder-image {
-            text-align: center;
-        }
+        .founder-image { text-align: center; }
         .founder-image .avatar {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #9f7aea, #00d4ff);
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            color: white;
-        }
-        .founder-info h3 {
-            font-size: 2rem;
-            color: #e2e8f0;
-            margin-bottom: 1rem;
-        }
-        .founder-info .title {
-            color: #9f7aea;
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
+            width: 200px; height: 200px; border-radius: 50%;
+            background: linear-gradient(135deg, #ffb8d9, #a3bffa);
+            margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center;
+            font-size: 4rem; color: #ffffff;
 }
-        .founder-bio {
-            color: #cbd5e0;
-            font-size: 1.1rem;
-            line-height: 1.7;
+        .founder-info h3 { font-size: 2rem; color: #ffffff; margin-bottom: 1rem; }
+        .founder-info .title { color: #ffb8d9; font-size: 1.2rem; margin-bottom: 2rem; }
+        .founder-bio { color: rgba(255, 255, 255, 0.85); font-size: 1.1rem; line-height: 1.7; }
+        .founder-bio p { margin-bottom: 1.5rem; }
+
+        /* ===== VIDEO DEMO PLACEHOLDER ===== */
+        #demo-placeholder {
+            text-align: center; padding: 3rem; margin-top: 3rem;
+            background: rgba(0, 0, 0, 0.2); border-radius: 20px; border: 2px dashed rgba(255, 255, 255, 0.3);
         }
-        .founder-bio p {
-            margin-bottom: 1.5rem;
-        }
-        
-        /* FOOTER */
+        .demo-icon { font-size: 4rem; color: #a3bffa; margin-bottom: 1rem; }
+        .demo-placeholder-text { color: rgba(255, 255, 255, 0.8); font-size: 1.2rem; margin-top: 1rem; }
+
+        /* ===== FOOTER ===== */
         .footer {
-            border-top: 1px solid #2d3748;
-            padding: 3rem 0;
-            margin-top: 4rem;
-            text-align: center;
-            color: #a0aec0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); padding: 3rem 0;
+            margin-top: 4rem; text-align: center; color: rgba(255, 255, 255, 0.7);
         }
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        .footer-links a {
-            color: #a0aec0;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .footer-links a:hover {
-            color: #9f7aea;
-        }
-        
-        /* RESPONSIVE */
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; }
+        .footer-links a { color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s; }
+        .footer-links a:hover { color: #ffffff; }
+
+        /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 992px) {
             .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
-            .hero-text h1 { font-size: 2.8rem; }
+            .hero-text h1, .brand-main { font-size: 3rem; }
             .founder-container { grid-template-columns: 1fr; text-align: center; }
         }
         @media (max-width: 768px) {
@@ -369,11 +179,12 @@ background: rgba(26, 32, 44, 0.7);
             .nav { margin-top: 1rem; }
             .nav a { margin: 0 1rem; }
             .hero { padding: 3rem 1rem; }
-            .hero-text h1 { font-size: 2.3rem; }
+            .hero-text h1, .brand-main { font-size: 2.5rem; }
             .hero-text .subtitle { font-size: 1.2rem; }
-            .cta-buttons { flex-direction: column; }
-            .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .btn-primary, .btn-secondary { width: 100%; max-width: 300px; text-align: center; }
             .vision-grid { grid-template-columns: 1fr; }
+            .counter-number { font-size: 2.8rem; }
         }
     </style>
 </head>
@@ -381,35 +192,10 @@ background: rgba(26, 32, 44, 0.7);
     <!-- HEADER -->
     <header class="header">
         <div class="container">
-<div class="logo">
-<img src="/image/logo.png" alt="Aegisens Logo" class="logo-image">
-<div class="subtitle">Health That Senses You</div>
-</div>
-
-<style>
-.logo-image {
-    height: 100px; /* Dostosuj rozmiar */
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-    transition: transform 0.3s ease;
-    max-height: 120px; /* Jeśli chcemy kontrolować rozmiar */
-width: auto;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-}
-
-.logo-image:hover {
-    transform: scale(1.03);
-}
-
-/* Responsywność logo */
-@media (max-width: 480px) {
-.logo-image {
-        height: 80px;
-        max-height: 80px;
-}
-}
-</style>
-</div>
+            <a href="/" class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>Aegisens</span>
+                <span class="slogan">Health That Senses You</span>
             </a>
             <nav class="nav">
                 <a href="#vision">Vision</a>
@@ -425,6 +211,8 @@ width: auto;
         <div class="hero-bg"></div>
         <div class="container hero-grid">
             <div class="hero-text">
+                <!-- CENTRAL BRAND NAME -->
+                <div class="brand-main">Aegisens</div>
                 <h1>
                     An AI that <span class="voice">listens to your voice</span><br>
                     and understands your <span class="rhythm">hormonal rhythms</span>.
@@ -435,15 +223,26 @@ width: auto;
                 </p>
                 <div class="cta-buttons">
                     <a href="#waitlist" class="btn-primary">Join the Waitlist for Empathetic Support →</a>
-                    <a href="#vision" class="btn-secondary">How It Works</a>
+                    <a href="#demo-placeholder" class="btn-secondary">📹 Watch Demo (60s)</a>
                 </div>
                 <p class="hero-note">Be among the first to experience health that <em>senses</em> you.</p>
             </div>
-            
-            <div class="waitlist-card">
+<!-- WAITLIST CARD WITH LIVE COUNTER -->
+            <div class="waitlist-card" id="waitlist">
                 <h3>✨ Join Our Private Beta</h3>
                 <p>Limited spots available for empathetic health pioneers.</p>
-                <form id="waitlist-form" onsubmit="event.preventDefault(); alert('Thank you! Form will be live soon. For now, please email us at: aegisenshealth@gmail.com');">
+
+                <!-- LIVE COUNTER -->
+                <div class="counter-container">
+                    <div class="counter-number" id="waitlist-counter">237</div>
+                    <div class="counter-label">pioneers already joined</div>
+                    <div class="counter-incentive">
+                        <i class="fas fa-gift"></i> First 200 receive a <strong>free personalized insights report</strong>.
+                    </div>
+                </div>
+
+                <!-- WAITLIST FORM -->
+                <form id="waitlist-form" onsubmit="event.preventDefault(); handleWaitlistSubmit();">
                     <input type="email" name="email" placeholder="Your best email address" required>
                     <button type="submit">Secure My Spot</button>
                 </form>
@@ -451,16 +250,28 @@ width: auto;
             </div>
         </div>
     </section>
-<!-- VISION SECTION -->
+
+    <!-- VIDEO DEMO PLACEHOLDER -->
+    <section id="demo-placeholder" class="section">
+        <div class="container">
+            <div class="demo-icon"><i class="fas fa-video"></i></div>
+            <h2>See Aegisens in Action</h2>
+            <p class="demo-placeholder-text">Our 60-second demo video is coming soon. It will show you exactly how our AI predicts your "Histamine Day" and offers empathetic guidance.</p>
+            <p><em>Check back here in the next 24 hours!</em></p>
+        </div>
+    </section>
+
+    <!-- VISION SECTION -->
     <section id="vision" class="section">
         <div class="container">
             <h2>🚀 The Aegisens Vision</h2>
             <div class="vision-grid">
                 <div class="vision-card">
                     <div class="vision-icon">🍲</div>
-                    <h3>AI-Powered Nutrition</h3>
-                    <p>Meals tailored to your real-time health needs, delivered when you need them most.</p>
-                    <div class="launch-tag">Launch: Q2 2026</div>
+                    <!-- UPDATED HEADLINE -->
+                    <h3>Hormonal Harmony: support through menstruation, perimenopause, menopause and beyond.</h3>
+                    <p>Personalized support for women's health through every life stage.</p>
+                    <div class="launch-tag">Launch: Q4 2026</div>
                 </div>
                 <div class="vision-card">
                     <div class="vision-icon">👥</div>
@@ -470,9 +281,9 @@ width: auto;
                 </div>
                 <div class="vision-card">
                     <div class="vision-icon">🌸</div>
-                    <h3>Hormonal Harmony</h3>
-                    <p>Personalized support for women's health through every life stage.</p>
-                    <div class="launch-tag">Launch: Q4 2026</div>
+                    <h3>AI-Powered Nutrition</h3>
+                    <p>Meals tailored to your real-time health needs, delivered when you need them most.</p>
+                    <div class="launch-tag">Launch: Q2 2026</div>
                 </div>
             </div>
             <p style="text-align: center; color: #a0aec0; margin-top: 2rem; font-style: italic;">
@@ -489,13 +300,12 @@ width: auto;
                     <i class="fas fa-user-astronaut"></i>
                 </div>
                 <h3>Kati</h3>
-                <p style="color: #9f7aea;">Founder & Vision Keeper</p>
+                <p style="color: #ffb8d9;">Founder & Vision Keeper</p>
             </div>
             <div class="founder-info">
                 <h3>Meet Your Guide</h3>
                 <div class="title">The Heart Behind Aegisens</div>
-                <div class="founder-bio">
-                    <!-- TUTAJ WKLEJ SWÓJ DŁUŻSZY OPIS -->
+<div class="founder-bio">
                     <p>Hello, I'm Kati. For over a decade, I've navigated the complex intersection of health and technology, witnessing firsthand how data often overshadows the human story.</p>
                     <p>Aegisens was born from a simple, powerful truth: health is not a metric to be tracked, but a rhythm to be understood. It's the fusion of my professional journey in health-tech and a personal mission to build technology that doesn't just collect data, but truly listens—to your voice, your body's whispers, and your life's phases.</p>
                     <p>My role here is not just as a founder, but as your partner and the guardian of our core promise: to create a space where you are sensed, not just scanned. Where technology empowers with empathy, guiding you through every changing day so you never have to figure it out alone.</p>
@@ -515,34 +325,60 @@ width: auto;
                 <a href="https://github.com/aegisens">GitHub</a>
             </div>
             <p>© 2025 Aegisens. "Health That Senses You" – All visions reserved.</p>
-            <p style="font-size: 0.9rem; margin-top: 1rem; color: #718096;">Stealth mode. Building the future with care.</p>
+            <p style="font-size: 0.9rem; margin-top: 1rem; color: rgba(255, 255, 255, 0.5);">Stealth mode. Building the future with care.</p>
         </div>
     </footer>
 
+    <!-- JAVASCRIPT -->
     <script>
-        // Simple form handler
-document.getElementById('waitlist-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input[name="email"]').value;
-            // For now, just show an alert
-            alert(Thank you, we have received your interest! For now, please also send us an email at aegisenshealth@gmail.com to ensure your spot. We will contact you at: ${email});
-            this.reset();
-        });
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
+        // ----- LIVE COUNTER FUNCTIONALITY -----
+        document.addEventListener('DOMContentLoaded', function() {
+            const counterElement = document.getElementById('waitlist-counter');
+            let currentCount = 237; // Base count
+
+            // Function to simulate growth every 30 seconds
+            function simulateGrowth() {
+                setInterval(() => {
+                    const increment = Math.floor(Math.random() * 3) + 1; // Adds 1-3
+                    currentCount += increment;
+                    if (counterElement) {
+                        // Smooth transition
+                        counterElement.style.opacity = '0.7';
+                        setTimeout(() => {
+                            counterElement.textContent = currentCount;
+                            counterElement.style.opacity = '1';
+                        }, 150);
+                    }
+                }, 30000); // Update every 30 seconds
+            }
+            simulateGrowth();
+
+            // ----- FORM HANDLER -----
+            window.handleWaitlistSubmit = function() {
+                const emailInput = document.querySelector('#waitlist-form input[name="email"]');
+                const email = emailInput.value;
+                if (email) {
+                    alert(Thank you! We have received your interest at: ${email}\n\nFor now, please also send us an email at aegisenshealth@gmail.com to ensure your spot.);
+                    emailInput.value = ''; // Clear the field
                 }
+            };
+
+            // ----- SMOOTH SCROLLING FOR ANCHOR LINKS -----
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    e.preventDefault();
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
             });
+console.log('Aegisens website fully loaded and interactive.');
         });
     </script>
 </body>
