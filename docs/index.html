@@ -3,20 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Aegisens 
-        Health That Senses You </title>
+    <title>Aegisens - Health That Senses You</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* GLOBAL STYLES */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    color: white;
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+        
+        /* HEADER STYLES */
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 2rem 5%;
+            min-height: 30vh;
+        }
+        
+        .brand-title {
+            color: #D4AF37; /* złoty kolor */
+            font-size: 4rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        .brand-subtitle {
+            color: #F5F5F5;
+            font-size: 1.5rem;
+            font-weight: 300;
+            text-align: center;
+            margin-top: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        @media (max-width: 768px) {
+            .brand-title {
+                font-size: 2.5rem;
+            }
+            .brand-subtitle {
+                font-size: 1.2rem;
+            }
+        }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
 
 /* HEADER - Lighter, transparent */
