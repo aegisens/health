@@ -9,102 +9,119 @@
     <style>
         /* GLOBAL STYLES */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background: #0a0e17; color: #e2e8f0; line-height: 1.6; overflow-x: hidden; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        
-        /* HEADER */
-        .header { padding: 1.5rem 0; border-bottom: 1px solid #1a202c; }
-        .header .container { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.8rem; font-weight: 800; color: #9f7aea; text-decoration: none; display: flex; align-items: center; gap: 10px; }
-        .logo i { color: #00d4ff; }
-        .nav a { color: #cbd5e0; text-decoration: none; margin-left: 2rem; transition: color 0.3s; }
-        .nav a:hover { color: #9f7aea; }
-        
-        /* HERO SECTION */
-        .hero {
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, #0a0e17 0%, #1a1b2e 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        .hero-bg {
-            position: absolute;
-            top: -50%;
-            right: -30%;
-            width: 80%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(159, 122, 234, 0.07) 0%, transparent 70%);
-            z-index: 0;
-        }
-        .hero-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-        .hero-text h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1.1;
-            color: #e2e8f0;
-            margin-bottom: 2rem;
-        }
-        .hero-text h1 span.voice { color: #9f7aea; }
-        .hero-text h1 span.rhythm { color: #00d4ff; }
-        .hero-text .subtitle {
-            font-size: 1.5rem;
-            line-height: 1.6;
-            color: #cbd5e0;
-            margin-bottom: 3rem;
-        }
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
-        }
-        .btn-primary {
-            display: inline-block;
-            background: linear-gradient(90deg, #9f7aea 0%, #00d4ff 100%);
-            color: white;
-            padding: 1.2rem 3rem;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 50px;
-            text-decoration: none;
-            box-shadow: 0 6px 25px rgba(159, 122, 234, 0.4);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(159, 122, 234, 0.6);
-        }
-        .btn-secondary {
-            display: inline-block;
-            border: 2px solid #4a5568;
-            color: #cbd5e0;
-            padding: 1.2rem 2.5rem;
-            font-size: 1.2rem;
-            font-weight: 600;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .btn-secondary:hover {
-            border-color: #9f7aea;
-            color: #9f7aea;
-        }
-        .hero-note {
-            color: #718096;
-            font-size: 0.95rem;
-        }
+body { background: #fdf8f3; /* Soft warm white */ color: #5a4a6a; /* Muted purple-grey for text */ line-height: 1.6; overflow-x: hidden; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* HEADER */
+.header { padding: 1.5rem 0; border-bottom: 1px solid #f0e6f6; }
+.header .container { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.8rem; font-weight: 800; color: #d8a7ca; /* Soft pink */ text-decoration: none; display: flex; align-items: center; gap: 10px; }
+.logo i { color: #9bc8d6; /* Soft mint */ }
+.nav a { color: #8a7a9c; /* Muted purple */ text-decoration: none; margin-left: 2rem; transition: color 0.3s; font-weight: 500; }
+.nav a:hover { color: #d8a7ca; }
+
+/* HERO SECTION */
+.hero {
+    min-height: 90vh; display: flex; align-items: center; padding: 4rem 2rem;
+    background: linear-gradient(135deg, #fdf8f3 0%, #f5eef8 100%); /* Warm gradient */
+    position: relative; overflow: hidden;
+}
+.hero-bg {
+    position: absolute; top: -50%; right: -30%; width: 80%; height: 200%;
+    background: radial-gradient(circle, rgba(216, 167, 202, 0.15) 0%, transparent 70%); /* Soft pink glow */
+    z-index: 0;
+}
+.hero-text h1 {
+    font-size: 3.5rem; font-weight: 800; line-height: 1.1;
+    color: #5a4a6a; /* Primary text color */
+    margin-bottom: 2rem;
+}
+.hero-text h1 span.voice { color: #d8a7ca; } /* Soft pink */
+.hero-text h1 span.rhythm { color: #9bc8d6; } /* Soft mint */
+.hero-text .subtitle {
+    font-size: 1.5rem; line-height: 1.6;
+    color: #8a7a9c; /* Muted purple */
+    margin-bottom: 3rem;
+}
+.btn-primary {
+    display: inline-block;
+    background: linear-gradient(90deg, #d8a7ca 0%, #9bc8d6 100%); /* Pink to Mint */
+    color: #fdf8f3; padding: 1.2rem 3rem; font-size: 1.2rem; font-weight: bold;
+    border-radius: 50px; text-decoration: none;
+    box-shadow: 0 6px 20px rgba(216, 167, 202, 0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(216, 167, 202, 0.5); }
+.btn-secondary {
+    display: inline-block; border: 2px solid #d8a7ca; color: #d8a7ca;
+    padding: 1.2rem 2.5rem; font-size: 1.2rem; font-weight: 600;
+    border-radius: 50px; text-decoration: none; transition: all 0.3s;
+    background: transparent;
+}
+.btn-secondary:hover { background: rgba(216, 167, 202, 0.08); }
+.hero-note { color: #b8abc6; font-size: 0.95rem; } /* Light purple-grey */
+
+/* WAITLIST CARD */
+.waitlist-card {
+    background: rgba(255, 255, 255, 0.85); /* Light translucent card */
+    backdrop-filter: blur(10px); border-radius: 20px; padding: 3rem;
+    border: 1px solid #f0e6f6; /* Very light lavender border */
+    box-shadow: 0 15px 40px rgba(141, 118, 167, 0.12); /* Soft shadow */
+}
+.waitlist-card h3 { font-size: 1.8rem; font-weight: bold; color: #5a4a6a; margin-bottom: 1rem; }
+.waitlist-card p { color: #8a7a9c; margin-bottom: 2rem; }
+#waitlist-form input {
+    padding: 1rem; border-radius: 12px; border: 1px solid #e1d5ed;
+    background: #faf7fc; /* Very light lavender */
+    color: #5a4a6a; font-size: 1rem;
+}
+#waitlist-form button {
+    background: #d8a7ca; color: #fdf8f3; border: none; padding: 1rem;
+    border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+    transition: background 0.3s;
+}
+#waitlist-form button:hover { background: #c995b8; }
+.form-note { color: #b8abc6; font-size: 0.9rem; margin-top: 1.5rem; }
+
+/* VISION SECTION */
+.section { margin-top: 5rem; padding: 3rem 0; }
+.section h2 { text-align: center; color: #5a4a6a; font-size: 2.5rem; margin-bottom: 3rem; }
+.vision-card {
+    background: #ffffff; border-radius: 16px; padding: 2rem;
+border: 1px solid #f0e6f6; box-shadow: 0 8px 25px rgba(141, 118, 167, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+.vision-card:hover {
+    transform: translateY(-8px); box-shadow: 0 15px 35px rgba(141, 118, 167, 0.15);
+    border-color: #e1d5ed;
+}
+.vision-card h3 { color: #9bc8d6; margin-bottom: 1rem; } /* Mint for titles */
+.vision-card p { color: #8a7a9c; }
+.launch-tag {
+    display: inline-block; background: #f0e6f6; color: #d8a7ca;
+    padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; margin-top: 1rem;
+}
+
+/* FOUNDER SECTION */
+.founder-section { background: #f9f2fb; /* Very light lavender */ padding: 4rem 0; margin-top: 4rem; }
+.founder-info h3 { font-size: 2rem; color: #5a4a6a; margin-bottom: 1rem; }
+.founder-info .title { color: #d8a7ca; font-size: 1.2rem; margin-bottom: 2rem; }
+.founder-bio { color: #6d5c7e; /* Slightly darker purple-grey */ font-size: 1.1rem; line-height: 1.7; }
+.avatar {
+    width: 200px; height: 200px; border-radius: 50%;
+    background: linear-gradient(135deg, #d8a7ca, #9bc8d6); /* Pink to mint gradient */
+    margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; color: #fdf8f3;
+}
+
+/* FOOTER */
+.footer { border-top: 1px solid #f0e6f6; padding: 3rem 0; margin-top: 4rem; text-align: center; color: #b8abc6; }
+.footer-links a { color: #8a7a9c; text-decoration: none; transition: color 0.3s; }
+.footer-links a:hover { color: #d8a7ca; }
+
+/* RESPONSIVE RULES REMAIN THE SAME */
+@media (max-width: 992px) { ... }
+@media (max-width: 768px) { ... }
         
         /* WAITLIST CARD */
         .waitlist-card {
