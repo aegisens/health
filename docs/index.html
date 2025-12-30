@@ -211,35 +211,7 @@
 }
 
 /* ===== LOGO ===== */
-.logo { 
-    display: flex; 
-    align-items: center; 
-    gap: 20px;
-    text-decoration: none;
-    color: inherit;
-}
-
-/* Logo po lewej stronie */
-.logo-image {
-    height: 100px; 
-    width: auto;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
-    transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-.logo-image:hover {
-    transform: scale(1.05);
-    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.2));
-}
-
-/* Kontener z tekstami obok logo */
-.logo-text-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.logo-text {
+a.logo .logo-text-content .logo-text {
     font-size: 1.2rem; 
     font-weight: 700; 
     color: #ffffff;
@@ -248,8 +220,8 @@
     line-height: 1;
 }
 
-.slogan { 
-    font-size: 1.7rem; /* ZWIĘKSZONE - WIĘKSZE OD LOGO-TEXT */
+a.logo .logo-text-content .slogan { 
+    font-size: 1.7rem; 
     font-weight: 900; 
     color: rgba(255, 255, 255, 0.95); 
     font-style: italic;
@@ -259,27 +231,38 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* RESPONSYWNOŚĆ */
+/* RESPONSYWNOŚĆ Z WIĘKSZĄ SPECYFICZNOŚCIĄ */
 @media (max-width: 1024px) {
-    .logo-text {
+    a.logo .logo-text-content .logo-text {
         font-size: 1.1rem;
     }
     
-    .slogan {
+    a.logo .logo-text-content .slogan {
         font-size: 1.5rem;
     }
 }
 
 @media (max-width: 768px) {
-    .logo-text {
+    a.logo .logo-text-content .logo-text {
         font-size: 1rem;
         white-space: normal;
     }
     
-    .slogan {
-        font-size: 1.3rem; /* Nadal większe niż logo-text */
+    a.logo .logo-text-content .slogan {
+        font-size: 1.3rem;
         white-space: normal;
         letter-spacing: 0.3px;
+    }
+}
+
+@media (max-width: 480px) {
+    a.logo .logo-text-content .logo-text {
+        font-size: 0.95rem;
+    }
+    
+    a.logo .logo-text-content .slogan {
+        font-size: 1.1rem;
+        font-weight: 800;
     }
 }
 
