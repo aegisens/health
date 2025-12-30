@@ -188,11 +188,11 @@
         }
 /* POPRAWKA: Jeden kolor dla głównego nagłówka */
 .hero-text h1 {
-    color: #bfa76a !important; 
+    color: #9e8c5a !important; 
 }
 .hero-text h1 span.voice,
 .hero-text h1 span.rhythm {
-    color: #bfa76a !important; /* Nadpisujemy poprzednie kolory akcentów */
+    color: #9e8c5a !important; /* Nadpisujemy poprzednie kolory akcentów */
 }
     <style>
 /* ===== HEADER ===== */
@@ -212,57 +212,81 @@
 
 /* ===== LOGO ===== */
 a.logo .logo-text-content .logo-text {
-    font-size: 1.2rem; 
-    font-weight: 700; 
+    font-size: 1.7rem; /* POWIĘKSZONY - teraz większy */
+    font-weight: 900; /* POGRUBIONY */
     color: #ffffff;
     white-space: nowrap;
     margin-bottom: 4px;
     line-height: 1;
+    text-align: center; /* Wyśrodkowanie */
+    display: block; /* Blokowy dla centrowania */
 }
 
 a.logo .logo-text-content .slogan { 
-    font-size: 1.7rem; 
-    font-weight: 900; 
+    font-size: 1.2rem; /* POMNIEJSZONY - teraz mniejszy */
+    font-weight: 700; /* Normalna waga */
     color: rgba(255, 255, 255, 0.95); 
     font-style: italic;
     letter-spacing: 0.5px;
     white-space: nowrap;
     line-height: 1.1;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center; /* Wyśrodkowanie */
+    display: block; /* Blokowy dla centrowania */
+    margin-top: 2px; /* Odstęp od logo-text */
+}
+
+/* Upewnij się, że kontener jest wyśrodkowany */
+.logo-text-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Wyśrodkowanie w poziomie */
+    justify-content: center; /* Wyśrodkowanie w pionie */
 }
 
 /* RESPONSYWNOŚĆ Z WIĘKSZĄ SPECYFICZNOŚCIĄ */
 @media (max-width: 1024px) {
     a.logo .logo-text-content .logo-text {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
     }
     
     a.logo .logo-text-content .slogan {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
     }
 }
 
 @media (max-width: 768px) {
     a.logo .logo-text-content .logo-text {
-        font-size: 1rem;
+        font-size: 1.3rem;
         white-space: normal;
+        text-align: center;
     }
     
     a.logo .logo-text-content .slogan {
-        font-size: 1.3rem;
+        font-size: 1rem;
         white-space: normal;
         letter-spacing: 0.3px;
+        text-align: center;
     }
 }
 
 @media (max-width: 480px) {
     a.logo .logo-text-content .logo-text {
-        font-size: 0.95rem;
+        font-size: 1.1rem;
     }
     
     a.logo .logo-text-content .slogan {
-        font-size: 1.1rem;
-        font-weight: 800;
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+}
+
+@media (max-width: 360px) {
+    a.logo .logo-text-content .logo-text {
+        font-size: 1rem;
+    }
+    
+    a.logo .logo-text-content .slogan {
+        font-size: 0.85rem;
     }
 }
 
