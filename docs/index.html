@@ -188,11 +188,11 @@
         }
 /* POPRAWKA: Jeden kolor dla głównego nagłówka */
 .hero-text h1 {
-    color: #9e8c5a !important; 
+    color: #f471ea !important; 
 }
 .hero-text h1 span.voice,
 .hero-text h1 span.rhythm {
-    color: #9e8c5a !important; /* Nadpisujemy poprzednie kolory akcentów */
+    color: #f471ea !important; /* Nadpisujemy poprzednie kolory akcentów */
 }
     <style>
 /* ===== HEADER ===== */
@@ -220,6 +220,7 @@ a.logo .logo-text-content .logo-text {
     line-height: 1;
     text-align: center; /* Wyśrodkowanie */
     display: block; /* Blokowy dla centrowania */
+    width: 100%; /* Zajmuje całą szerokość kontenera */
 }
 
 a.logo .logo-text-content .slogan { 
@@ -233,6 +234,7 @@ a.logo .logo-text-content .slogan {
     text-align: center; /* Wyśrodkowanie */
     display: block; /* Blokowy dla centrowania */
     margin-top: 2px; /* Odstęp od logo-text */
+    width: 100%; /* Zajmuje całą szerokość kontenera */
 }
 
 /* Upewnij się, że kontener jest wyśrodkowany */
@@ -241,6 +243,7 @@ a.logo .logo-text-content .slogan {
     flex-direction: column;
     align-items: center; /* Wyśrodkowanie w poziomie */
     justify-content: center; /* Wyśrodkowanie w pionie */
+    text-align: center; /* Dodatkowe centrowanie tekstu */
 }
 
 /* RESPONSYWNOŚĆ Z WIĘKSZĄ SPECYFICZNOŚCIĄ */
@@ -255,38 +258,57 @@ a.logo .logo-text-content .slogan {
 }
 
 @media (max-width: 768px) {
+    /* POPRAWIENIE DLA TELEFONU - TEKST NA ŚRODKU */
     a.logo .logo-text-content .logo-text {
         font-size: 1.3rem;
         white-space: normal;
-        text-align: center;
+        text-align: center !important; /* Wymuszenie centrowania */
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
     }
     
     a.logo .logo-text-content .slogan {
         font-size: 1rem;
         white-space: normal;
         letter-spacing: 0.3px;
-        text-align: center;
+        text-align: center !important; /* Wymuszenie centrowania */
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    /* NAJWAŻNIEJSZA ZMIANA: logo-text-content NA ŚRODKU */
+    .logo-text-content {
+        align-items: center !important; /* WYMUSZENIE centrowania */
+        text-align: center !important;
+        justify-content: center;
+        width: 100%;
     }
 }
 
 @media (max-width: 480px) {
     a.logo .logo-text-content .logo-text {
         font-size: 1.1rem;
+        text-align: center !important;
     }
     
     a.logo .logo-text-content .slogan {
         font-size: 0.95rem;
         font-weight: 600;
+        text-align: center !important;
     }
 }
 
 @media (max-width: 360px) {
     a.logo .logo-text-content .logo-text {
         font-size: 1rem;
+        text-align: center !important;
     }
     
     a.logo .logo-text-content .slogan {
         font-size: 0.85rem;
+        text-align: center !important;
     }
 }
 
@@ -303,17 +325,6 @@ a.logo .logo-text-content .slogan {
     color: #ffffff; 
 }
 
-/* ===== RESPONSYWNOŚĆ - TABLET ===== */
-@media (max-width: 360px) {
-    .logo-text {
-        font-size: 0.9rem;
-    }
-    
-    .slogan {
-        font-size: 1rem;
-    }
-}
-
 /* ===== RESPONSYWNOŚĆ - TELEFON ===== */
 @media (max-width: 768px) {
     .header {
@@ -327,22 +338,50 @@ a.logo .logo-text-content .slogan {
         align-items: stretch;
     }
     
+    /* LOGO UKŁAD - KOREKTA */
     .logo {
         flex-direction: row;
-        text-align: left;
+        text-align: center; /* ZMIANA: center zamiast left */
         gap: 15px;
         width: 100%;
-        justify-content: flex-start; /* Logo zostaje po LEWEJ */
+        justify-content: center; /* ZMIANA: center zamiast flex-start */
+        align-items: center; /* Wyśrodkowanie pionowe */
     }
     
     .logo-image {
         height: 60px;
-        margin: 0; /* Usunięcie marginesów */
+        margin: 0;
+        flex-shrink: 0; /* Zapobiega zmniejszaniu */
     }
     
+    /* USUŃ LUB ZAKOMENTUJ TE LINIJKI, BO PRZESUWAJĄ TEKST W LEWO: */
+    /*
     .logo-text-content {
         align-items: flex-start;
         text-align: left;
+    }
+    */
+    
+    /* ZAMIAST TEGO DODAJ: */
+    .logo-text-content {
+        align-items: center !important;
+        text-align: center !important;
+        justify-content: center;
+        flex: 1; /* Zajmuje dostępną przestrzeń */
+    }
+    
+    .nav {
+        margin-top: 0.5rem;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
+    
+    .nav a {
+        margin: 0;
+        font-size: 0.9rem;
+        padding: 0.3rem 0.5rem;
     }
 }
 </style>
