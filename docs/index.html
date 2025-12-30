@@ -221,7 +221,7 @@
 
 /* Logo po lewej stronie */
 .logo-image {
-    height: 80px; /* Zmniejszone dla lepszej responsywności */
+    height: 100px; 
     width: auto;
     filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
     transition: transform 0.3s ease, filter 0.3s ease;
@@ -239,9 +239,8 @@
     justify-content: center;
 }
 
-/* Napis Aegisens - ZAMENIONA WIELKOŚĆ ZE ZDANIEM */
 .logo-text {
-    font-size: 1.2rem; /* Teraz większe niż wcześniej */
+    font-size: 1.2rem; 
     font-weight: 700; 
     color: #ffffff;
     white-space: nowrap;
@@ -249,15 +248,50 @@
     line-height: 1;
 }
 
-/* Zdanie kluczowe - teraz większe niż Aegisens */
 .slogan { 
-    font-size: 1.5rem; /* Teraz większe niż Aegisens */
-    font-weight: 800; /* Lekko mniej pogrubione */
-    color: rgba(255, 255, 255, 0.9); 
+    font-size: 1.7rem; /* ZWIĘKSZONE - WIĘKSZE OD LOGO-TEXT */
+    font-weight: 900; 
+    color: rgba(255, 255, 255, 0.95); 
     font-style: italic;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
     white-space: nowrap;
-    line-height: 1.2;
+    line-height: 1.1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* RESPONSYWNOŚĆ */
+@media (max-width: 1024px) {
+    .logo-text {
+        font-size: 1.1rem;
+    }
+    
+    .slogan {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .logo-text {
+        font-size: 1rem;
+        white-space: normal;
+    }
+    
+    .slogan {
+        font-size: 1.3rem; /* Nadal większe niż logo-text */
+        white-space: normal;
+        letter-spacing: 0.3px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 0.95rem;
+    }
+    
+    .slogan {
+        font-size: 1.1rem; /* Nadal wyraźnie większe */
+        font-weight: 800;
+    }
 }
 
 /* ===== NAVIGATION ===== */
@@ -274,26 +308,13 @@
 }
 
 /* ===== RESPONSYWNOŚĆ - TABLET ===== */
-@media (max-width: 1024px) {
-    .header .container {
-        padding: 0 1.2rem;
-    }
-    
-    .logo-image {
-        height: 70px;
-    }
-    
+@media (max-width: 360px) {
     .logo-text {
-        font-size: 1.3rem;
+        font-size: 0.9rem;
     }
     
     .slogan {
         font-size: 1rem;
-    }
-    
-    .nav a {
-        margin-left: 1.2rem;
-        font-size: 0.95rem;
     }
 }
 
