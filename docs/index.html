@@ -219,9 +219,9 @@
     color: inherit;
 }
 
-/* Logo powiększone jak na początku (100px) */
+/* Logo po lewej stronie */
 .logo-image {
-    height: 100px; /* PONOWNIE POWIĘKSZONE do pierwotnego rozmiaru */
+    height: 100px;
     width: auto;
     filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
     transition: transform 0.3s ease, filter 0.3s ease;
@@ -232,43 +232,32 @@
     filter: drop-shadow(0 6px 8px rgba(0,0,0,0.2));
 }
 
-/* Główny kontener dla logo i tekstów */
-.logo-content {
+/* Kontener z tekstami obok logo */
+.logo-text-content {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-/* Kontener dla napisu Aegisens (po prawej stronie logo) */
-.logo-text-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px; /* Odstęp od zdania poniżej */
-}
-
-/* Napis Aegisens po prawej stronie logo */
+/* Napis Aegisens - MNIEJSZY O POŁOWĘ */
 .logo-text {
-    font-size: 2.2rem; 
+    font-size: 1.1rem; /* Mniejszy o połowę z 2.2rem */
     font-weight: 800; 
     color: #ffffff;
     white-space: nowrap;
-    margin-left: 15px; /* Odstęp od logo */
+    margin-bottom: 4px; /* Odstęp od zdania poniżej */
+    line-height: 1;
 }
 
-/* Zdanie kluczowe - POWIĘKSZONE i POGRUBIONE jak Aegisens */
-.slogan-container {
-    display: flex;
-    align-items: center;
-}
-
+/* Zdanie kluczowe - pod spodem Aegisens */
 .slogan { 
-    font-size: 1.4rem; /* POWIĘKSZONE */
-    font-weight: 800; /* POGRUBIONE tak samo jak Aegisens */
+    font-size: 1.4rem; /* Duże i czytelne */
+    font-weight: 800; /* Pogrubione */
     color: rgba(255, 255, 255, 0.95); 
     font-style: italic;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    margin-left: 15px; /* Wyrównanie z napisem Aegisens */
+    line-height: 1.2;
 }
 
 /* ===== NAVIGATION ===== */
@@ -291,11 +280,11 @@
     }
     
     .logo-text {
-        font-size: 1.8rem;
+        font-size: 1rem;
     }
     
     .slogan {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
 }
 
@@ -310,28 +299,23 @@
         flex-direction: column;
         text-align: center;
         gap: 15px;
+        width: 100%;
     }
     
-    .logo-content {
+    .logo-text-content {
         align-items: center;
-    }
-    
-    .logo-text-container {
-        flex-direction: column;
-        margin-bottom: 10px;
+        text-align: center;
     }
     
     .logo-text {
-        font-size: 1.8rem;
-        margin-left: 0;
-        margin-top: 10px;
+        font-size: 1.2rem;
+        margin-bottom: 5px;
     }
     
     .slogan {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
+        white-space: normal;
         text-align: center;
-        margin-left: 0;
-        margin-top: 5px;
     }
     
     .nav {
@@ -349,13 +333,11 @@
     }
     
     .logo-text {
-        font-size: 1.5rem;
+        font-size: 1rem;
     }
     
     .slogan {
-        font-size: 1rem;
-        white-space: normal;
-        text-align: center;
+        font-size: 1.1rem;
     }
 }
 </style>
@@ -366,13 +348,9 @@
         <div class="container">
             <a href="/" class="logo">
                 <img src="/image/logo.png" alt="Aegisens Logo" class="logo-image">
-                <div class="logo-content">
-                    <div class="logo-text-container">
-                        <span class="logo-text">Aegisens</span>
-                    </div>
-                    <div class="slogan-container">
-                        <span class="slogan">Health That Senses You</span>
-                    </div>
+                <div class="logo-text-content">
+                    <span class="logo-text">Aegisens</span>
+                    <span class="slogan">Health That Senses You</span>
                 </div>
             </a>
             <nav class="nav">
