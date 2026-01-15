@@ -520,12 +520,21 @@ a.logo .logo-text-content .slogan {
                 <a href="https://github.com/aegisens">GitHub</a>
             </div>
             <p>© 2025 Aegisens. "Health That Senses You" – All visions reserved.</p>
-            <p style="font-size: 0.9rem; margin-top: 1rem; color: rgba(255, 255, 255, 0.5);">Stealth mode. Building the future with care.</p>
+            <p style="font-size: 0.9rem; margin-top: 1rem; color: #718096;">Stealth mode. Building the future with care.</p>
         </div>
     </footer>
 
-    <!-- JAVASCRIPT -->
     <script>
+        // Simple form handler
+document.getElementById('waitlist-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[name="email"]').value;
+            // For now, just show an alert
+            alert(Thank you, we have received your interest! For now, please also send us an email at aegisenshealth@gmail.com to ensure your spot. We will contact you at: ${email});
+            this.reset();
+        });
+        
+        // Smooth scrolling for anchor links
         document.addEventListener('DOMContentLoaded', function() {
         const counterNumber = document.getElementById('waitlist-counter');
         const counterLabel = document.querySelector('.counter-label');
@@ -542,26 +551,6 @@ a.logo .logo-text-content .slogan {
             counterNumber.textContent = currentCount + '+';
         }, 30000);
     });
-         // Simple form handler
-document.getElementById('waitlist-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input[name="email"]').value;
-            // For now, just show an alert
-            alert(Thank you, we have received your interest! For now, please also send us an email at aegisenshealth@gmail.com to ensure your spot. We will contact you at: ${email});
-            this.reset();
-        });
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
                     });
                 }
             });
