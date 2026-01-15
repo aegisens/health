@@ -525,40 +525,33 @@ a.logo .logo-text-content .slogan {
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        // ===== 1. LIVE COUNTER =====
-        const counterNumber = document.getElementById('waitlist-counter');
-        const counterLabel = document.querySelector('.counter-label');
-        if (counterNumber && counterLabel) {
-            let currentCount = 284;
-            counterNumber.textContent = currentCount + '+';
-            counterLabel.textContent = 'pioneers joined – growing daily';
+    // 1. Funkcja obsługi formularza (MUSI być w zasięgu globalnym)
+    function handleWaitlistSubmit(event) {
+        event.preventDefault(); // Zatrzymaj wysyłanie
+        const email = event.target.email.value; // Pobierz email
+        if (email) {
+            alert('Thank you! We have received your interest at: ' + email + '\n\nFor now, please also send us an email at aegisenshealth@gmail.com to ensure your spot.');
+            event.target.email.value = ''; // Wyczyść pole
+        } else {
+            alert('Please enter your email address.');
+        }
+        return false;
+    }
 
-            setInterval(function() {
-                currentCount += Math.floor(Math.random() * 3) + 1;
-                counterNumber.textContent = currentCount + '+';
+    // 2. Live Counter (działa niezależnie)
+    document.addEventListener('DOMContentLoaded', function() {
+        const counter = document.getElementById('waitlist-counter');
+        const label = document.querySelector('.counter-label');
+        if (counter && label) {
+            let count = 284;
+            counter.textContent = count + '+';
+            label.textContent = 'pioneers joined – growing daily';
+            setInterval(() => {
+                count += Math.floor(Math.random() * 3) + 1;
+                counter.textContent = count + '+';
             }, 30000);
         }
-
-        // ===== 2. FORM HANDLER =====
-        
-        window.handleWaitlistSubmit = function(event) {
-            
-            event.preventDefault();
-
-            const emailInput = document.querySelector('#waitlist-form input[name="email"]');
-            const email = emailInput ? emailInput.value : '';
-
-            if (email) {
-                
-                alert(Thank you! We have received your interest at: ${email}\n\nFor now, please also send us an email at aegisenshealth@gmail.com to ensure your spot.);
-                
-                emailInput.value = '';
-            } else {
-                alert('Please enter your email address.');
-            }
-        };
     });
-    </script>
+</script>
 </body>
 </html>
