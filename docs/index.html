@@ -525,36 +525,40 @@ a.logo .logo-text-content .slogan {
     </footer>
 
     <script>
-        // Simple form handler
-document.getElementById('waitlist-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input[name="email"]').value;
-            // For now, just show an alert
-            alert(Thank you, we have received your interest! For now, please also send us an email at aegisenshealth@gmail.com to ensure your spot. We will contact you at: ${email});
-            this.reset();
-        });
-        
-        // Smooth scrolling for anchor links
         document.addEventListener('DOMContentLoaded', function() {
+        // ===== 1. LIVE COUNTER =====
         const counterNumber = document.getElementById('waitlist-counter');
         const counterLabel = document.querySelector('.counter-label');
-        if (!counterNumber || !counterLabel) return;
-
-        let currentCount = 284;
-        
-        counterNumber.textContent = currentCount + '+';
-        counterLabel.textContent = 'pioneers joined – growing daily';
-
-        setInterval(function() {
-            currentCount += Math.floor(Math.random() * 3) + 1;
-            
+        if (counterNumber && counterLabel) {
+            let currentCount = 284;
             counterNumber.textContent = currentCount + '+';
-        }, 30000);
+            counterLabel.textContent = 'pioneers joined – growing daily';
+
+            setInterval(function() {
+                currentCount += Math.floor(Math.random() * 3) + 1;
+                counterNumber.textContent = currentCount + '+';
+            }, 30000);
+        }
+
+        // ===== 2. FORM HANDLER =====
+        
+        window.handleWaitlistSubmit = function(event) {
+            
+            event.preventDefault();
+
+            const emailInput = document.querySelector('#waitlist-form input[name="email"]');
+            const email = emailInput ? emailInput.value : '';
+
+            if (email) {
+                
+                alert(Thank you! We have received your interest at: ${email}\n\nFor now, please also send us an email at aegisenshealth@gmail.com to ensure your spot.);
+                
+                emailInput.value = '';
+            } else {
+                alert('Please enter your email address.');
+            }
+        };
     });
-                    });
-                }
-            });
-        });
     </script>
 </body>
 </html>
