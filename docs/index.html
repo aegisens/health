@@ -434,8 +434,8 @@ a.logo .logo-text-content .slogan {
 
                 <!-- WAITLIST FORM -->
                 <form id="waitlist-form" onsubmit="event.preventDefault(); handleWaitlistSubmit();">
-                    <input type="email" name="email" placeholder="Your best email address" required>
-                    <button type="submit">Secure My Spot</button>
+                    <input type="email" name="email" placeholder="Your email" id="waitlist-email">
+<button onclick="submitWaitlist()">Secure My Spot</button>
                 </form>
                 <p class="form-note">✅ No spam. 🔒 Privacy-first. Unsubscribe anytime.</p>
             </div>
@@ -510,51 +510,43 @@ a.logo .logo-text-content .slogan {
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-links">
-                <a href="mailto:aegisenshealth@gmail.com">Contact</a>
-                <a href="#privacy">Privacy</a>
-                <a href="#terms">Terms</a>
-                <a href="https://github.com/aegisens">GitHub</a>
-            </div>
-            <p>© 2025 Aegisens. "Health That Senses You" – All visions reserved.</p>
-            <p style="font-size: 0.9rem; margin-top: 1rem; color: #718096;">Stealth mode. Building the future with care.</p>
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-links">
+            <a href="mailto:aegisenshealth@gmail.com">Contact</a>
+            <a href="#privacy">Privacy</a>
+            <a href="#terms">Terms</a>
+            <a href="https://github.com/aegisens">GitHub</a>
         </div>
-    </footer>
+        <p>© 2025 Aegisens. "Health That Senses You" – All visions reserved.</p>
+        <p style="font-size: 0.9rem; margin-top: 1rem; color: #718096;">Stealth mode. Building the future with care.</p>
+    </div>
+</footer>
 
-    <script>
-    // FUNKCJA DLA FORMULARZA
-    function handleWaitlistSubmit(event) {
-        // 1. Zatrzymaj wysyłanie formularza
-        event.preventDefault();
-
-        // 2. Znajdź pole email w tym formularzu
-        const form = event.target;
-        const emailInput = form.querySelector('input[type="email"]');
-
-        // 3. Pobierz adres
-        const userEmail = emailInput.value;
-
-        // 4. Pokaż alert
-        alert('Thank you! We have received your interest at: ' + userEmail + '\n\nFor now, please also send us an email at aegisenshealth@gmail.com to ensure your spot.');
-
-        // 5. Wyczyść pole
-        emailInput.value = '';
-
-        // Funkcja NIE wysyła formularza dalej
-        return false;
+<script>
+    function submitWaitlist() {
+        const emailInput = document.getElementById('waitlist-email');
+        const email = emailInput ? emailInput.value : '';
+        
+        if (email) {
+            alert(`Thank you! We have received your interest at: ${email}\n\nFor now, please also send us an email at aegisenshealth@gmail.com to ensure your spot.`);
+            emailInput.value = '';
+        } else {
+            alert('Please enter your email address.');
+        }
     }
 
-    // LIVE COUNTER (pozostaje bez zmian)
+    // LIVE COUNTER 
     document.addEventListener('DOMContentLoaded', function() {
         const counterNumber = document.getElementById('waitlist-counter');
         const counterLabel = document.querySelector('.counter-label');
+        
         if (counterNumber && counterLabel) {
             let currentCount = 284;
             counterNumber.textContent = currentCount + '+';
             counterLabel.textContent = 'pioneers joined – growing daily';
+            
             setInterval(function() {
                 currentCount += Math.floor(Math.random() * 3) + 1;
                 counterNumber.textContent = currentCount + '+';
