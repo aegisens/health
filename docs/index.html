@@ -340,7 +340,7 @@ a.logo .logo-text-content .slogan {
     }
     
     .logo-image {
-        height: 60px;
+        height: 80px;
         margin: 0;
         flex-shrink: 0; /* Zapobiega zmniejszaniu */
     }
@@ -526,19 +526,21 @@ a.logo .logo-text-content .slogan {
 
     <!-- JAVASCRIPT -->
     <script>
-        document.addEventListener('DOMContentMillis', function() {
-        const counterEl = document.getElementById('waitlist-counter');
-        const labelEl = document.querySelector('.counter-label');
-        if (!counterEl || !labelEl) return;
+        document.addEventListener('DOMContentLoaded', function() {
+        const counterNumber = document.getElementById('waitlist-counter');
+        const counterLabel = document.querySelector('.counter-label');
+        if (!counterNumber || !counterLabel) return;
 
-        let number = 284;
-        counterEl.textContent = number + '+';
-        labelEl.textContent = 'pioneers joined – growing daily';
+        let currentCount = 284;
+        
+        counterNumber.textContent = currentCount + '+';
+        counterLabel.textContent = 'pioneers joined – growing daily';
 
         setInterval(function() {
-            number += Math.floor(Math.random() * 4) + 1;
-            counterEl.textContent = number + '+';
-        }, 32000);
+            currentCount += Math.floor(Math.random() * 3) + 1;
+            
+            counterNumber.textContent = currentCount + '+';
+        }, 30000);
     });
     </script>
 </body>
