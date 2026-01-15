@@ -555,8 +555,13 @@ a.logo .logo-text-content .slogan {
             alert('Thank you! We have received your interest at: ' + email + '\n\nFor now, please also send us an email at aegisenshealth@gmail.com to ensure your spot.');
             
             emailInput.value = '';
-        } else {
-            alert('Please enter your email address.');
+            if (email) {
+                
+                alert(Thank you! We have received your interest at: ${email}\n\nFor now, please also send us an email at aegisenshealth@gmail.com to ensure your spot.);
+                
+                emailInput.value = '';
+            } else {
+                alert('Please enter your email address.');
         }
 
         return false;
