@@ -542,6 +542,30 @@ a.logo .logo-text-content .slogan {
             counterNumber.textContent = currentCount + '+';
         }, 30000);
     });
+         // Simple form handler
+document.getElementById('waitlist-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[name="email"]').value;
+            // For now, just show an alert
+            alert(Thank you, we have received your interest! For now, please also send us an email at aegisenshealth@gmail.com to ensure your spot. We will contact you at: ${email});
+            this.reset();
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
