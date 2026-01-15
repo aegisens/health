@@ -525,30 +525,39 @@ a.logo .logo-text-content .slogan {
     </footer>
 
     <script>
-    // 1. Funkcja obsługi formularza (MUSI być w zasięgu globalnym)
+    // FUNKCJA DLA FORMULARZA
     function handleWaitlistSubmit(event) {
-        event.preventDefault(); // Zatrzymaj wysyłanie
-        const email = event.target.email.value; // Pobierz email
-        if (email) {
-            alert('Thank you! We have received your interest at: ' + email + '\n\nFor now, please also send us an email at aegisenshealth@gmail.com to ensure your spot.');
-            event.target.email.value = ''; // Wyczyść pole
-        } else {
-            alert('Please enter your email address.');
-        }
+        // 1. Zatrzymaj wysyłanie formularza
+        event.preventDefault();
+
+        // 2. Znajdź pole email w tym formularzu
+        const form = event.target;
+        const emailInput = form.querySelector('input[type="email"]');
+
+        // 3. Pobierz adres
+        const userEmail = emailInput.value;
+
+        // 4. Pokaż alert
+        alert('Thank you! We have received your interest at: ' + userEmail + '\n\nFor now, please also send us an email at aegisenshealth@gmail.com to ensure your spot.');
+
+        // 5. Wyczyść pole
+        emailInput.value = '';
+
+        // Funkcja NIE wysyła formularza dalej
         return false;
     }
 
-    // 2. Live Counter (działa niezależnie)
+    // LIVE COUNTER (pozostaje bez zmian)
     document.addEventListener('DOMContentLoaded', function() {
-        const counter = document.getElementById('waitlist-counter');
-        const label = document.querySelector('.counter-label');
-        if (counter && label) {
-            let count = 284;
-            counter.textContent = count + '+';
-            label.textContent = 'pioneers joined – growing daily';
-            setInterval(() => {
-                count += Math.floor(Math.random() * 3) + 1;
-                counter.textContent = count + '+';
+        const counterNumber = document.getElementById('waitlist-counter');
+        const counterLabel = document.querySelector('.counter-label');
+        if (counterNumber && counterLabel) {
+            let currentCount = 284;
+            counterNumber.textContent = currentCount + '+';
+            counterLabel.textContent = 'pioneers joined – growing daily';
+            setInterval(function() {
+                currentCount += Math.floor(Math.random() * 3) + 1;
+                counterNumber.textContent = currentCount + '+';
             }, 30000);
         }
     });
