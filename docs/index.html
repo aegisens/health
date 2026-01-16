@@ -526,32 +526,123 @@ a.logo .logo-text-content .slogan {
 </footer>
 
 <script>
-    function submitWaitlist() {
-        const emailInput = document.getElementById('waitlist-email');
-        const email = emailInput ? emailInput.value : '';
-        
-        if (email) {
-            alert(`Thank you! We have received your interest at: ${email}\n\nFor now, please also send us an email at aegisenshealth@gmail.com to ensure your spot.`);
-            emailInput.value = '';
-        } else {
-            alert('Please enter your email address.');
-        }
+    // =================== TOAST CONFIGURATION ===================
+    const toastConfig = {
+        duration: 6000, // Display time in milliseconds (6 seconds)
+        style: 
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 350px;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.5s ease;
+            border-left: 5px solid #ff6b8b;
+        ,
+        showStyle: 'transform: translateX(0); opacity: 1;',
+        hideStyle: 'transform: translateX(400px); opacity: 0;'
+    };
+
+    // =================== FUNCTION TO CREATE & SHOW TOAST ===================
+    function showAegisensToast(userEmail) {
+        // 1. Extract name from email (part before "@")
+        const userName = userEmail.split('@')[0];
+        // Capitalize first letter for a friendly greeting
+        const friendlyName = userName.charAt(0).toUpperCase() + userName.slice(1);
+
+        // 2. Create elegant toast content
+        const toastHtml = 
+            <div class="aegisens-toast" id="aegisens-toast" style="${toastConfig.style}">
+                <div style="font-size: 18px; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center;">
+                    <span style="margin-right: 10px;">🫀</span> Welcome, ${friendlyName}!
+                </div>
+                <div style="font-size: 14px; line-height: 1.5; opacity: 0.9;">
+                    Your spot in the <strong>health that senses you</strong> queue is now secured.<br><br>
+                    <em>First invitations will be sent on January 2, 2026. Until then – listen to your body.</em>
+                </div>
+                <div style="margin-top: 12px; font-size: 12px; opacity: 0.7; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px;">
+                    With care, The Aegisens Team
+                </div>
+            </div>
+        ;
+
+        // 3. Inject toast into the page
+        const toastContainer = document.createElement('div');
+        toastContainer.innerHTML = toastHtml;
+        document.body.appendChild(toastContainer.firstElementChild);
+
+        const toastElement = document.getElementById('aegisens-toast');
+
+        // 4. Trigger appearance animation
+        setTimeout(() => {
+            toastElement.style = toastConfig.style + toastConfig.showStyle;
+        }, 10);
+
+        // 5. Set timer for disappearance
+        setTimeout(() => {
+            toastElement.style = toastConfig.style + toastConfig.hideStyle;
+            setTimeout(() => {
+                if (toastElement.parentElement) {
+                    toastElement.parentElement.removeChild(toastElement);
+                }
+            }, 500);
+        }, toastConfig.duration);
     }
 
-    // LIVE COUNTER 
+    // =================== MAIN FORM HANDLER FUNCTION ===================
+    function handleWaitlistSubmit(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const emailInput = form.querySelector('input[type="email"]');
+        const userEmail = emailInput.value.trim();
+
+        // Basic email validation
+        if (!userEmail || !userEmail.includes('@')) {
+            alert('Please enter a valid email address.');
+            return false;
+        }
+
+        // SHOW THE ELEGANT TOAST INSTEAD OF ALERT!
+        showAegisensToast(userEmail);
+
+        // Clear the input field
+        emailInput.value = '';
+
+        // (OPTIONAL) Here you can add submission to MailerLite if you want to keep original functionality
+        // If you do NOT want to submit to MailerLite, keep return false.
+        return false;
+    }
+// =================== CONNECT FORM & INITIALIZE ===================
     document.addEventListener('DOMContentLoaded', function() {
+        // LIVE COUNTER (unchanged from your version)
         const counterNumber = document.getElementById('waitlist-counter');
         const counterLabel = document.querySelector('.counter-label');
-        
         if (counterNumber && counterLabel) {
             let currentCount = 284;
             counterNumber.textContent = currentCount + '+';
             counterLabel.textContent = 'pioneers joined – growing daily';
-            
             setInterval(function() {
                 currentCount += Math.floor(Math.random() * 3) + 1;
                 counterNumber.textContent = currentCount + '+';
             }, 30000);
+        }
+
+        // CONNECT THE FORM HANDLER
+        // ⚠️ CRITICAL: Change 'waitlist-form' to your form's actual ID if different!
+        const waitlistForm = document.getElementById('waitlist-form');
+        if (waitlistForm) {
+            waitlistForm.addEventListener('submit', handleWaitlistSubmit);
+            console.log('Aegisens Debug: Form connected. Ready for elegant toasts! 🍞');
+        } else {
+            console.warn('Aegisens Debug: Form not found. Please check the form ID.');
         }
     });
 </script>
