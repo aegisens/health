@@ -525,11 +525,12 @@ a.logo .logo-text-content .slogan {
 </footer>
 
 <script>
-// KONFIGURACJA
+// =================== KONFIGURACJA ===================
 var targetEmail = 'aegisenshealth@gmail.com';
 var buttonColor = '#E07A9A';
+var toastDuration = 10000; // 10 SEKUND (by przeczytać)
 
-// FUNKCJA TOAST
+// =================== FUNKCJA TOAST ===================
 function showAegisensToast(userEmail) {
     var namePart = userEmail.split('@')[0];
     var friendlyName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
@@ -539,10 +540,10 @@ function showAegisensToast(userEmail) {
     document.body.appendChild(tempDiv.firstChild);
     var toastEl = document.getElementById('aegisensToast');
     setTimeout(function() { toastEl.style.opacity = '1'; toastEl.style.transform = 'translateX(0)'; }, 10);
-    setTimeout(function() { toastEl.style.opacity = '0'; toastEl.style.transform = 'translateX(400px)'; setTimeout(function() { if(toastEl.parentNode) toastEl.parentNode.removeChild(toastEl); }, 500); }, 6000);
+    setTimeout(function() { toastEl.style.opacity = '0'; toastEl.style.transform = 'translateX(400px)'; setTimeout(function() { if(toastEl.parentNode) toastEl.parentNode.removeChild(toastEl); }, 500); }, toastDuration); // UŻYWAMY DŁUŻSZEGO CZASU
 }
 
-// OBSŁUGA FORMULARZA
+// =================== OBSŁUGA FORMULARZA ===================
 function handleFormSubmit(event) {
     event.preventDefault();
     var emailField = event.target.querySelector('input[type="email"]');
@@ -550,7 +551,7 @@ function handleFormSubmit(event) {
     if (!userEmail || userEmail.indexOf('@') < 0) { alert('Please enter a valid email.'); return false; }
     // 1. POKAŻ TOAST
     showAegisensToast(userEmail);
-    // 2. WYŚLIJ TEST MAIL (używamy FormSubmit.co)
+    // 2. WYŚLIJ TEST MAIL
     var formData = new FormData();
     formData.append('user_email', userEmail);
     formData.append('target_email', targetEmail);
@@ -560,27 +561,39 @@ function handleFormSubmit(event) {
     return false;
 }
 
-// START PO ZAŁADOWANIU STRONY
+// =================== START PO ZAŁADOWANIU STRONY ===================
 document.addEventListener('DOMContentLoaded', function() {
-    // Licznik
+    // --- LIVE COUNTER z tekstem "waitlist growing daily" ---
     var counterNum = document.getElementById('waitlist-counter');
     var counterLab = document.querySelector('.counter-label');
     if (counterNum && counterLab) {
         var count = 284;
         counterNum.textContent = count + '+';
-        // DODAJEMY TEKST Z FEEDBACKU!
         counterLab.innerHTML = 'pioneers joined – <strong style="color:' + buttonColor + '">waitlist growing daily!</strong>';
         setInterval(function() { count += Math.floor(Math.random() * 3) + 1; counterNum.textContent = count + '+'; }, 30000);
     }
-    // Podłącz formularz (SZUKAMY ID "waitlist-form" - ZMIEŃ TUTAJ JEŚLI INNE!)
-    var form = document.getElementById('waitlist-form');
+
+    // --- DODANIE NAGŁÓWKA "JOIN NOW!" NAD FORMULARZEM ---
+    // Szukamy kontenera formularza (może być div z klasą .ml-form-embedContent lub rodzic form)
+    var formContainer = document.querySelector('.ml-form-embedContent, form#waitlist-form, form[action*="formsubmit"]');
+if (formContainer) {
+        var joinNowHeader = document.createElement('div');
+        joinNowHeader.innerHTML = '<div style="text-align: center; margin-bottom: 20px; font-size: 1.5rem; font-weight: 800; color: ' + buttonColor + '; text-transform: uppercase; letter-spacing: 1px;">Join Now!</div>';
+        // Wstawiamy nagłówek przed formularzem
+        formContainer.parentNode.insertBefore(joinNowHeader, formContainer);
+        console.log('Aegisens: "JOIN NOW!" header added.');
+    }
+
+    // --- PODŁĄCZENIE FORMULARZA ---
+    var form = document.getElementById('waitlist-form'); // ZMIEŃ ID TUTAJ JEŚLI TRZEBA!
     if (form) {
         form.addEventListener('submit', handleFormSubmit);
         console.log('Aegisens Test Form: Ready! Emails to:', targetEmail);
     } else {
         console.warn('Aegisens Test Form: Form not found. Current ID: waitlist-form');
     }
-    // Różowy przycisk
+
+    // --- RÓŻOWY PRZYCISK CTA ---
     var btn = document.querySelector('a[href*="#"], .button, button');
     if (btn) { btn.style.backgroundColor = buttonColor; btn.style.borderColor = buttonColor; }
 });
