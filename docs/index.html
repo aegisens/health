@@ -525,122 +525,64 @@ a.logo .logo-text-content .slogan {
 </footer>
 
 <script>
-// =================== KONFIGURACJA ===================
-const CONFIG = {
-    testEmail: 'aegisenshealth@gmail.com', // Na ten adres lecą testy!
-    buttonColor: '#E07A9A', // Różowy przycisk zgodnie z feedbackiem
-    counterStart: 284
-};
+// KONFIGURACJA
+var targetEmail = 'aegisenshealth@gmail.com';
+var buttonColor = '#E07A9A';
 
-// =================== STYL TOASTA ===================
-const toastStyle = 
-    position: fixed; top: 30px; right: 30px; z-index: 10000;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;
-    padding: 20px 25px; border-radius: 16px; max-width: 350px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    border-left: 5px solid ${CONFIG.buttonColor};
-    transform: translateX(400px); opacity: 0;
-    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.5s ease;
-;
-
-// =================== FUNKCJA TOAST ===================
-function showToast(email) {
-    const userName = email.split('@')[0];
-    const friendlyName = userName.charAt(0).toUpperCase() + userName.slice(1);
-    const toastHtml = 
-        <div id="aegisens-toast" style="${toastStyle}">
-            <div style="font-size:18px; font-weight:700; margin-bottom:5px; display:flex; align-items:center;">
-                <span style="margin-right:10px;">🫀</span> Got it, ${friendlyName}!
-            </div>
-            <div style="font-size:14px; line-height:1.5; opacity:0.9;">
-                Your spot is secure. <strong>Welcome to the health revolution.</strong><br><br>
-                <em>A test confirmation was sent to our team. Next: real invites on Jan 2!</em>
-            </div>
-            <div style="margin-top:12px; font-size:12px; opacity:0.7; border-top:1px solid rgba(255,255,255,0.2); padding-top:8px;">
-                With care, The Aegisens Team
-            </div>
-        </div>
-    ;
-    const toastContainer = document.createElement('div');
-    toastContainer.innerHTML = toastHtml;
-    document.body.appendChild(toastContainer.firstElementChild);
-    const toastEl = document.getElementById('aegisens-toast');
-    setTimeout(() => { toastEl.style.opacity = '1'; toastEl.style.transform = 'translateX(0)'; }, 10);
-    setTimeout(() => {
-        toastEl.style.opacity = '0'; toastEl.style.transform = 'translateX(400px)';
-        setTimeout(() => toastEl.remove(), 500);
-    }, 6000);
+// FUNKCJA TOAST
+function showAegisensToast(userEmail) {
+    var namePart = userEmail.split('@')[0];
+    var friendlyName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+    var toastHTML = '<div id="aegisensToast" style="position:fixed; top:30px; right:30px; z-index:10000; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; padding:20px 25px; border-radius:16px; max-width:350px; box-shadow:0 10px 30px rgba(0,0,0,0.15); font-family:-apple-system, BlinkMacSystemFont, sans-serif; border-left:5px solid ' + buttonColor + '; transform:translateX(400px); opacity:0; transition:transform 0.5s, opacity 0.5s;"><div style="font-size:18px; font-weight:bold; margin-bottom:5px;"><span style="margin-right:10px;">🫀</span> Got it, ' + friendlyName + '!</div><div style="font-size:14px; line-height:1.5;">Your spot is secure. <strong>Welcome to the health revolution.</strong><br><br><em>Test confirmation sent. Real invites: Jan 2!</em></div><div style="margin-top:12px; font-size:12px; opacity:0.7; border-top:1px solid rgba(255,255,255,0.2); padding-top:8px;">With care, The Aegisens Team</div></div>';
+    var tempDiv = document.createElement('div');
+    tempDiv.innerHTML = toastHTML;
+    document.body.appendChild(tempDiv.firstChild);
+    var toastEl = document.getElementById('aegisensToast');
+    setTimeout(function() { toastEl.style.opacity = '1'; toastEl.style.transform = 'translateX(0)'; }, 10);
+    setTimeout(function() { toastEl.style.opacity = '0'; toastEl.style.transform = 'translateX(400px)'; setTimeout(function() { if(toastEl.parentNode) toastEl.parentNode.removeChild(toastEl); }, 500); }, 6000);
 }
 
-// =================== FUNKCJA FORMULARZA (TEST) ===================
-async function handleWaitlistSubmit(event) {
+// OBSŁUGA FORMULARZA
+function handleFormSubmit(event) {
     event.preventDefault();
-    const form = event.target;
-    const emailInput = form.querySelector('input[type="email"]');
-    const userEmail = emailInput.value.trim();
-
-    if (!userEmail || !userEmail.includes('@')) {
-        alert('Please enter a valid email address.');
-        return false;
-    }
-
-    // 1. POKAZUJEMY TOAST (natychmiastowa informacja zwrotna)
-    showToast(userEmail);
-
-    // 2. WYSYŁAMY TESTOWEGO MAILA (na aegisenshealth@gmail.com)
-    const formData = new FormData();
+    var emailField = event.target.querySelector('input[type="email"]');
+    var userEmail = emailField.value.trim();
+    if (!userEmail || userEmail.indexOf('@') < 0) { alert('Please enter a valid email.'); return false; }
+    // 1. POKAŻ TOAST
+    showAegisensToast(userEmail);
+    // 2. WYŚLIJ TEST MAIL (używamy FormSubmit.co)
+    var formData = new FormData();
     formData.append('user_email', userEmail);
-    formData.append('target_email', CONFIG.testEmail); // To jest kluczowe - leci do Ciebie!
-
-    try {
-        // Używamy darmowego serwisu do wysyłania formularzy (FormSubmit.co)
-        await fetch('https://formsubmit.co/ajax/' + CONFIG.testEmail, {
-            method: 'POST',
-            body: formData,
-            headers: { 'Accept': 'application/json' }
-        });
-        console.log('Test email sent to Aegisens inbox successfully.');
-    } catch (error) {
-        console.warn('Test email failed (but form worked). This is OK for testing.', error);
-    }
-
-    // 3. CZYŚCIMY POLE
-    emailInput.value = '';
+    formData.append('target_email', targetEmail);
+    fetch('https://formsubmit.co/ajax/' + targetEmail, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } }).then(function(r) { return r.json(); }).then(function(data) { console.log('Test email sent to Aegisens inbox.'); }).catch(function(e) { console.warn('Test email failed (but form worked). OK for test.'); });
+    // 3. WYCZYŚĆ POLE
+    emailField.value = '';
     return false;
 }
 
-// =================== INICJALIZACJA STRONY ===================
+// START PO ZAŁADOWANIU STRONY
 document.addEventListener('DOMContentLoaded', function() {
-    // --- LIVE COUNTER z nowym tekstem ---
-const counterNumber = document.getElementById('waitlist-counter');
-    const counterLabel = document.querySelector('.counter-label');
-    if (counterNumber && counterLabel) {
-        let currentCount = CONFIG.counterStart;
-        counterNumber.textContent = currentCount + '+';
+    // Licznik
+    var counterNum = document.getElementById('waitlist-counter');
+    var counterLab = document.querySelector('.counter-label');
+    if (counterNum && counterLab) {
+        var count = 284;
+        counterNum.textContent = count + '+';
         // DODAJEMY TEKST Z FEEDBACKU!
-        counterLabel.innerHTML = 'pioneers joined – <strong style="color: ' + CONFIG.buttonColor + '">waitlist growing daily!</strong>';
-        setInterval(() => {
-            currentCount += Math.floor(Math.random() * 3) + 1;
-            counterNumber.textContent = currentCount + '+';
-        }, 30000);
+        counterLab.innerHTML = 'pioneers joined – <strong style="color:' + buttonColor + '">waitlist growing daily!</strong>';
+        setInterval(function() { count += Math.floor(Math.random() * 3) + 1; counterNum.textContent = count + '+'; }, 30000);
     }
-
-    // --- PODPIĘCIE FORMULARZA ---
-    const waitlistForm = document.getElementById('waitlist-form'); // ZMIEN ID JAK TRZEBA!
-    if (waitlistForm) {
-        waitlistForm.addEventListener('submit', handleWaitlistSubmit);
-        console.log('Aegisens Test Form: Ready! Emails will go to:', CONFIG.testEmail);
+    // Podłącz formularz (SZUKAMY ID "waitlist-form" - ZMIEŃ TUTAJ JEŚLI INNE!)
+    var form = document.getElementById('waitlist-form');
+    if (form) {
+        form.addEventListener('submit', handleFormSubmit);
+        console.log('Aegisens Test Form: Ready! Emails to:', targetEmail);
     } else {
-        console.warn('Aegisens Test Form: Form not found. Check ID.');
+        console.warn('Aegisens Test Form: Form not found. Current ID: waitlist-form');
     }
-
-    // --- KOLOR PRZYCISKU (muted pink) ---
-    const ctaButton = document.querySelector('a[href*="#"], .button, button'); // Szukamy głównego przycisku
-    if (ctaButton) {
-        ctaButton.style.backgroundColor = CONFIG.buttonColor;
-        ctaButton.style.borderColor = CONFIG.buttonColor;
-    }
+    // Różowy przycisk
+    var btn = document.querySelector('a[href*="#"], .button, button');
+    if (btn) { btn.style.backgroundColor = buttonColor; btn.style.borderColor = buttonColor; }
 });
 </script>
 </body>
