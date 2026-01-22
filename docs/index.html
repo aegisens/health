@@ -418,77 +418,78 @@ a.logo .logo-text-content .slogan {
                 </div>
                 <p class="hero-note">Be among the first to experience health that <em>senses</em> you.</p>
             </div>
-<!-- ANKIETA Z PRZYCISKIEM PRZYWRÓĆ DANE I RESPONSYWNOŚCIĄ -->
+<!-- POLL: LIVE LOADING BAR - ENGLISH VERSION -->
 <div id="aegisens-vote-widget" style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 16px; border: 2px solid #E07A9A; text-align: center; box-shadow: 0 6px 20px rgba(0,0,0,0.04); position: relative; overflow: hidden;">
     <h3 style="color: #2d3748; margin-bottom: 8px; font-size: 1.4rem; font-weight: 700; padding: 0 10px;">🗳️ Shape Our 2026 Roadmap</h3>
-    <p style="color: #4a5568; margin-bottom: 1.3rem; font-size: 0.95rem; line-height: 1.4; padding: 0 10px;">Kliknij swój największy zdrowotny problem. Zobacz wyniki społeczności w czasie rzeczywistym.</p>
+    <p style="color: #4a5568; margin-bottom: 1.3rem; font-size: 0.95rem; line-height: 1.4; padding: 0 10px;">Click your biggest health mystery. See live community results instantly.</p>
     
-    <!-- KONTENER GŁÓWNY -->
+    <!-- MAIN CONTAINER -->
     <div id="vote-options-container" style="max-width: 100%; margin: 0 auto; padding: 0 10px;">
-        <!-- Opcje pojawią się tutaj -->
+        <!-- Options will appear here -->
     </div>
 
-    <!-- PRZYCISK WYNIKÓW -->
+    <!-- RESULTS BUTTON -->
     <div id="results-toggle" style="margin-top: 20px; padding: 0 10px; display: none;">
         <button id="toggle-results-btn" style="background: #9F7AEA; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 600; transition: all 0.3s; width: 100%; max-width: 300px;">
-            📊 Pokaż szczegółowe wyniki
+            📊 Show detailed results
         </button>
     </div>
 
-    <!-- PRZYCISK PRZYWRÓĆ DANE (tylko gdy nie ma danych) -->
+    <!-- RESTORE DATA BUTTON (only when no data) -->
     <div id="restore-data-section" style="margin-top: 20px; padding: 0 10px; display: none;">
         <button id="restore-data-btn" style="background: #F6AD55; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 600; transition: all 0.3s; width: 100%; max-width: 300px;">
-            🔄 Przywróć domyślne dane
+            🔄 Restore default data
         </button>
-        <p style="font-size: 0.8rem; color: #a0aec0; margin-top: 8px;">Wygląda na to, że nie ma zapisanych danych. Kliknij, aby przywrócić przykładowe głosy.</p>
+        <p style="font-size: 0.8rem; color: #a0aec0; margin-top: 8px;">It looks like there's no saved data. Click to restore sample votes.</p>
     </div>
 
-    <!-- PANEL WYNIKÓW -->
+    <!-- RESULTS PANEL -->
     <div id="detailed-results" style="max-width: 100%; margin: 20px auto 0; display: none; background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 18px; border: 1px solid #e2e8f0;">
         <h4 style="color: #2d3748; margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-            📈 Szczegółowe statystyki
+            📈 Detailed Statistics
             <span id="total-votes" style="margin-left: auto; font-size: 0.85rem; color: #718096;"></span>
         </h4>
         
-        <!-- WYKRES -->
+        <!-- CHART -->
         <div id="results-chart" style="margin-bottom: 15px; overflow-x: hidden;">
-            <!-- Wykres pojawi się tutaj -->
+            <!-- Chart will appear here -->
         </div>
         
-        <!-- TABELA -->
+        <!-- TABLE -->
         <div id="results-table" style="font-size: 0.85rem; overflow-x: auto;">
-            <!-- Tabela pojawi się tutaj -->
+            <!-- Table will appear here -->
         </div>
         
-        <!-- PRZYCISKI AKCJI -->
+        <!-- ACTION BUTTONS -->
         <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; text-align: center; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
             <button id="export-data-btn" style="background: #68D391; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; flex: 1; min-width: 140px;">
-                💾 Eksportuj dane
+                💾 Export data
             </button>
             <button id="reset-votes-btn" style="background: #FC8181; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; flex: 1; min-width: 140px;">
-                🗑️ Wyczyść dane
+                🗑️ Clear data
             </button>
             <button id="backup-data-btn" style="background: #4FD1C7; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; flex: 1; min-width: 140px;">
-                💿 Kopia zapasowa
+                💿 Create backup
             </button>
         </div>
     </div>
 
-    <p style="font-size: 0.8rem; color: #a0aec0; margin-top: 1.3rem; line-height: 1.3; padding: 0 10px;"><em>Kliknij, aby zagłosować. Jeden głos na osobę. Wyniki aktualizują się na żywo.</em></p>
+    <!-- CHANGED COLOR TO IVORY -->
+    <p style="font-size: 0.8rem; color: ivory; margin-top: 1.3rem; line-height: 1.3; padding: 0 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.1);"><em>Click to vote. One vote per person. Results update in real-time.</em></p>
 </div>
 
 <script>
-// ========== KONFIGURACJA ==========
+// ========== CONFIGURATION ==========
 const POLL_ID = 'health_mystery_poll_2024';
 const DEFAULT_DATA = [
-    { id: 'energy', label: '👂 Nieprzewidywalne spadki energii', votes: 42, color: '#E07A9A' },
-    { id: 'menopause', label: '🍃 Okres przedmenopauzalny', votes: 38, color: '#9F7AEA' },
-    { id: 'vulnerable', label: '🥗 Zarządzanie "wrażliwym dniem"', votes: 55, color: '#F687B3' },
-    { id: 'mood', label: '😌 Wahania nastroju', votes: 27, color: '#81E6D9' },
-    { id: 'other', label: '💭 Inny problem zdrowotny', votes: 15, color: '#68D391' }
+    { id: 'energy', label: '👂 Unpredictable energy crashes', votes: 42, color: '#E07A9A' },
+    { id: 'menopause', label: '🍃 Navigating perimenopause', votes: 38, color: '#9F7AEA' },
+    { id: 'vulnerable', label: '🥗 Navigating my "Vulnerable Day"', votes: 55, color: '#F687B3' },
+    { id: 'mood', label: '😌 Managing mood swings', votes: 27, color: '#81E6D9' },
+    { id: 'other', label: '💭 Other health mystery', votes: 15, color: '#68D391' }
 ];
 
-// ========== SYSTEM DANYCH Z PRZYWracaniem ==========
+// ========== DATA MANAGER WITH RESTORE ==========
 class DataManager {
     constructor(pollId, defaultData) {
         this.pollId = pollId;
@@ -498,35 +499,31 @@ class DataManager {
         this.data = this.loadData();
     }
     
-    // 1. Ładuje dane, jeśli nie ma to przywraca domyślne
     loadData() {
         const saved = localStorage.getItem(this.storageKey);
         if (saved) {
             try {
                 return JSON.parse(saved);
             } catch (e) {
-                console.error('Błąd ładowania danych:', e);
+                console.error('Error loading data:', e);
                 return this.restoreDefaultData();
             }
         }
         return this.restoreDefaultData();
     }
     
-    // 2. Przywraca domyślne dane
     restoreDefaultData() {
-        console.log('Przywracanie domyślnych danych...');
+        console.log('Restoring default data...');
         localStorage.setItem(this.storageKey, JSON.stringify(this.defaultData));
-        return JSON.parse(JSON.stringify(this.defaultData)); // Głęboka kopia
+        return JSON.parse(JSON.stringify(this.defaultData));
     }
     
-    // 3. Zapisuje aktualne dane
     saveData(data) {
         this.data = data;
         localStorage.setItem(this.storageKey, JSON.stringify(data));
-        console.log('Dane zapisane:', data);
+        console.log('Data saved:', data);
     }
     
-    // 4. Tworzy kopię zapasową
     createBackup() {
         const backup = {
             timestamp: new Date().toISOString(),
@@ -534,11 +531,10 @@ class DataManager {
             totalVotes: this.getTotalVotes()
         };
         localStorage.setItem(this.backupKey, JSON.stringify(backup));
-        console.log('Kopia zapasowa utworzona:', backup);
+        console.log('Backup created:', backup);
         return backup;
     }
     
-    // 5. Przywraca z kopii zapasowej
     restoreFromBackup() {
         const backup = localStorage.getItem(this.backupKey);
         if (backup) {
@@ -547,13 +543,12 @@ class DataManager {
                 this.saveData(parsed.data);
                 return parsed;
             } catch (e) {
-                console.error('Błąd przywracania kopii:', e);
+                console.error('Error restoring backup:', e);
             }
         }
         return null;
     }
     
-    // 6. Eksportuje dane
     exportData() {
         const exportObj = {
             pollId: this.pollId,
@@ -568,7 +563,7 @@ class DataManager {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `ankieta-wyniki-${new Date().toISOString().split('T')[0]}.json`;
+        a.download = `poll-results-${new Date().toISOString().split('T')[0]}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -586,7 +581,7 @@ class DataManager {
     }
 }
 
-// ========== GŁÓWNA LOGIKA ==========
+// ========== MAIN LOGIC ==========
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('vote-options-container');
     const resultsToggle = document.getElementById('results-toggle');
@@ -596,12 +591,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const dataManager = new DataManager(POLL_ID, DEFAULT_DATA);
     let userVoted = localStorage.getItem(`${POLL_ID}_hasVoted`);
     
-    // Sprawdź czy są dane do wyświetlenia
+    // Check if there's data to display
     if (!dataManager.hasData()) {
         restoreSection.style.display = 'block';
     }
     
-    // 1. Funkcje pomocnicze
+    // 1. Helper functions
     function calculatePercentages() {
         const total = dataManager.getTotalVotes();
         dataManager.data.forEach(opt => {
@@ -615,14 +610,14 @@ document.addEventListener('DOMContentLoaded', function() {
         renderDetailedResults();
         updateTotalVotesDisplay();
         
-        // Pokaż/ukryj przyciski w zależności od stanu
+        // Show/hide buttons based on state
         if (userVoted || dataManager.hasData()) {
             resultsToggle.style.display = 'block';
             restoreSection.style.display = 'none';
         }
     }
     
-    // 2. Rysowanie ankiet (RESPONSYWNE)
+    // 2. Render poll (RESPONSIVE)
     function renderPoll() {
         container.innerHTML = '';
         
@@ -636,7 +631,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 transition: all 0.2s;
             `;
             
-            // RESPONSYWNY PRZYCISK
+            // RESPONSIVE BUTTON
             const button = document.createElement('div');
             button.style.cssText = `
                 display: flex;
@@ -652,7 +647,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 transition: all 0.2s;
             `;
             
-            // Responsywny układ - na telefonach pionowo, na desktop poziomo
             button.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                     <span style="flex: 1; padding-right: 10px;">${option.label}</span>
@@ -691,7 +685,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     button.style.transform = 'translateY(0)';
                 });
                 
-                // Obsługa dotyku na telefonach
+                // Touch handling for mobile
                 optionEl.addEventListener('touchstart', function(e) {
                     button.style.borderColor = option.color;
                     button.style.boxShadow = `0 3px 8px ${option.color}30`;
@@ -711,13 +705,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // 3. Szczegółowe wyniki (RESPONSYWNE)
+    // 3. Detailed results (RESPONSIVE)
     function renderDetailedResults() {
         const chartContainer = document.getElementById('results-chart');
         const tableContainer = document.getElementById('results-table');
         const sorted = [...dataManager.data].sort((a, b) => b.votes - a.votes);
         
-        // Responsywny wykres
+        // Responsive chart
         chartContainer.innerHTML = '';
         sorted.forEach(opt => {
             const bar = document.createElement('div');
@@ -744,14 +738,14 @@ document.addEventListener('DOMContentLoaded', function() {
             chartContainer.appendChild(bar);
         });
         
-        // Responsywna tabela (na telefonie przewija się poziomo)
+        // Responsive table (horizontal scroll on mobile)
         tableContainer.innerHTML = `
             <div style="overflow-x: auto;">
                 <table style="min-width: 400px; width: 100%; border-collapse: collapse; font-size: 0.8rem;">
                     <thead>
                         <tr style="border-bottom: 2px solid #e2e8f0;">
-                            <th style="text-align: left; padding: 8px 6px; color: #718096; min-width: 150px;">Opcja</th>
-                            <th style="text-align: center; padding: 8px 6px; color: #718096; min-width: 70px;">Głosy</th>
+                            <th style="text-align: left; padding: 8px 6px; color: #718096; min-width: 150px;">Option</th>
+                            <th style="text-align: center; padding: 8px 6px; color: #718096; min-width: 70px;">Votes</th>
                             <th style="text-align: center; padding: 8px 6px; color: #718096; min-width: 70px;">%</th>
                         </tr>
                     </thead>
@@ -784,17 +778,17 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateTotalVotesDisplay() {
         const totalEl = document.getElementById('total-votes');
         if (totalEl) {
-            totalEl.textContent = `Łącznie: ${dataManager.getTotalVotes()} głosów`;
+            totalEl.textContent = `Total: ${dataManager.getTotalVotes()} votes`;
         }
     }
     
     function showMessage(option) {
         const messages = {
-            energy: "👂 Dziękujemy! Spadki energii są naszym priorytetem #1.",
-            menopause: "🍃 Dziękujemy! Menopauza to kluczowy moduł.",
-            vulnerable: "🥗 Dziękujemy! 'Wrażliwy dzień' to sedno naszej metody.",
-            mood: "😌 Dziękujemy! Wahania nastroju to rdzeń naszego AI.",
-            other: "💭 Dziękujemy za Twoją osobistą historię!"
+            energy: "👂 Thank you! Energy crashes are our #1 priority.",
+            menopause: "🍃 Thank you! Perimenopause is a key module.",
+            vulnerable: "🥗 Thank you! 'Vulnerable Day' is core to our method.",
+            mood: "😌 Thank you! Mood swings are at the heart of our empathetic AI.",
+            other: "💭 Thank you for your personal story!"
         };
         
         const messageBox = document.createElement('div');
@@ -810,7 +804,7 @@ document.addEventListener('DOMContentLoaded', function() {
             font-size: 0.9rem;
             animation: fadeIn 0.5s;
         `;
-        messageBox.textContent = messages[option.id] || 'Dziękujemy za Twój głos!';
+        messageBox.textContent = messages[option.id] || 'Thank you for your vote!';
         
         container.appendChild(messageBox);
     }
@@ -819,63 +813,63 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('toggle-results-btn').addEventListener('click', function() {
         if (detailedResults.style.display === 'none') {
             detailedResults.style.display = 'block';
-            this.textContent = '▲ Ukryj szczegółowe wyniki';
+            this.textContent = '▲ Hide detailed results';
             this.style.background = '#4FD1C7';
         } else {
             detailedResults.style.display = 'none';
-            this.textContent = '📊 Pokaż szczegółowe wyniki';
+            this.textContent = '📊 Show detailed results';
             this.style.background = '#9F7AEA';
         }
     });
     
     document.getElementById('restore-data-btn').addEventListener('click', function() {
-        if (confirm('Czy na pewno chcesz przywrócić domyślne dane ankiety?')) {
+        if (confirm('Are you sure you want to restore default poll data?')) {
             dataManager.restoreDefaultData();
             userVoted = null;
             localStorage.removeItem(`${POLL_ID}_hasVoted`);
             updateUI();
             restoreSection.style.display = 'none';
-            this.textContent = '✓ Dane przywrócone!';
+            this.textContent = '✓ Data restored!';
             setTimeout(() => {
-                this.textContent = '🔄 Przywróć domyślne dane';
+                this.textContent = '🔄 Restore default data';
             }, 2000);
         }
     });
     
     document.getElementById('export-data-btn').addEventListener('click', function() {
         dataManager.exportData();
-        this.textContent = '✓ Wyeksportowano!';
+        this.textContent = '✓ Exported!';
         setTimeout(() => {
-            this.textContent = '💾 Eksportuj dane';
+            this.textContent = '💾 Export data';
         }, 2000);
     });
     
     document.getElementById('reset-votes-btn').addEventListener('click', function() {
-        if (confirm('Czy na pewno chcesz wyczyścić wszystkie dane? To usunie wszystkie głosy!')) {
+        if (confirm('Are you sure you want to clear all data? This will delete all votes!')) {
             dataManager.saveData(DEFAULT_DATA.map(opt => ({ ...opt, votes: 0 })));
             userVoted = null;
             localStorage.removeItem(`${POLL_ID}_hasVoted`);
             updateUI();
-            this.textContent = '✓ Wyczyszczono!';
+            this.textContent = '✓ Cleared!';
             setTimeout(() => {
-                this.textContent = '🗑️ Wyczyść dane';
+                this.textContent = '🗑️ Clear data';
             }, 2000);
         }
     });
     
     document.getElementById('backup-data-btn').addEventListener('click', function() {
         const backup = dataManager.createBackup();
-        this.textContent = '✓ Kopia utworzona!';
+        this.textContent = '✓ Backup created!';
         setTimeout(() => {
-            this.textContent = '💿 Kopia zapasowa';
+            this.textContent = '💿 Create backup';
         }, 2000);
-        alert(`Kopia zapasowa utworzona: ${backup.timestamp}\nZapisano ${backup.totalVotes} głosów.`);
+        alert(`Backup created: ${backup.timestamp}\nSaved ${backup.totalVotes} votes.`);
     });
     
-    // 5. Inicjalizacja
+    // 5. Initialize
     updateUI();
     
-    // 6. Styl dla responsywności i animacji
+    // 6. Styles for responsiveness and animations
     const style = document.createElement('style');
     style.textContent = `
         @keyframes fadeIn {
