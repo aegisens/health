@@ -563,28 +563,57 @@ if (voteForm) {
                 voteCounts[voteValue] += 1;
             }
             
-            // Pokaz wyniki
-            showResults();
-            
-            // Wyłącz formularz po oddaniu głosu
-            voteForm.style.opacity = '0.7';
-            const submitButton = voteForm.querySelector('button[type="submit"]');
-            if (submitButton) {
-                submitButton.disabled = true;
-                submitButton.textContent = '✓ Vote Cast!';
-                submitButton.style.background = '#a0aec0';
-            }
-            
-            // Ustaw finalny tekst potwierdzenia
-            const dynamicResponse = document.getElementById('dynamic-response');
-            if (dynamicResponse) {
-                dynamicResponse.textContent = responseMessages[voteValue] || "Thank you for your vote!";
-                dynamicResponse.style.color = '#E07A9A';
-                dynamicResponse.style.fontWeight = 'bold';
-            }
-        });
+            // Funkcja pokazująca wyniki
+function showResults() {
+    const total = Object.values(voteCounts).reduce((a, b) => a + b, 0);
+    const container = document.getElementById('results-bar-container');
+    
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    const labels = {
+        energy: '👂 Energy Crashes',
+        menopause: '🍃 Perimenopause',
+        histamine: '🥗 "Vulnerable Day"',
+        mood: '😌 Mood Swings',
+        other: '💭 Other'
+    };
+    
+    for (const [key, count] of Object.entries(voteCounts)) {
+        const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+        const label = labels[key] || key;
+        const barColor = key === 'other' ? '#81E6D9' : '#E07A9A';
+        
+        const bar = 
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #2d3748;">${label}</span>
+                    <span style="color: #9F7AEA; font-weight: bold; font-size: 1.1rem;">${percent}% (${count} votes)</span>
+                </div>
+                <div style="height: 14px; background: #edf2f7; border-radius: 7px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                    <div style="height: 100%; width: ${percent}%; background: linear-gradient(90deg, ${barColor}, ${key === 'other' ? '#4FD1C7' : '#9F7AEA'}); border-radius: 7px; transition: width 1s ease-out;"></div>
+                </div>
+            </div>
+        ;
+        container.innerHTML += bar;
     }
-
+    
+    // Pokaż sekcję z wynikami
+    const resultsSection = document.getElementById('vote-results');
+    if (resultsSection) {
+        resultsSection.style.display = 'block';
+        // POPRAWIONE PRZEWIJANIE:
+        // Mały timeout zapewni, że sekcja jest już wyrenderowana przed przewinięciem
+        setTimeout(() => {
+            resultsSection.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start',        // Zmienione z 'nearest' na 'start'
+                inline: 'nearest'
+            });
+        }, 50);
+    }
+}
     // Funkcja pokazująca wyniki
     function showResults() {
         const total = Object.values(voteCounts).reduce((a, b) => a + b, 0);
