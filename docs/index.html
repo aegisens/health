@@ -418,70 +418,27 @@ a.logo .logo-text-content .slogan {
                 </div>
                 <p class="hero-note">Be among the first to experience health that <em>senses</em> you.</p>
             </div>
-<!-- POLL: LIVE LOADING BAR - ENGLISH VERSION -->
+<!-- POLL VOTING SECTION - ENGLISH VERSION -->
 <div id="aegisens-vote-widget" style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 16px; border: 2px solid #E07A9A; text-align: center; box-shadow: 0 6px 20px rgba(0,0,0,0.04); position: relative; overflow: hidden;">
     <h3 style="color: #2d3748; margin-bottom: 8px; font-size: 1.4rem; font-weight: 700; padding: 0 10px;">🗳️ Shape Our 2026 Roadmap</h3>
-    <p style="color: #FFFFF0; margin-bottom: 1.3rem; font-size: 0.95rem; line-height: 1.4; padding: 0 10px;">Click your biggest health mystery. See live community results instantly.</p>
+    <p style="color: #4a5568; margin-bottom: 1.3rem; font-size: 0.95rem; line-height: 1.4; padding: 0 10px;">Click your biggest health mystery. See live community results instantly.</p>
     
     <!-- MAIN CONTAINER -->
     <div id="vote-options-container" style="max-width: 100%; margin: 0 auto; padding: 0 10px;">
         <!-- Options will appear here -->
     </div>
 
-    <!-- RESULTS BUTTON -->
-    <div id="results-toggle" style="margin-top: 20px; padding: 0 10px; display: none;">
-        <button id="toggle-results-btn" style="background: #9F7AEA; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 600; transition: all 0.3s; width: 100%; max-width: 300px;">
-            📊 Show detailed results
-        </button>
-    </div>
-
-    <!-- RESTORE DATA BUTTON (only when no data) -->
-    <div id="restore-data-section" style="margin-top: 20px; padding: 0 10px; display: none;">
-        <button id="restore-data-btn" style="background: #F6AD55; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 600; transition: all 0.3s; width: 100%; max-width: 300px;">
-            🔄 Restore default data
-        </button>
-        <p style="font-size: 0.8rem; color: #a0aec0; margin-top: 8px;">It looks like there's no saved data. Click to restore sample votes.</p>
-    </div>
-
-    <!-- RESULTS PANEL -->
-    <div id="detailed-results" style="max-width: 100%; margin: 20px auto 0; display: none; background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 18px; border: 1px solid #e2e8f0;">
-        <h4 style="color: #2d3748; margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-            📈 Detailed Statistics
-            <span id="total-votes" style="margin-left: auto; font-size: 0.85rem; color: #718096;"></span>
-        </h4>
-        
-        <!-- CHART -->
-        <div id="results-chart" style="margin-bottom: 15px; overflow-x: hidden;">
-            <!-- Chart will appear here -->
-        </div>
-        
-        <!-- TABLE -->
-        <div id="results-table" style="font-size: 0.85rem; overflow-x: auto;">
-            <!-- Table will appear here -->
-        </div>
-        
-        <!-- ACTION BUTTONS -->
-        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; text-align: center; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-            <button id="export-data-btn" style="background: #68D391; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; flex: 1; min-width: 140px;">
-                💾 Export data
-            </button>
-            <button id="reset-votes-btn" style="background: #FC8181; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; flex: 1; min-width: 140px;">
-                🗑️ Clear data
-            </button>
-            <button id="backup-data-btn" style="background: #4FD1C7; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; flex: 1; min-width: 140px;">
-                💿 Create backup
-            </button>
-        </div>
-    </div>
-
-    <!-- CHANGED COLOR TO IVORY -->
     <p style="font-size: 0.8rem; color: ivory; margin-top: 1.3rem; line-height: 1.3; padding: 0 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.1);"><em>Click to vote. One vote per person. Results update in real-time.</em></p>
 </div>
 
 <script>
 // ========== CONFIGURATION ==========
 const POLL_ID = 'health_mystery_poll_2024';
-const DEFAULT_DATA = [
+const STORAGE_KEY = `poll_data_${POLL_ID}`;
+const VOTE_KEY = `${POLL_ID}_hasVoted`;
+
+// Default data structure
+let pollData = [
     { id: 'energy', label: '👂 Unpredictable energy crashes', votes: 42, color: '#E07A9A' },
     { id: 'menopause', label: '🍃 Navigating perimenopause', votes: 38, color: '#9F7AEA' },
     { id: 'vulnerable', label: '🥗 Navigating my "Vulnerable Day"', votes: 55, color: '#F687B3' },
@@ -489,149 +446,63 @@ const DEFAULT_DATA = [
     { id: 'other', label: '💭 Other health mystery', votes: 15, color: '#68D391' }
 ];
 
-// ========== DATA MANAGER WITH RESTORE ==========
-class DataManager {
-    constructor(pollId, defaultData) {
-        this.pollId = pollId;
-        this.defaultData = defaultData;
-        this.storageKey = `poll_data_${pollId}`;
-        this.backupKey = `poll_backup_${pollId}`;
-        this.data = this.loadData();
-    }
-    
-    loadData() {
-        const saved = localStorage.getItem(this.storageKey);
-        if (saved) {
-            try {
-                return JSON.parse(saved);
-            } catch (e) {
-                console.error('Error loading data:', e);
-                return this.restoreDefaultData();
-            }
+// ========== DATA MANAGEMENT ==========
+function loadPollData() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        try {
+            const parsed = JSON.parse(saved);
+            // Merge with default to ensure all options exist
+            pollData = pollData.map(defaultOpt => {
+                const savedOpt = parsed.find(p => p.id === defaultOpt.id);
+                return savedOpt ? { ...defaultOpt, votes: savedOpt.votes } : defaultOpt;
+            });
+        } catch (e) {
+            console.error('Error loading poll data:', e);
         }
-        return this.restoreDefaultData();
-    }
-    
-    restoreDefaultData() {
-        console.log('Restoring default data...');
-        localStorage.setItem(this.storageKey, JSON.stringify(this.defaultData));
-        return JSON.parse(JSON.stringify(this.defaultData));
-    }
-    
-    saveData(data) {
-        this.data = data;
-        localStorage.setItem(this.storageKey, JSON.stringify(data));
-        console.log('Data saved:', data);
-    }
-    
-    createBackup() {
-        const backup = {
-            timestamp: new Date().toISOString(),
-            data: this.data,
-            totalVotes: this.getTotalVotes()
-        };
-        localStorage.setItem(this.backupKey, JSON.stringify(backup));
-        console.log('Backup created:', backup);
-        return backup;
-    }
-    
-    restoreFromBackup() {
-        const backup = localStorage.getItem(this.backupKey);
-        if (backup) {
-            try {
-                const parsed = JSON.parse(backup);
-                this.saveData(parsed.data);
-                return parsed;
-            } catch (e) {
-                console.error('Error restoring backup:', e);
-            }
-        }
-        return null;
-    }
-    
-    exportData() {
-        const exportObj = {
-            pollId: this.pollId,
-            lastUpdated: new Date().toISOString(),
-            totalVotes: this.getTotalVotes(),
-            options: this.data
-        };
-        
-        const blob = new Blob([JSON.stringify(exportObj, null, 2)], { 
-            type: 'application/json' 
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `poll-results-${new Date().toISOString().split('T')[0]}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        return exportObj;
-    }
-    
-    getTotalVotes() {
-        return this.data.reduce((sum, opt) => sum + opt.votes, 0);
-    }
-    
-    hasData() {
-        return this.getTotalVotes() > 0;
     }
 }
 
-// ========== MAIN LOGIC ==========
+function savePollData() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(pollData));
+}
+
+// ========== POLL LOGIC ==========
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('vote-options-container');
-    const resultsToggle = document.getElementById('results-toggle');
-    const restoreSection = document.getElementById('restore-data-section');
-    const detailedResults = document.getElementById('detailed-results');
     
-    const dataManager = new DataManager(POLL_ID, DEFAULT_DATA);
-    let userVoted = localStorage.getItem(`${POLL_ID}_hasVoted`);
+    // Load existing data
+    loadPollData();
     
-    // Check if there's data to display
-    if (!dataManager.hasData()) {
-        restoreSection.style.display = 'block';
-    }
+    // Check if user already voted
+    const hasVoted = localStorage.getItem(VOTE_KEY);
     
-    // 1. Helper functions
+    // Calculate percentages
     function calculatePercentages() {
-        const total = dataManager.getTotalVotes();
-        dataManager.data.forEach(opt => {
-            opt.percentage = total > 0 ? Math.round((opt.votes / total) * 100) : 0;
+        const totalVotes = pollData.reduce((sum, opt) => sum + opt.votes, 0);
+        pollData.forEach(opt => {
+            opt.percentage = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
         });
     }
     
-    function updateUI() {
-        calculatePercentages();
-        renderPoll();
-        renderDetailedResults();
-        updateTotalVotesDisplay();
-        
-        // Show/hide buttons based on state
-        if (userVoted || dataManager.hasData()) {
-            resultsToggle.style.display = 'block';
-            restoreSection.style.display = 'none';
-        }
-    }
-    
-    // 2. Render poll (RESPONSIVE)
+    // Render the poll
     function renderPoll() {
+        calculatePercentages();
         container.innerHTML = '';
         
-        dataManager.data.forEach(option => {
+        pollData.forEach(option => {
             const optionEl = document.createElement('div');
             optionEl.className = 'vote-option';
+            
+            const hasVotedOnThis = hasVoted === option.id;
+            
             optionEl.style.cssText = `
                 margin-bottom: 12px;
                 text-align: left;
-                cursor: ${userVoted ? 'default' : 'pointer'};
+                cursor: ${hasVoted ? 'default' : 'pointer'};
                 transition: all 0.2s;
             `;
             
-            // RESPONSIVE BUTTON
             const button = document.createElement('div');
             button.style.cssText = `
                 display: flex;
@@ -639,7 +510,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 padding: 12px 14px;
                 background: white;
                 border-radius: 10px;
-                border: 1.5px solid ${userVoted ? (option.votes > 0 ? option.color : '#e2e8f0') : '#e2e8f0'};
+                border: 1.5px solid ${hasVotedOnThis ? option.color : '#e2e8f0'};
                 font-weight: 600;
                 color: #2d3748;
                 margin-bottom: 6px;
@@ -647,32 +518,56 @@ document.addEventListener('DOMContentLoaded', function() {
                 transition: all 0.2s;
             `;
             
-            button.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <span style="flex: 1; padding-right: 10px;">${option.label}</span>
-                    <span style="color: ${option.color}; font-weight: bold; white-space: nowrap;">
-                        ${option.percentage}% <span style="opacity: 0.7; font-size: 0.8rem;">(${option.votes})</span>
-                    </span>
-                </div>
-                <div style="height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; display: ${userVoted ? 'block' : 'none'};">
-                    <div style="height: 100%; width: ${option.percentage}%; background: linear-gradient(90deg, ${option.color}, ${option.color}99); border-radius: 4px; transition: width 1s;"></div>
-                </div>
-            `;
+            // Add checkmark if voted for this option
+            if (hasVotedOnThis) {
+                button.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span style="flex: 1; padding-right: 10px; display: flex; align-items: center; gap: 8px;">
+                            ${option.label}
+                            <span style="color: ${option.color}; font-size: 0.8rem;">✓ Voted</span>
+                        </span>
+                        <span style="color: ${option.color}; font-weight: bold; white-space: nowrap;">
+                            ${option.percentage}% <span style="opacity: 0.7; font-size: 0.8rem;">(${option.votes})</span>
+                        </span>
+                    </div>
+                    <div style="height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; width: ${option.percentage}%; background: linear-gradient(90deg, ${option.color}, ${option.color}99); border-radius: 4px; transition: width 1s;"></div>
+                    </div>
+                `;
+            } else {
+                button.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span style="flex: 1; padding-right: 10px;">${option.label}</span>
+                        <span style="color: ${option.color}; font-weight: bold; white-space: nowrap;">
+                            ${option.percentage}% <span style="opacity: 0.7; font-size: 0.8rem;">(${option.votes})</span>
+                        </span>
+                    </div>
+                    <div style="height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; display: ${hasVoted ? 'block' : 'none'};">
+                        <div style="height: 100%; width: ${option.percentage}%; background: linear-gradient(90deg, ${option.color}, ${option.color}99); border-radius: 4px; transition: width 1s;"></div>
+                    </div>
+                `;
+            }
             
-            if (!userVoted) {
+            // Add click handler if not voted yet
+            if (!hasVoted) {
                 optionEl.addEventListener('click', function() {
+                    // Record vote
                     option.votes += 1;
-                    userVoted = true;
-                    localStorage.setItem(`${POLL_ID}_hasVoted`, 'true');
+                    localStorage.setItem(VOTE_KEY, option.id);
                     
-                    dataManager.saveData(dataManager.data);
-                    showMessage(option);
+                    // Save data
+                    savePollData();
                     
+                    // Show thank you message
+                    showThankYouMessage(option);
+                    
+                    // Update display
                     setTimeout(() => {
-                        updateUI();
+                        renderPoll();
                     }, 300);
                 });
                 
+                // Hover effects
                 optionEl.addEventListener('mouseenter', function() {
                     button.style.borderColor = option.color;
                     button.style.boxShadow = `0 3px 8px ${option.color}30`;
@@ -684,20 +579,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     button.style.boxShadow = 'none';
                     button.style.transform = 'translateY(0)';
                 });
-                
-                // Touch handling for mobile
-                optionEl.addEventListener('touchstart', function(e) {
-                    button.style.borderColor = option.color;
-                    button.style.boxShadow = `0 3px 8px ${option.color}30`;
-                    button.style.transform = 'translateY(-1px)';
-                    e.preventDefault();
-                });
-                
-                optionEl.addEventListener('touchend', function() {
-                    button.style.borderColor = '#e2e8f0';
-                    button.style.boxShadow = 'none';
-                    button.style.transform = 'translateY(0)';
-                });
             }
             
             optionEl.appendChild(button);
@@ -705,84 +586,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // 3. Detailed results (RESPONSIVE)
-    function renderDetailedResults() {
-        const chartContainer = document.getElementById('results-chart');
-        const tableContainer = document.getElementById('results-table');
-        const sorted = [...dataManager.data].sort((a, b) => b.votes - a.votes);
-        
-        // Responsive chart
-        chartContainer.innerHTML = '';
-        sorted.forEach(opt => {
-            const bar = document.createElement('div');
-            bar.style.cssText = `
-                margin-bottom: 10px;
-                display: flex;
-                flex-direction: column;
-            `;
-            
-            bar.innerHTML = `
-                <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.82rem;">
-                    <span style="color: #4a5568; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 70%;">
-                        ${opt.label}
-                    </span>
-                    <span style="color: ${opt.color}; font-weight: bold;">
-                        ${opt.percentage}% (${opt.votes})
-                    </span>
-                </div>
-                <div style="height: 16px; background: #e2e8f0; border-radius: 8px; overflow: hidden; position: relative;">
-                    <div style="height: 100%; width: ${opt.percentage}%; background: linear-gradient(90deg, ${opt.color}, ${opt.color}99); border-radius: 8px; transition: width 1s;"></div>
-                </div>
-            `;
-            
-            chartContainer.appendChild(bar);
-        });
-        
-        // Responsive table (horizontal scroll on mobile)
-        tableContainer.innerHTML = `
-            <div style="overflow-x: auto;">
-                <table style="min-width: 400px; width: 100%; border-collapse: collapse; font-size: 0.8rem;">
-                    <thead>
-                        <tr style="border-bottom: 2px solid #e2e8f0;">
-                            <th style="text-align: left; padding: 8px 6px; color: #718096; min-width: 150px;">Option</th>
-                            <th style="text-align: center; padding: 8px 6px; color: #718096; min-width: 70px;">Votes</th>
-                            <th style="text-align: center; padding: 8px 6px; color: #718096; min-width: 70px;">%</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${sorted.map(opt => `
-                            <tr style="border-bottom: 1px solid #f1f5f9;">
-                                <td style="padding: 10px 6px; color: #2d3748;">
-                                    <div style="display: flex; align-items: center; gap: 6px;">
-                                        <div style="width: 10px; height: 10px; border-radius: 50%; background: ${opt.color}; flex-shrink: 0;"></div>
-                                        <span style="overflow: hidden; text-overflow: ellipsis;">${opt.label}</span>
-                                    </div>
-                                </td>
-                                <td style="text-align: center; padding: 10px 6px; font-weight: bold; color: ${opt.color};">${opt.votes}</td>
-                                <td style="text-align: center; padding: 10px 6px;">
-                                    <div style="display: inline-block; width: 40px; height: 6px; background: #e2e8f0; border-radius: 3px;">
-                                        <div style="height: 100%; width: ${opt.percentage}%; background: ${opt.color}; border-radius: 3px;"></div>
-                                    </div>
-                                    <span style="margin-left: 6px; font-weight: bold;">${opt.percentage}%</span>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-        `;
-        
-        updateTotalVotesDisplay();
-    }
-    
-    function updateTotalVotesDisplay() {
-        const totalEl = document.getElementById('total-votes');
-        if (totalEl) {
-            totalEl.textContent = `Total: ${dataManager.getTotalVotes()} votes`;
-        }
-    }
-    
-    function showMessage(option) {
+    // Show thank you message
+    function showThankYouMessage(option) {
         const messages = {
             energy: "👂 Thank you! Energy crashes are our #1 priority.",
             menopause: "🍃 Thank you! Perimenopause is a key module.",
@@ -805,102 +610,18 @@ document.addEventListener('DOMContentLoaded', function() {
             animation: fadeIn 0.5s;
         `;
         messageBox.textContent = messages[option.id] || 'Thank you for your vote!';
-        
         container.appendChild(messageBox);
     }
     
-    // 4. Event listeners
-    document.getElementById('toggle-results-btn').addEventListener('click', function() {
-        if (detailedResults.style.display === 'none') {
-            detailedResults.style.display = 'block';
-            this.textContent = '▲ Hide detailed results';
-            this.style.background = '#4FD1C7';
-        } else {
-            detailedResults.style.display = 'none';
-            this.textContent = '📊 Show detailed results';
-            this.style.background = '#9F7AEA';
-        }
-    });
+    // Initial render
+    renderPoll();
     
-    document.getElementById('restore-data-btn').addEventListener('click', function() {
-        if (confirm('Are you sure you want to restore default poll data?')) {
-            dataManager.restoreDefaultData();
-            userVoted = null;
-            localStorage.removeItem(`${POLL_ID}_hasVoted`);
-            updateUI();
-            restoreSection.style.display = 'none';
-            this.textContent = '✓ Data restored!';
-            setTimeout(() => {
-                this.textContent = '🔄 Restore default data';
-            }, 2000);
-        }
-    });
-    
-    document.getElementById('export-data-btn').addEventListener('click', function() {
-        dataManager.exportData();
-        this.textContent = '✓ Exported!';
-        setTimeout(() => {
-            this.textContent = '💾 Export data';
-        }, 2000);
-    });
-    
-    document.getElementById('reset-votes-btn').addEventListener('click', function() {
-        if (confirm('Are you sure you want to clear all data? This will delete all votes!')) {
-            dataManager.saveData(DEFAULT_DATA.map(opt => ({ ...opt, votes: 0 })));
-            userVoted = null;
-            localStorage.removeItem(`${POLL_ID}_hasVoted`);
-            updateUI();
-            this.textContent = '✓ Cleared!';
-            setTimeout(() => {
-                this.textContent = '🗑️ Clear data';
-            }, 2000);
-        }
-    });
-    
-    document.getElementById('backup-data-btn').addEventListener('click', function() {
-        const backup = dataManager.createBackup();
-        this.textContent = '✓ Backup created!';
-        setTimeout(() => {
-            this.textContent = '💿 Create backup';
-        }, 2000);
-        alert(`Backup created: ${backup.timestamp}\nSaved ${backup.totalVotes} votes.`);
-    });
-    
-    // 5. Initialize
-    updateUI();
-    
-    // 6. Styles for responsiveness and animations
+    // Add animation style
     const style = document.createElement('style');
     style.textContent = `
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-        @media (max-width: 768px) {
-            #aegisens-vote-widget {
-                padding: 1.2rem 0.8rem !important;
-                margin-top: 1.5rem !important;
-                border-radius: 14px !important;
-            }
-            #detailed-results {
-                padding: 14px !important;
-                margin: 15px 0 0 !important;
-            }
-        }
-        @media (max-width: 480px) {
-            #aegisens-vote-widget h3 {
-                font-size: 1.3rem !important;
-            }
-            .vote-option div:first-child {
-                padding: 10px 12px !important;
-                font-size: 0.88rem !important;
-            }
-        }
-        button {
-            -webkit-tap-highlight-color: transparent;
-        }
-        button:active {
-            transform: scale(0.98);
         }
     `;
     document.head.appendChild(style);
