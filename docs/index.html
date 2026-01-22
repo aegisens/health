@@ -418,253 +418,182 @@ a.logo .logo-text-content .slogan {
                 </div>
                 <p class="hero-note">Be among the first to experience health that <em>senses</em> you.</p>
             </div>
-<!-- ANKIETA: SATYSFAKCJI UŻYTKOWNIKA - PEŁNY DZIAŁAJĄCY KOD -->
-<div id="aegisens-survey-widget" style="margin-top: 3rem; padding: 2.5rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 20px; border: 2px solid #9F7AEA; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-    <h3 style="color: #2d3748; margin-bottom: 10px; font-size: 1.8rem;">📊 Ankieta: Twoja opinia się liczy</h3>
-    <p style="color: #4a5568; margin-bottom: 1.8rem; font-size: 1.1rem;">Odpowiedz na pytania i zobacz natychmiast, jak myślą inni!</p>
+<!-- ANKIETA: LIVE LOADING BAR - KOMPAKTOWA WERSJA -->
+<div id="aegisens-vote-widget" style="margin-top: 2rem; padding: 1.8rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 18px; border: 2px solid #E07A9A; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.04);">
+    <h3 style="color: #2d3748; margin-bottom: 8px; font-size: 1.5rem; font-weight: 700;">🗳️ Shape Our 2026 Roadmap</h3>
+    <p style="color: #4a5568; margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.4;">Click your biggest health mystery. See live community results instantly.</p>
     
-    <!-- KONTENER GŁÓWNY - TU POJAWIĄ SIĘ PYTANIA -->
-    <div id="survey-questions-container" style="max-width: 650px; margin: 0 auto; min-height: 50px;">
-        <div style="padding: 20px; color: #718096; font-style: italic;">
-            Ładowanie ankiety...
+    <div id="vote-options-container" style="max-width: 550px; margin: 0 auto; min-height: 80px;">
+        <div style="padding: 15px; color: #718096; font-size: 0.9rem; font-style: italic;">
+            Loading voting options...
         </div>
     </div>
 
-    <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 2rem;"><em>Kliknij, aby zagłosować. Wyniki aktualizują się w czasie rzeczywistym.</em></p>
+    <p style="font-size: 0.85rem; color: #a0aec0; margin-top: 1.5rem; line-height: 1.3;"><em>Click to vote. One vote per person. Results update in real-time.</em></p>
 </div>
 
 <script>
-// UPEWNIJ SIĘ, ŻE KOD WYKONA SIĘ DOPIERO PO ZAŁADOWANIU STRONY
 (function() {
-    // Czekamy, aż cała struktura DOM (drzewo HTML) będzie gotowa
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initSurvey);
+        document.addEventListener('DOMContentLoaded', initVoteWidget);
     } else {
-        // DOM jest już załadowany, uruchamiamy od razu
-        initSurvey();
+        initVoteWidget();
     }
 
-    function initSurvey() {
-        console.log('Inicjalizacja ankiety...');
-        
-        // STRUKTURA DANYCH
-        const surveyData = [
-            {
-                id: 'ocena',
-                question: 'Jak oceniasz ogólną użyteczność tej strony?',
-                options: [
-                    { id: '5', label: '⭐ Bardzo dobra', votes: 42, color: '#68D391' },
-                    { id: '4', label: 'Dobra', votes: 38, color: '#81E6D9' },
-                    { id: '3', label: 'Średnia', votes: 55, color: '#F687B3' },
-                    { id: '2', label: 'Słaba', votes: 27, color: '#FC8181' },
-                    { id: '1', label: 'Bardzo słaba', votes: 15, color: '#D69E2E' }
-                ]
-            },
-            {
-                id: 'ulubione',
-                question: 'Co podoba Ci się najbardziej? (Możesz wybrać wiele opcji)',
-                options: [
-                    { id: 'design', label: '🎨 Design i wygląd', votes: 72, color: '#9F7AEA' },
-                    { id: 'szybkosc', label: '⚡ Szybkość działania', votes: 64, color: '#E07A9A' },
-                    { id: 'tresci', label: '📚 Przydatność treści', votes: 89, color: '#4FD1C7' },
-                    { id: 'nawigacja', label: '🧭 Łatwość nawigacji', votes: 45, color: '#F6AD55' }
-                ],
-                multipleChoice: true
-            }
+    function initVoteWidget() {
+        const voteOptions = [
+            { id: 'energy', label: '👂 Unpredictable energy crashes', votes: 42, color: '#E07A9A' },
+            { id: 'menopause', label: '🍃 Navigating perimenopause', votes: 38, color: '#9F7AEA' },
+            { id: 'vulnerable', label: '🥗 Navigating my "Vulnerable Day"', votes: 55, color: '#F687B3' },
+            { id: 'mood', label: '😌 Managing mood swings', votes: 27, color: '#81E6D9' },
+            { id: 'other', label: '💭 Other health mystery', votes: 15, color: '#68D391' }
         ];
 
-        const container = document.getElementById('survey-questions-container');
+        const container = document.getElementById('vote-options-container');
+        if (!container) return;
         
-        // Sprawdź czy kontener istnieje
-        if (!container) {
-            console.error('BŁĄD: Nie znaleziono elementu survey-questions-container');
-            return;
-        }
-        
-        let userResponses = {};
+        let userVoted = false;
 
-        // Funkcja obliczająca procenty
-        function calculatePercentages(options) {
-            const totalVotes = options.reduce((sum, opt) => sum + opt.votes, 0);
-            options.forEach(opt => {
-                opt.percentage = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
+        function calculatePercentages() {
+            const totalVotes = voteOptions.reduce((sum, option) => sum + option.votes, 0);
+            voteOptions.forEach(option => {
+                option.percentage = totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0;
             });
         }
 
-        // Funkcja renderująca ankietę
-        function renderSurvey() {
-            console.log('Renderowanie ankiety...');
+        function renderOptions() {
+            calculatePercentages();
             container.innerHTML = '';
             
-            surveyData.forEach((questionData) => {
-                const questionDiv = document.createElement('div');
-                questionDiv.style.cssText = `
-                    background: rgba(255, 255, 255, 0.7);
-                    border-radius: 16px;
-                    padding: 1.8rem;
-                    margin-bottom: 2.5rem;
+            voteOptions.forEach(option => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'vote-option';
+                optionElement.style.cssText = `
+                    margin-bottom: 16px;
                     text-align: left;
-                    border: 1px solid #e2e8f0;
+                    cursor: ${userVoted ? 'default' : 'pointer'};
+                    transition: all 0.2s ease;
                 `;
                 
-                const questionTitle = document.createElement('h4');
-                questionTitle.textContent = questionData.question;
-                questionTitle.style.cssText = `
+                // KOMPAKTOWA ETYKIETA
+                const labelDiv = document.createElement('div');
+                labelDiv.style.cssText = `
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 14px 16px;
+                    background: white;
+                    border-radius: 10px;
+                    border: 1.5px solid ${userVoted ? (option.votes > 0 ? option.color : '#e2e8f0') : '#e2e8f0'};
+                    font-weight: 600;
                     color: #2d3748;
-                    margin-bottom: 1.5rem;
-                    font-size: 1.2rem;
-                    font-weight: 700;
+                    margin-bottom: 6px;
+                    font-size: 0.95rem;
+                    transition: all 0.2s ease;
                 `;
-                questionDiv.appendChild(questionTitle);
                 
-                calculatePercentages(questionData.options);
+                labelDiv.innerHTML = `
+                    <span style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.1rem;">${option.label.split(' ')[0]}</span>
+                        <span>${option.label.split(' ').slice(1).join(' ')}</span>
+                    </span>
+                    <span style="color: ${option.color}; font-weight: bold; font-size: 0.95rem;">
+                        ${option.percentage}% <span style="opacity: 0.7; font-size: 0.85rem;">(${option.votes})</span>
+                    </span>
+                `;
                 
-                questionData.options.forEach(option => {
-                    const optionElement = document.createElement('div');
-                    optionElement.className = 'survey-option';
-                    optionElement.style.cssText = `
-                        margin-bottom: 18px;
-                        cursor: pointer;
-                    `;
-                    
-                    // Sprawdź czy ta opcja jest wybrana
-                    const isSelected = userResponses[questionData.id] && 
-                        (questionData.multipleChoice 
-                            ? userResponses[questionData.id].includes(option.id) 
-                            : userResponses[questionData.id] === option.id);
-                    
-                    const labelRow = document.createElement('div');
-                    labelRow.style.cssText = `
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        padding: 16px 20px;
-                        background: white;
-                        border-radius: 12px;
-                        border: 2px solid ${isSelected ? option.color : '#e2e8f0'};
-                        font-weight: 600;
-                        color: #2d3748;
-                        margin-bottom: 8px;
-                    `;
-                    
-                    const labelLeft = document.createElement('div');
-                    labelLeft.style.cssText = 'display: flex; align-items: center; gap: 12px;';
-                    
-                    const choiceIndicator = document.createElement('div');
-                    choiceIndicator.style.cssText = `
-                        width: 22px;
-                        height: 22px;
-                        border-radius: ${questionData.multipleChoice ? '6px' : '50%'};
-                        border: 2px solid ${isSelected ? option.color : '#cbd5e0'};
-                        background: ${isSelected ? option.color : 'white'};
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: white;
-                        font-size: 0.8rem;
-                    `;
-                    
-                    if (isSelected) {
-                        choiceIndicator.innerHTML = questionData.multipleChoice ? '✓' : '●';
-                    }
-                    
-                    labelLeft.appendChild(choiceIndicator);
-                    labelLeft.innerHTML += `<span>${option.label}</span>`;
-                    
-                    const labelRight = document.createElement('div');
-                    labelRight.innerHTML = `
-                        <span style="color: ${option.color}; font-weight: bold; font-size: 1.1rem;">
-                            ${option.percentage}% (${option.votes})
-                        </span>
-                    `;
-                    
-                    labelRow.appendChild(labelLeft);
-                    labelRow.appendChild(labelRight);
-                    
-                    // Pasek postępu
-                    const barContainer = document.createElement('div');
-                    barContainer.style.cssText = `
-                        height: 12px;
-                        background: #edf2f7;
-                        border-radius: 6px;
-                        overflow: hidden;
-                        display: ${userResponses[questionData.id] ? 'block' : 'none'};
-                    `;
-                    
-                    const barFill = document.createElement('div');
-                    barFill.style.cssText = `
-                        height: 100%;
-                        width: ${option.percentage}%;
-                        background: linear-gradient(90deg, ${option.color}, ${option.color}99);
-                        border-radius: 6px;
-                    `;
-                    
-                    barContainer.appendChild(barFill);
-                    
-                    // Obsługa kliknięcia
+                // MNIEJSZY PASEK ŁADOWANIA
+                const barContainer = document.createElement('div');
+                barContainer.style.cssText = `
+                    height: 10px;
+                    background: #f1f5f9;
+                    border-radius: 5px;
+                    overflow: hidden;
+                    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+                    display: ${userVoted ? 'block' : 'none'};
+                `;
+                
+                const barFill = document.createElement('div');
+                barFill.style.cssText = `
+                    height: 100%;
+                    width: ${option.percentage}%;
+                    background: linear-gradient(90deg, ${option.color}, ${option.color}99);
+                    border-radius: 5px;
+                    transition: width 1s ease-out;
+                `;
+                
+                barContainer.appendChild(barFill);
+                
+                if (!userVoted) {
                     optionElement.addEventListener('click', function() {
-                        console.log('Kliknięto opcję:', option.id);
-                        
-                        if (!questionData.multipleChoice) {
-                            if (userResponses[questionData.id]) return;
-                            
-                            option.votes += 1;
-                            userResponses[questionData.id] = option.id;
-                        } else {
-                            if (!userResponses[questionData.id]) {
-                                userResponses[questionData.id] = [];
-                            }
-                            
-                            const optionIndex = userResponses[questionData.id].indexOf(option.id);
-                            if (optionIndex > -1) {
-                                userResponses[questionData.id].splice(optionIndex, 1);
-                                option.votes -= 1;
-                            } else {
-                                userResponses[questionData.id].push(option.id);
-                                option.votes += 1;
-                            }
-                        }
-                        
-                        renderSurvey();
-                        showThankYouMessage();
+                        handleVote(option);
                     });
                     
-                    optionElement.appendChild(labelRow);
-                    optionElement.appendChild(barContainer);
-                    questionDiv.appendChild(optionElement);
-                });
+                    optionElement.addEventListener('mouseenter', function() {
+                        labelDiv.style.borderColor = option.color;
+                        labelDiv.style.boxShadow = `0 3px 8px ${option.color}30`;
+                        labelDiv.style.transform = 'translateY(-1px)';
+                    });
+                    
+                    optionElement.addEventListener('mouseleave', function() {
+                        labelDiv.style.borderColor = '#e2e8f0';
+                        labelDiv.style.boxShadow = 'none';
+                        labelDiv.style.transform = 'translateY(0)';
+                    });
+                }
                 
-                container.appendChild(questionDiv);
+                optionElement.appendChild(labelDiv);
+                optionElement.appendChild(barContainer);
+                container.appendChild(optionElement);
             });
+        }
+        
+        function handleVote(option) {
+            option.votes += 1;
+            userVoted = true;
             
-            // Jeśli wszystkie pytania są wypełnione
-            if (Object.keys(userResponses).length === surveyData.length) {
-                const thankYouDiv = document.createElement('div');
-                thankYouDiv.style.cssText = `
-                    text-align: center;
-                    margin-top: 20px;
-                    padding: 20px;
-                    background: linear-gradient(135deg, #9F7AEA15, #E07A9A05);
-                    border-radius: 12px;
-                    border: 2px dashed #9F7AEA;
-                    color: #2d3748;
-                    font-weight: 500;
+            renderOptions();
+            
+            const messages = {
+                energy: "👂 Thank you! Energy crashes are our #1 priority.",
+                menopause: "🍃 Thank you! Perimenopause is a key module.",
+                vulnerable: "🥗 Thank you! 'Vulnerable Day' is core to our method.",
+                mood: "😌 Thank you! Mood swings are at the heart of our empathetic AI.",
+                other: "💭 Thank you for your personal story!"
+            };
+            
+            const thankYou = document.createElement('div');
+            thankYou.style.cssText = `
+                text-align: center;
+                margin-top: 16px;
+                padding: 12px 16px;
+                background: linear-gradient(135deg, ${option.color}10, ${option.color}03);
+                border-radius: 8px;
+                border-left: 3px solid ${option.color};
+                color: #2d3748;
+                font-weight: 500;
+                font-size: 0.9rem;
+                animation: fadeInCompact 0.4s ease;
+            `;
+            thankYou.textContent = messages[option.id] || 'Thank you for your vote!';
+            
+            if (!document.querySelector('#vote-animations-compact')) {
+                const style = document.createElement('style');
+                style.id = 'vote-animations-compact';
+                style.textContent = `
+                    @keyframes fadeInCompact {
+                        from { opacity: 0; transform: translateY(8px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
                 `;
-                thankYouDiv.innerHTML = `
-                    <strong>🎉 Dziękujemy za wypełnienie ankiety!</strong><br>
-                    <small style="color: #718096;">Twoje odpowiedzi pomogą nam ulepszyć serwis.</small>
-                `;
-                container.appendChild(thankYouDiv);
+                document.head.appendChild(style);
             }
+            
+            container.appendChild(thankYou);
+            console.log('Vote recorded:', option.id);
         }
         
-        function showThankYouMessage() {
-            console.log('Dziękujemy za głos!');
-        }
-        
-        // Uruchom ankietę
-        renderSurvey();
-        console.log('Ankieta została pomyślnie załadowana!');
+        renderOptions();
     }
 })();
 </script>
