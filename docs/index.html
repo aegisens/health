@@ -418,184 +418,477 @@ a.logo .logo-text-content .slogan {
                 </div>
                 <p class="hero-note">Be among the first to experience health that <em>senses</em> you.</p>
             </div>
-<!-- ANKIETA: LIVE LOADING BAR - KOMPAKTOWA WERSJA -->
-<div id="aegisens-vote-widget" style="margin-top: 2rem; padding: 1.8rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 18px; border: 2px solid #E07A9A; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.04);">
+<!-- ANKIETA Z ZAPISEM DANYCH I PRZYCISKIEM WYNIKÓW -->
+<div id="aegisens-vote-widget" style="margin-top: 2rem; padding: 1.8rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 18px; border: 2px solid #E07A9A; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.04); position: relative;">
     <h3 style="color: #2d3748; margin-bottom: 8px; font-size: 1.5rem; font-weight: 700;">🗳️ Shape Our 2026 Roadmap</h3>
-    <p style="color: #4a5568; margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.4;">Click your biggest health mystery. See live community results instantly.</p>
+    <p style="color: #4a5568; margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.4;">Kliknij swój największy zdrowotny problem. Zobacz wyniki społeczności w czasie rzeczywistym.</p>
     
-    <div id="vote-options-container" style="max-width: 550px; margin: 0 auto; min-height: 80px;">
-        <div style="padding: 15px; color: #718096; font-size: 0.9rem; font-style: italic;">
-            Loading voting options...
+    <div id="vote-options-container" style="max-width: 550px; margin: 0 auto;">
+        <!-- Opcje pojawią się tutaj -->
+    </div>
+
+    <!-- PRZYCISK "POKAŻ WSZYSTKIE WYNIKI" -->
+    <div id="results-toggle" style="margin-top: 20px; display: none;">
+        <button id="toggle-results-btn" style="background: #9F7AEA; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s;">
+            📊 Pokaż szczegółowe wyniki
+        </button>
+    </div>
+
+    <!-- PANEL SZCZEGÓŁOWYCH WYNIKÓW -->
+    <div id="detailed-results" style="max-width: 550px; margin: 25px auto 0; display: none; background: rgba(255, 255, 255, 0.9); border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0;">
+        <h4 style="color: #2d3748; margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+            📈 Szczegółowe statystyki
+            <span id="total-votes" style="margin-left: auto; font-size: 0.9rem; color: #718096;"></span>
+        </h4>
+        
+        <div id="results-chart" style="margin-bottom: 15px;">
+            <!-- Wykres pojawi się tutaj -->
+        </div>
+        
+        <div id="results-table" style="font-size: 0.9rem;">
+            <!-- Tabela wyników pojawi się tutaj -->
+        </div>
+        
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; text-align: center;">
+            <button id="export-data-btn" style="background: #68D391; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; margin-right: 10px;">
+                💾 Eksportuj dane
+            </button>
+            <button id="reset-votes-btn" style="background: #FC8181; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                🔄 Resetuj głosy (test)
+            </button>
         </div>
     </div>
 
-    <p style="font-size: 0.85rem; color: #a0aec0; margin-top: 1.5rem; line-height: 1.3;"><em>Click to vote. One vote per person. Results update in real-time.</em></p>
+    <p style="font-size: 0.85rem; color: #a0aec0; margin-top: 1.5rem; line-height: 1.3;"><em>Kliknij, aby zagłosować. Jeden głos na osobę. Wyniki aktualizują się na żywo.</em></p>
 </div>
 
 <script>
-(function() {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initVoteWidget);
-    } else {
-        initVoteWidget();
+// ========== KONFIGURACJA ==========
+const POLL_ID = 'health_mystery_poll_2024'; // Unikalne ID ankiety
+const SAVE_TO_SERVER = false; // Ustaw na true, aby wysyłać na serwer
+const SERVER_URL = 'https://twój-serwer.com/api/save-vote'; // Twój endpoint
+
+// ========== DANE ANKIETY ==========
+let voteOptions = [
+    { id: 'energy', label: '👂 Nieprzewidywalne spadki energii', votes: 42, color: '#E07A9A' },
+    { id: 'menopause', label: '🍃 Okres przedmenopauzalny', votes: 38, color: '#9F7AEA' },
+    { id: 'vulnerable', label: '🥗 Zarządzanie "wrażliwym dniem"', votes: 55, color: '#F687B3' },
+    { id: 'mood', label: '😌 Wahania nastroju', votes: 27, color: '#81E6D9' },
+    { id: 'other', label: '💭 Inny problem zdrowotny', votes: 15, color: '#68D391' }
+];
+
+// ========== SYSTEM ZAPISU DANYCH ==========
+class DataSaver {
+    constructor(pollId) {
+        this.pollId = pollId;
+        this.storageKey = `poll_data_${pollId}`;
+        this.initializeData();
     }
-
-    function initVoteWidget() {
-        const voteOptions = [
-            { id: 'energy', label: '👂 Unpredictable energy crashes', votes: 42, color: '#E07A9A' },
-            { id: 'menopause', label: '🍃 Navigating perimenopause', votes: 38, color: '#9F7AEA' },
-            { id: 'vulnerable', label: '🥗 Navigating my "Vulnerable Day"', votes: 55, color: '#F687B3' },
-            { id: 'mood', label: '😌 Managing mood swings', votes: 27, color: '#81E6D9' },
-            { id: 'other', label: '💭 Other health mystery', votes: 15, color: '#68D391' }
-        ];
-
-        const container = document.getElementById('vote-options-container');
-        if (!container) return;
-        
-        let userVoted = false;
-
-        function calculatePercentages() {
-            const totalVotes = voteOptions.reduce((sum, option) => sum + option.votes, 0);
-            voteOptions.forEach(option => {
-                option.percentage = totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0;
-            });
+    
+    // 1. Inicjalizacja danych z localStorage
+    initializeData() {
+        const saved = localStorage.getItem(this.storageKey);
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                // Aktualizuj dane, zachowując strukturę
+                voteOptions = voteOptions.map(opt => {
+                    const savedOpt = parsed.find(o => o.id === opt.id);
+                    return savedOpt ? { ...opt, votes: savedOpt.votes } : opt;
+                });
+                console.log('Załadowano zapisane dane:', parsed);
+            } catch (e) {
+                console.error('Błąd ładowania danych:', e);
+            }
         }
-
-        function renderOptions() {
-            calculatePercentages();
-            container.innerHTML = '';
-            
-            voteOptions.forEach(option => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'vote-option';
-                optionElement.style.cssText = `
-                    margin-bottom: 16px;
-                    text-align: left;
-                    cursor: ${userVoted ? 'default' : 'pointer'};
-                    transition: all 0.2s ease;
-                `;
-                
-                // KOMPAKTOWA ETYKIETA
-                const labelDiv = document.createElement('div');
-                labelDiv.style.cssText = `
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 14px 16px;
-                    background: white;
-                    border-radius: 10px;
-                    border: 1.5px solid ${userVoted ? (option.votes > 0 ? option.color : '#e2e8f0') : '#e2e8f0'};
-                    font-weight: 600;
-                    color: #2d3748;
-                    margin-bottom: 6px;
-                    font-size: 0.95rem;
-                    transition: all 0.2s ease;
-                `;
-                
-                labelDiv.innerHTML = `
-                    <span style="display: flex; align-items: center; gap: 8px;">
-                        <span style="font-size: 1.1rem;">${option.label.split(' ')[0]}</span>
-                        <span>${option.label.split(' ').slice(1).join(' ')}</span>
-                    </span>
-                    <span style="color: ${option.color}; font-weight: bold; font-size: 0.95rem;">
-                        ${option.percentage}% <span style="opacity: 0.7; font-size: 0.85rem;">(${option.votes})</span>
-                    </span>
-                `;
-                
-                // MNIEJSZY PASEK ŁADOWANIA
-                const barContainer = document.createElement('div');
-                barContainer.style.cssText = `
-                    height: 10px;
-                    background: #f1f5f9;
-                    border-radius: 5px;
-                    overflow: hidden;
-                    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-                    display: ${userVoted ? 'block' : 'none'};
-                `;
-                
-                const barFill = document.createElement('div');
-                barFill.style.cssText = `
-                    height: 100%;
-                    width: ${option.percentage}%;
-                    background: linear-gradient(90deg, ${option.color}, ${option.color}99);
-                    border-radius: 5px;
-                    transition: width 1s ease-out;
-                `;
-                
-                barContainer.appendChild(barFill);
-                
-                if (!userVoted) {
-                    optionElement.addEventListener('click', function() {
-                        handleVote(option);
-                    });
-                    
-                    optionElement.addEventListener('mouseenter', function() {
-                        labelDiv.style.borderColor = option.color;
-                        labelDiv.style.boxShadow = `0 3px 8px ${option.color}30`;
-                        labelDiv.style.transform = 'translateY(-1px)';
-                    });
-                    
-                    optionElement.addEventListener('mouseleave', function() {
-                        labelDiv.style.borderColor = '#e2e8f0';
-                        labelDiv.style.boxShadow = 'none';
-                        labelDiv.style.transform = 'translateY(0)';
-                    });
-                }
-                
-                optionElement.appendChild(labelDiv);
-                optionElement.appendChild(barContainer);
-                container.appendChild(optionElement);
-            });
-        }
+        this.saveToLocal();
+    }
+    
+    // 2. Zapis do localStorage
+    saveToLocal() {
+        localStorage.setItem(this.storageKey, JSON.stringify(voteOptions));
+        console.log('Zapisano lokalnie:', voteOptions);
+    }
+    
+    // 3. Wysłanie na serwer (jeśli SAVE_TO_SERVER = true)
+    async saveToServer(optionId, userData = {}) {
+        if (!SAVE_TO_SERVER) return;
         
-        function handleVote(option) {
-            option.votes += 1;
-            userVoted = true;
+        const voteData = {
+            pollId: this.pollId,
+            optionId: optionId,
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            ...userData
+        };
+        
+        try {
+            const response = await fetch(SERVER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(voteData)
+            });
             
-            renderOptions();
-            
-            const messages = {
-                energy: "👂 Thank you! Energy crashes are our #1 priority.",
-                menopause: "🍃 Thank you! Perimenopause is a key module.",
-                vulnerable: "🥗 Thank you! 'Vulnerable Day' is core to our method.",
-                mood: "😌 Thank you! Mood swings are at the heart of our empathetic AI.",
-                other: "💭 Thank you for your personal story!"
-            };
-            
-            const thankYou = document.createElement('div');
-            thankYou.style.cssText = `
-                text-align: center;
-                margin-top: 16px;
-                padding: 12px 16px;
-                background: linear-gradient(135deg, ${option.color}10, ${option.color}03);
-                border-radius: 8px;
-                border-left: 3px solid ${option.color};
-                color: #2d3748;
-                font-weight: 500;
-                font-size: 0.9rem;
-                animation: fadeInCompact 0.4s ease;
+            if (response.ok) {
+                console.log('Głos wysłany na serwer:', voteData);
+                return true;
+            }
+        } catch (error) {
+            console.error('Błąd wysyłania na serwer:', error);
+        }
+        return false;
+    }
+    
+    // 4. Eksport danych do JSON
+    exportData() {
+        const data = {
+            pollId: this.pollId,
+            lastUpdated: new Date().toISOString(),
+            totalVotes: this.getTotalVotes(),
+            options: voteOptions
+        };
+        
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `wyniki-ankiety-${this.pollId}-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        console.log('Dane wyeksportowane:', data);
+    }
+    
+    // 5. Reset danych (tylko dla testów)
+    resetData() {
+        if (confirm('Czy na pewno chcesz zresetować wszystkie głosy? To tylko dla testów!')) {
+            voteOptions = voteOptions.map(opt => ({ ...opt, votes: 0 }));
+            localStorage.removeItem(this.storageKey);
+            localStorage.removeItem(`${this.pollId}_hasVoted`);
+            console.log('Dane zresetowane');
+            return true;
+        }
+        return false;
+    }
+    
+    getTotalVotes() {
+        return voteOptions.reduce((sum, opt) => sum + opt.votes, 0);
+    }
+}
+
+// ========== GŁÓWNA LOGIKA ==========
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('vote-options-container');
+    const resultsToggle = document.getElementById('results-toggle');
+    const detailedResults = document.getElementById('detailed-results');
+    const toggleResultsBtn = document.getElementById('toggle-results-btn');
+    const exportBtn = document.getElementById('export-data-btn');
+    const resetBtn = document.getElementById('reset-votes-btn');
+    
+    const dataSaver = new DataSaver(POLL_ID);
+    let userVoted = localStorage.getItem(`${POLL_ID}_hasVoted`);
+    
+    // 1. Funkcje pomocnicze
+    function calculatePercentages() {
+        const total = dataSaver.getTotalVotes();
+        voteOptions.forEach(opt => {
+            opt.percentage = total > 0 ? Math.round((opt.votes / total) * 100) : 0;
+        });
+    }
+    
+    function updateTotalVotesDisplay() {
+        const totalEl = document.getElementById('total-votes');
+        if (totalEl) {
+            totalEl.textContent = `Łącznie: ${dataSaver.getTotalVotes()} głosów`;
+        }
+    }
+    
+    // 2. Rysowanie opcji głosowania
+    function renderPoll() {
+        calculatePercentages();
+        container.innerHTML = '';
+        
+        voteOptions.forEach(option => {
+            const optionEl = document.createElement('div');
+            optionEl.className = 'vote-option';
+            optionEl.style.cssText = `
+                margin-bottom: 15px;
+                text-align: left;
+                cursor: ${userVoted ? 'default' : 'pointer'};
+                transition: all 0.2s;
             `;
-            thankYou.textContent = messages[option.id] || 'Thank you for your vote!';
             
-            if (!document.querySelector('#vote-animations-compact')) {
-                const style = document.createElement('style');
-                style.id = 'vote-animations-compact';
-                style.textContent = `
-                    @keyframes fadeInCompact {
-                        from { opacity: 0; transform: translateY(8px); }
-                        to { opacity: 1; transform: translateY(0); }
-                    }
-                `;
-                document.head.appendChild(style);
+            // Przycisk głosowania
+            const button = document.createElement('div');
+            button.style.cssText = `
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 14px 16px;
+                background: white;
+                border-radius: 10px;
+                border: 1.5px solid ${userVoted ? (option.votes > 0 ? option.color : '#e2e8f0') : '#e2e8f0'};
+                font-weight: 600;
+                color: #2d3748;
+                margin-bottom: 6px;
+                font-size: 0.95rem;
+                transition: all 0.2s;
+            `;
+            
+            button.innerHTML = `
+                <span>${option.label}</span>
+                <span style="color: ${option.color}; font-weight: bold;">
+                    ${option.percentage}% <span style="opacity: 0.7; font-size: 0.85rem;">(${option.votes})</span>
+                </span>
+            `;
+            
+            // Pasek postępu
+            const progressBar = document.createElement('div');
+            progressBar.style.cssText = `
+                height: 10px;
+                background: #f1f5f9;
+                border-radius: 5px;
+                overflow: hidden;
+                display: ${userVoted ? 'block' : 'none'};
+            `;
+            
+            const progressFill = document.createElement('div');
+            progressFill.style.cssText = `
+                height: 100%;
+                width: ${option.percentage}%;
+                background: linear-gradient(90deg, ${option.color}, ${option.color}99);
+                border-radius: 5px;
+                transition: width 1s ease-out;
+            `;
+            
+            progressBar.appendChild(progressFill);
+            
+            // Obsługa kliknięcia
+            if (!userVoted) {
+                optionEl.addEventListener('click', async function() {
+                    // Dodaj głos lokalnie
+                    option.votes += 1;
+                    userVoted = true;
+                    localStorage.setItem(`${POLL_ID}_hasVoted`, 'true');
+                    
+                    // Zapisz dane
+                    dataSaver.saveToLocal();
+                    
+                    // Wyślij na serwer (jeśli włączone)
+                    const serverSuccess = await dataSaver.saveToServer(option.id, {
+                        ip: await getClientIP()
+                    });
+                    
+                    // Pokaż komunikat
+                    showMessage(option, serverSuccess);
+                    
+                    // Odśwież widok
+                    setTimeout(() => {
+                        renderPoll();
+                        renderDetailedResults();
+                        updateTotalVotesDisplay();
+                        
+                        // Pokaż przycisk "Pokaż wyniki"
+                        resultsToggle.style.display = 'block';
+                    }, 300);
+                });
+                
+                // Efekty hover
+                optionEl.addEventListener('mouseenter', function() {
+                    button.style.borderColor = option.color;
+                    button.style.boxShadow = `0 3px 8px ${option.color}30`;
+                    button.style.transform = 'translateY(-2px)';
+                });
+                
+                optionEl.addEventListener('mouseleave', function() {
+                    button.style.borderColor = '#e2e8f0';
+                    button.style.boxShadow = 'none';
+                    button.style.transform = 'translateY(0)';
+                });
             }
             
-            container.appendChild(thankYou);
-            console.log('Vote recorded:', option.id);
+            optionEl.appendChild(button);
+            optionEl.appendChild(progressBar);
+            container.appendChild(optionEl);
+        });
+        
+        // Pokaż przycisk wyników jeśli już głosowano
+        if (userVoted) {
+            resultsToggle.style.display = 'block';
+        }
+    }
+    
+    // 3. Szczegółowe wyniki
+    function renderDetailedResults() {
+        const chartContainer = document.getElementById('results-chart');
+        const tableContainer = document.getElementById('results-table');
+        
+        // Sortuj od największej liczby głosów
+        const sortedOptions = [...voteOptions].sort((a, b) => b.votes - a.votes);
+        
+        // Tworzenie wykresu
+        chartContainer.innerHTML = '';
+        sortedOptions.forEach(opt => {
+            const bar = document.createElement('div');
+            bar.style.cssText = `
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+            `;
+            
+            bar.innerHTML = `
+                <div style="width: 100px; font-size: 0.85rem; color: #4a5568;">${opt.label.split(' ')[0]} ${opt.label.split(' ')[1] || ''}</div>
+                <div style="flex: 1; margin-left: 10px;">
+                    <div style="height: 20px; background: #e2e8f0; border-radius: 10px; overflow: hidden; position: relative;">
+                        <div style="height: 100%; width: ${opt.percentage}%; background: linear-gradient(90deg, ${opt.color}, ${opt.color}99); border-radius: 10px; transition: width 1s;"></div>
+                        <div style="position: absolute; right: 8px; top: 0; height: 100%; display: flex; align-items: center; font-size: 0.8rem; font-weight: bold; color: #2d3748;">
+                            ${opt.percentage}%
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 50px; text-align: right; font-size: 0.85rem; font-weight: bold; color: ${opt.color}; margin-left: 10px;">
+                    ${opt.votes}
+                </div>
+            `;
+            
+            chartContainer.appendChild(bar);
+        });
+        
+        // Tworzenie tabeli
+        tableContainer.innerHTML = `
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #e2e8f0;">
+                        <th style="text-align: left; padding: 8px; color: #718096;">Opcja</th>
+                        <th style="text-align: center; padding: 8px; color: #718096;">Głosy</th>
+                        <th style="text-align: center; padding: 8px; color: #718096;">Procent</th>
+                        <th style="text-align: right; padding: 8px; color: #718096;">Udział</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${sortedOptions.map(opt => `
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 8px; color: #2d3748;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background: ${opt.color};"></div>
+                                    ${opt.label}
+                                </div>
+                            </td>
+                            <td style="text-align: center; padding: 10px 8px; font-weight: bold; color: ${opt.color};">${opt.votes}</td>
+                            <td style="text-align: center; padding: 10px 8px;">${opt.percentage}%</td>
+                            <td style="text-align: right; padding: 10px 8px;">
+                                <div style="width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; display: inline-block;">
+                                    <div style="height: 100%; width: ${opt.percentage}%; background: ${opt.color}; border-radius: 3px;"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+        
+        updateTotalVotesDisplay();
+    }
+    
+    // 4. Funkcje pomocnicze
+    function showMessage(option, serverSuccess = false) {
+        const messages = {
+            energy: "👂 Dziękujemy! Spadki energii są naszym priorytetem #1.",
+            menopause: "🍃 Dziękujemy! Menopauza to kluczowy moduł.",
+            vulnerable: "🥗 Dziękujemy! 'Wrażliwy dzień' to sedno naszej metody.",
+            mood: "😌 Dziękujemy! Wahania nastroju to rdzeń naszego AI.",
+            other: "💭 Dziękujemy za Twoją osobistą historię!"
+        };
+        
+        const messageBox = document.createElement('div');
+        messageBox.style.cssText = `
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, ${option.color}15, ${option.color}05);
+            border-radius: 10px;
+            border-left: 4px solid ${option.color};
+            color: #2d3748;
+            font-weight: 500;
+            animation: fadeIn 0.5s;
+        `;
+        
+        let message = messages[option.id] || 'Dziękujemy za Twój głos!';
+        if (SAVE_TO_SERVER && serverSuccess) {
+            message += ' ✓ Dane zapisane na serwerze';
         }
         
-        renderOptions();
+        messageBox.textContent = message;
+        container.appendChild(messageBox);
     }
-})();
+    
+    async function getClientIP() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            return data.ip;
+        } catch {
+            return 'unknown';
+        }
+    }
+    
+    // 5. Event listeners
+    toggleResultsBtn.addEventListener('click', function() {
+        if (detailedResults.style.display === 'none') {
+            detailedResults.style.display = 'block';
+            toggleResultsBtn.textContent = '▲ Ukryj szczegółowe wyniki';
+            toggleResultsBtn.style.background = '#4FD1C7';
+        } else {
+            detailedResults.style.display = 'none';
+            toggleResultsBtn.textContent = '📊 Pokaż szczegółowe wyniki';
+            toggleResultsBtn.style.background = '#9F7AEA';
+        }
+    });
+    
+    exportBtn.addEventListener('click', function() {
+        dataSaver.exportData();
+        exportBtn.textContent = '✓ Wyeksportowano!';
+        setTimeout(() => {
+            exportBtn.textContent = '💾 Eksportuj dane';
+        }, 2000);
+    });
+    
+    resetBtn.addEventListener('click', function() {
+        if (dataSaver.resetData()) {
+            userVoted = null;
+            renderPoll();
+            detailedResults.style.display = 'none';
+            resultsToggle.style.display = 'none';
+            toggleResultsBtn.textContent = '📊 Pokaż szczegółowe wyniki';
+            toggleResultsBtn.style.background = '#9F7AEA';
+            alert('Dane zresetowane! Możesz teraz przetestować głosowanie ponownie.');
+        }
+    });
+    
+    // 6. Inicjalizacja
+    renderPoll();
+    renderDetailedResults();
+    
+    // Dodaj styl dla animacji
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #toggle-results-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(159, 122, 234, 0.3);
+        }
+        #export-data-btn:hover, #reset-votes-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+    `;
+    document.head.appendChild(style);
+});
 </script>
 <!-- WAITLIST CARD WITH LIVE COUNTER -->
             <div class="waitlist-card" id="waitlist">
