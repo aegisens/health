@@ -418,198 +418,173 @@ a.logo .logo-text-content .slogan {
                 </div>
                 <p class="hero-note">Be among the first to experience health that <em>senses</em> you.</p>
             </div>
-            <!-- ANKIETA: SHAPE THE FUTURE - WERSJA ULEPSZONA (z Vulnerable Day) -->
+            <!-- ANKIETA: LIVE LOADING BAR - WERSJA UPROSZCZONA -->
 <div id="aegisens-vote-widget" style="margin-top: 3rem; padding: 2.5rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 20px; border: 2px solid #E07A9A; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
     <h3 style="color: #2d3748; margin-bottom: 10px; font-size: 1.8rem;">🗳️ Shape Our 2026 Roadmap</h3>
-    <p style="color: #4a5568; margin-bottom: 1.8rem; font-size: 1.1rem;">Cast your vote. It directly guides what we build next. What's your single biggest health mystery?</p>
+    <p style="color: #4a5568; margin-bottom: 1.8rem; font-size: 1.1rem;">Click your biggest health mystery. See live community results instantly.</p>
     
-    <form id="feature-vote-form">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 2rem; text-align: left;">
-            <label style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 12px; border: 2px solid #e2e8f0; cursor: pointer; transition: all 0.3s;">
-                <input type="radio" name="vote" value="energy" style="margin-right: 15px; transform: scale(1.3);">
-                <span style="font-weight: 600; color: #2d3748;">👂 Unpredictable energy crashes</span>
-            </label>
-            <label style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 12px; border: 2px solid #e2e8f0; cursor: pointer; transition: all 0.3s;">
-                <input type="radio" name="vote" value="menopause" style="margin-right: 15px; transform: scale(1.3);">
-                <span style="font-weight: 600; color: #2d3748;">🍃 Navigating perimenopause</span>
-            </label>
-            <label style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 12px; border: 2px solid #e2e8f0; cursor: pointer; transition: all 0.3s;">
-                <input type="radio" name="vote" value="histamine" style="margin-right: 15px; transform: scale(1.3);">
-                <span style="font-weight: 600; color: #2d3748;">🥗 Navigating my "Vulnerable Day"</span>
-            </label>
-            <label style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 12px; border: 2px solid #e2e8f0; cursor: pointer; transition: all 0.3s;">
-                <input type="radio" name="vote" value="mood" style="margin-right: 15px; transform: scale(1.3);">
-                <span style="font-weight: 600; color: #2d3748;">😌 Managing mood swings</span>
-            </label>
-            <label style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 12px; border: 2px solid #e2e8f0; cursor: pointer; transition: all 0.3s;">
-                <input type="radio" name="vote" value="other" style="margin-right: 15px; transform: scale(1.3);">
-                <span style="font-weight: 600; color: #2d3748;">💭 Other (tell us)</span>
-            </label>
-        </div>
-
-        <!-- POLE TEKSTOWE DLA "OTHER" (UKRYTE NA POCZĄTKU) -->
-        <div id="other-input-container" style="display: none; margin-bottom: 1.5rem;">
-            <textarea id="other-text" placeholder="Please describe your biggest health mystery in your own words..." style="width: 100%; padding: 15px; border-radius: 10px; border: 2px solid #9F7AEA; font-family: inherit; font-size: 1rem; min-height: 80px; resize: vertical; box-sizing: border-box;" maxlength="500"></textarea>
-            <p style="text-align: right; color: #a0aec0; font-size: 0.85rem; margin-top: 5px;"><span id="char-count">0</span>/500 characters</p>
-        </div>
-
-        <!-- PRZYCISK + DYNAMICZNY TEKST -->
-        <button type="submit" style="padding: 16px 40px; background: linear-gradient(90deg, #E07A9A, #9F7AEA); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; margin-bottom: 1rem;">
-Cast Your Vote & See Results
-        </button>
-        
-        <div id="dynamic-response" style="min-height: 24px; margin-top: 1rem; font-style: italic; color: #9F7AEA; font-weight: 500;">
-            <!-- Tu pojawi się dynamiczny tekst -->
-        </div>
-
-        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 1rem;"><em>One vote per person. See live community results instantly.</em></p>
-    </form>
-
-    <!-- MIEJSCE NA WYNIKI (początkowo ukryte) -->
-    <div id="vote-results" style="display: none; margin-top: 3rem; padding-top: 2rem; border-top: 2px dashed #E07A9A;">
-        <h4 style="color: #2d3748; margin-bottom: 1.5rem;">📊 Live Community Results</h4>
-        <div id="results-bar-container" style="background: #f7fafc; border-radius: 12px; padding: 25px; border: 2px solid #e2e8f0;">
-            <!-- Wyniki wstawi JavaScript -->
-            <p style="color: #4a5568; text-align: center;">Results will appear here after voting.</p>
-        </div>
-        <p style="color: #4a5568; font-size: 0.95rem; margin-top: 1.5rem;"><strong>Thank you for shaping our future with us!</strong> We'll share updates on the winning focus area.</p>
+    <div id="vote-options-container" style="max-width: 600px; margin: 0 auto;">
+        <!-- Opcje są generowane przez JavaScript -->
     </div>
+
+    <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 2rem;"><em>Click to vote. One vote per person. Results update in real-time.</em></p>
 </div>
 
 <script>
-// Czekaj na pełne załadowanie DOM
 document.addEventListener('DOMContentLoaded', function() {
-    
-    // Symulowane dane głosów – w realu pobieraj z backendu
-    let voteCounts = {
-        energy: 42,
-        menopause: 38,
-        histamine: 55,
-        mood: 27,
-        other: 15
-    };
+    // Struktura danych - opcje + liczba głosów
+    const voteOptions = [
+        { id: 'energy', label: '👂 Unpredictable energy crashes', votes: 42, color: '#E07A9A' },
+        { id: 'menopause', label: '🍃 Navigating perimenopause', votes: 38, color: '#9F7AEA' },
+        { id: 'vulnerable', label: '🥗 Navigating my "Vulnerable Day"', votes: 55, color: '#F687B3' },
+        { id: 'mood', label: '😌 Managing mood swings', votes: 27, color: '#81E6D9' },
+        { id: 'other', label: '💭 Other health mystery', votes: 15, color: '#68D391' }
+    ];
 
-    const responseMessages = {
-        energy: "👂 Rozumiem... właśnie nad ENERGY CRASHES pracujemy najmocniej. To nasz priorytet #1.",
-        menopause: "🍃 Rozumiem... właśnie nad NAVIGATING PERIMENOPAUSE pracujemy najmocniej. To kluczowy moduł.",
-        histamine: "🥗 Rozumiem... właśnie nad NAVIGATING YOUR 'VULNERABLE DAY' pracujemy najmocniej. To sedno naszej metody.",
-        mood: "😌 Rozumiem... właśnie nad MANAGING MOOD SWINGS pracujemy najmocniej. To rdzeń empatycznego AI.",
-        other: "💭 Dziękujemy za szczerość. Twoja osobista historia jest dla nas bezcenna."
-    };
+    const container = document.getElementById('vote-options-container');
+    let userVoted = false;
 
-    // 1. Pokazuj pole "Other" tylko po wybraniu
-    const voteRadios = document.querySelectorAll('input[name="vote"]');
-    voteRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-            const otherContainer = document.getElementById('other-input-container');
-            const dynamicText = document.getElementById('dynamic-response');
-            
-            if (this.value === 'other') {
-                otherContainer.style.display = 'block';
-                document.getElementById('other-text').focus();
-            } else {
-                otherContainer.style.display = 'none';
-                document.getElementById('other-text').value = '';
-                document.getElementById('char-count').textContent = '0';
-            }
-            
-            // Podgląd odpowiedzi
-            dynamicText.textContent = responseMessages[this.value] || "";
-        });
-    });
-
-    // 2. Licznik znaków w "Other"
-    const otherText = document.getElementById('other-text');
-    if (otherText) {
-        otherText.addEventListener('input', function() {
-            document.getElementById('char-count').textContent = this.value.length;
+    // Funkcja obliczająca procenty
+    function calculatePercentages() {
+        const totalVotes = voteOptions.reduce((sum, option) => sum + option.votes, 0);
+        voteOptions.forEach(option => {
+            option.percentage = totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0;
         });
     }
 
-    // 3. Submit – głosowanie
-    const voteForm = document.getElementById('feature-vote-form');
-    voteForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+    // Funkcja renderująca opcje
+    function renderOptions() {
+        calculatePercentages();
+        container.innerHTML = '';
         
-        const selected = document.querySelector('input[name="vote"]:checked');
-        if (!selected) {
-            alert('Wybierz jedną opcję, żeby oddać głos.');
-            return;
-        }
-        
-        const voteValue = selected.value;
-        
-        // Walidacja "Other"
-        if (voteValue === 'other') {
-            const otherText = document.getElementById('other-text');
-            if (!otherText || otherText.value.trim() === '') {
-                alert('Opisz proszę swój największy problem zdrowotny.');
-                return;
-            }
-            console.log('Other:', otherText.value);
-        }
-        
-        // Symulacja zapisu głosu
-        if (voteCounts[voteValue] !== undefined) {
-            voteCounts[voteValue] += 1;
-        }
-        
-        // Pokaz komunikat
-        const dynamicResponse = document.getElementById('dynamic-response');
-        dynamicResponse.textContent = responseMessages[voteValue] || "Dziękujemy za Twój głos!";
-        dynamicResponse.style.color = '#E07A9A';
-        dynamicResponse.style.fontWeight = 'bold';
-        
-        // Pokaz wyniki
-        showResults();
-        
-        // Wyłącz formularz
-        voteForm.style.opacity = '0.7';
-        const submitBtn = voteForm.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = '✓ Głos oddany!';
-        submitBtn.style.background = '#a0aec0';
-    });
-
-    // Funkcja wyświetlająca wyniki
-    function showResults() {
-        const total = Object.values(voteCounts).reduce((a, b) => a + b, 0);
-const container = document.getElementById('results-bar-container');
-        if (!container) return;
-        
-        container.innerHTML = ''; // wyczyść poprzednie
-        
-        const labels = {
-            energy: '👂 Energy Crashes',
-            menopause: '🍃 Perimenopause',
-            histamine: '🥗 "Vulnerable Day"',
-            mood: '😌 Mood Swings',
-            other: '💭 Other'
-        };
-        
-        for (const [key, count] of Object.entries(voteCounts)) {
-            const percent = total > 0 ? Math.round((count / total) * 100) : 0;
-            const label = labels[key] || key;
-            const barColor = key === 'other' ? '#81E6D9' : '#E07A9A';
-            
-            const barHTML = 
-                <div style="margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span style="font-weight: 700; color: #2d3748;">${label}</span>
-                        <span style="color: #9F7AEA; font-weight: bold; font-size: 1.1rem;">\( {percent}% ( \){count})</span>
-                    </div>
-                    <div style="height: 14px; background: #edf2f7; border-radius: 7px; overflow: hidden;">
-                        <div style="height: 100%; width: ${percent}%; background: linear-gradient(90deg, ${barColor}, ${key === 'other' ? '#4FD1C7' : '#9F7AEA'}); transition: width 1s ease-out;"></div>
-                    </div>
-                </div>
+        voteOptions.forEach(option => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'vote-option';
+            optionElement.style.cssText = 
+                margin-bottom: 25px;
+                text-align: left;
+                cursor: pointer;
+                transition: all 0.3s;
             ;
-            container.innerHTML += barHTML;
-        }
-        
-        // Pokaz sekcję wyników
-        document.getElementById('vote-results').style.display = 'block';
-        document.getElementById('vote-results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // Główna etykieta
+            const labelDiv = document.createElement('div');
+            labelDiv.style.cssText = 
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 18px 20px;
+                background: white;
+                border-radius: 12px;
+                border: 2px solid ${userVoted ? (option.votes > 0 ? option.color : '#e2e8f0') : '#e2e8f0'};
+                font-weight: 600;
+                color: #2d3748;
+                margin-bottom: 8px;
+                transition: all 0.3s;
+            ;
+            
+            labelDiv.innerHTML = 
+                <span>${option.label}</span>
+                <span style="color: ${option.color}; font-weight: bold; font-size: 1.1rem;">
+                    ${option.percentage}% (${option.votes})
+                </span>
+            ;
+            
+            // Pasek ładowania (progress bar)
+            const barContainer = document.createElement('div');
+            barContainer.style.cssText = 
+                height: 14px;
+                background: #edf2f7;
+                border-radius: 7px;
+                overflow: hidden;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+                display: ${userVoted ? 'block' : 'none'};
+            ;
+const barFill = document.createElement('div');
+            barFill.style.cssText = 
+                height: 100%;
+                width: ${option.percentage}%;
+                background: linear-gradient(90deg, ${option.color}, ${option.color}99);
+                border-radius: 7px;
+                transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            ;
+            
+            barContainer.appendChild(barFill);
+            
+            // Obsługa kliknięcia
+            optionElement.addEventListener('click', function() {
+                if (userVoted) return; // Jedno głosowanie na sesję
+                
+                // Dodaj głos
+                option.votes += 1;
+                userVoted = true;
+                
+                // Odśwież widok
+                renderOptions();
+                
+                // Pokaż komunikat podziękowania
+                const messages = {
+                    energy: "👂 Dziękujemy! Energy crashes są naszym priorytetem #1.",
+                    menopause: "🍃 Dziękujemy! Perimenopause to kluczowy moduł.",
+                    vulnerable: "🥗 Dziękujemy! 'Vulnerable Day' to sedno naszej metody.",
+                    mood: "😌 Dziękujemy! Mood swings to rdzeń empatycznego AI.",
+                    other: "💭 Dziękujemy za Twoją osobistą historię!"
+                };
+                
+                const thankYou = document.createElement('div');
+                thankYou.style.cssText = 
+                    text-align: center;
+                    margin-top: 20px;
+                    padding: 15px;
+                    background: linear-gradient(135deg, ${option.color}15, ${option.color}05);
+                    border-radius: 10px;
+                    border-left: 4px solid ${option.color};
+                    color: #2d3748;
+                    font-weight: 500;
+                    animation: fadeIn 0.5s;
+                ;
+                thankYou.textContent = messages[option.id] || 'Dziękujemy za Twój głos!';
+                
+                // Animacja
+                thankYou.style.animation = 'fadeIn 0.5s';
+                const style = document.createElement('style');
+                style.textContent = 
+                    @keyframes fadeIn {
+                        from { opacity: 0; transform: translateY(10px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                ;
+                document.head.appendChild(style);
+                
+                container.appendChild(thankYou);
+                
+                // W prawdziwej wersji: tutaj wyślij głos na serwer
+                console.log('Vote recorded:', option.id);
+            });
+            
+            // Hover efekt
+            optionElement.addEventListener('mouseenter', function() {
+                if (!userVoted) {
+                    labelDiv.style.borderColor = option.color;
+                    labelDiv.style.boxShadow = 0 4px 12px ${option.color}40;
+                }
+            });
+            
+            optionElement.addEventListener('mouseleave', function() {
+                if (!userVoted) {
+                    labelDiv.style.borderColor = '#e2e8f0';
+                    labelDiv.style.boxShadow = 'none';
+                }
+            });
+            
+            optionElement.appendChild(labelDiv);
+            optionElement.appendChild(barContainer);
+            container.appendChild(optionElement);
+        });
     }
+    
+    // Inicjalizacja
+    renderOptions();
 });
 </script>
 <!-- WAITLIST CARD WITH LIVE COUNTER -->
