@@ -418,173 +418,308 @@ a.logo .logo-text-content .slogan {
                 </div>
                 <p class="hero-note">Be among the first to experience health that <em>senses</em> you.</p>
             </div>
-            <!-- ANKIETA: LIVE LOADING BAR - WERSJA UPROSZCZONA -->
-<div id="aegisens-vote-widget" style="margin-top: 3rem; padding: 2.5rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 20px; border: 2px solid #E07A9A; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-    <h3 style="color: #2d3748; margin-bottom: 10px; font-size: 1.8rem;">🗳️ Shape Our 2026 Roadmap</h3>
-    <p style="color: #4a5568; margin-bottom: 1.8rem; font-size: 1.1rem;">Click your biggest health mystery. See live community results instantly.</p>
+           <!-- ANKIETA: SATYSFAKCJI UŻYTKOWNIKA - SEKCJA DO WKLEJENIA -->
+<div id="aegisens-survey-widget" style="margin-top: 3rem; padding: 2.5rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 20px; border: 2px solid #9F7AEA; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+    <h3 style="color: #2d3748; margin-bottom: 10px; font-size: 1.8rem;">📊 Ankieta: Twoja opinia się liczy</h3>
+    <p style="color: #4a5568; margin-bottom: 1.8rem; font-size: 1.1rem;">Odpowiedz na pytania i zobacz natychmiast, jak myślą inni!</p>
     
-    <div id="vote-options-container" style="max-width: 600px; margin: 0 auto;">
-        <!-- Opcje są generowane przez JavaScript -->
+    <div id="survey-questions-container" style="max-width: 650px; margin: 0 auto;">
+        <!-- Pytania i wyniki są generowane przez JavaScript poniżej -->
     </div>
 
-    <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 2rem;"><em>Click to vote. One vote per person. Results update in real-time.</em></p>
+    <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 2rem;"><em>Kliknij, aby zagłosować. Wyniki aktualizują się w czasie rzeczywistym.</em></p>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Struktura danych - opcje + liczba głosów
-    const voteOptions = [
-        { id: 'energy', label: '👂 Unpredictable energy crashes', votes: 42, color: '#E07A9A' },
-        { id: 'menopause', label: '🍃 Navigating perimenopause', votes: 38, color: '#9F7AEA' },
-        { id: 'vulnerable', label: '🥗 Navigating my "Vulnerable Day"', votes: 55, color: '#F687B3' },
-        { id: 'mood', label: '😌 Managing mood swings', votes: 27, color: '#81E6D9' },
-        { id: 'other', label: '💭 Other health mystery', votes: 15, color: '#68D391' }
+    // STRUKTURA DANYCH: Pytania ankiety z opcjami i głosami
+    const surveyData = [
+        {
+            id: 'ocena',
+            question: 'Jak oceniasz ogólną użyteczność tej strony?',
+            options: [
+                { id: '5', label: '⭐ Bardzo dobra', votes: 42, color: '#68D391' },
+                { id: '4', label: 'Dobra', votes: 38, color: '#81E6D9' },
+                { id: '3', label: 'Średnia', votes: 55, color: '#F687B3' },
+                { id: '2', label: 'Słaba', votes: 27, color: '#FC8181' },
+                { id: '1', label: 'Bardzo słaba', votes: 15, color: #D69E2E }
+            ]
+        },
+        {
+            id: 'ulubione',
+            question: 'Co podoba Ci się najbardziej? (Możesz wybrać wiele opcji)',
+            options: [
+                { id: 'design', label: '🎨 Design i wygląd', votes: 72, color: '#9F7AEA' },
+                { id: 'szybkosc', label: '⚡ Szybkość działania', votes: 64, color: '#E07A9A' },
+                { id: 'tresci', label: '📚 Przydatność treści', votes: 89, color: '#4FD1C7' },
+                { id: 'nawigacja', label: '🧭 Łatwość nawigacji', votes: 45, color: '#F6AD55' }
+            ],
+            multipleChoice: true // To pytanie pozwala na wielokrotny wybór
+        }
     ];
 
-    const container = document.getElementById('vote-options-container');
-    let userVoted = false;
+    const container = document.getElementById('survey-questions-container');
+    let userResponses = {}; // Śledzi odpowiedzi użytkownika: { 'ocena': '5', 'ulubione': ['design', 'tresci'] }
 
-    // Funkcja obliczająca procenty
-    function calculatePercentages() {
-        const totalVotes = voteOptions.reduce((sum, option) => sum + option.votes, 0);
-        voteOptions.forEach(option => {
-            option.percentage = totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0;
+    // Funkcja obliczająca procenty dla danej listy opcji
+    function calculatePercentages(options) {
+        const totalVotes = options.reduce((sum, opt) => sum + opt.votes, 0);
+        options.forEach(opt => {
+            opt.percentage = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
         });
     }
 
-    // Funkcja renderująca opcje
-    function renderOptions() {
-        calculatePercentages();
+    // Funkcja renderująca całą ankietę
+    function renderSurvey() {
         container.innerHTML = '';
         
-        voteOptions.forEach(option => {
-            const optionElement = document.createElement('div');
-            optionElement.className = 'vote-option';
-            optionElement.style.cssText = 
-                margin-bottom: 25px;
+        surveyData.forEach((questionData, qIndex) => {
+            // Kontener na pytanie
+            const questionDiv = document.createElement('div');
+            questionDiv.style.cssText = `
+                background: rgba(255, 255, 255, 0.7);
+                border-radius: 16px;
+                padding: 1.8rem;
+                margin-bottom: 2.5rem;
                 text-align: left;
-                cursor: pointer;
+                border: 1px solid #e2e8f0;
                 transition: all 0.3s;
-            ;
+            `;
             
-            // Główna etykieta
-            const labelDiv = document.createElement('div');
-            labelDiv.style.cssText = 
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 18px 20px;
-                background: white;
-                border-radius: 12px;
-                border: 2px solid ${userVoted ? (option.votes > 0 ? option.color : '#e2e8f0') : '#e2e8f0'};
-                font-weight: 600;
+            // Tekst pytania
+            const questionTitle = document.createElement('h4');
+            questionTitle.textContent = questionData.question;
+            questionTitle.style.cssText = `
                 color: #2d3748;
-                margin-bottom: 8px;
-                transition: all 0.3s;
-            ;
+                margin-bottom: 1.5rem;
+                font-size: 1.2rem;
+                font-weight: 700;
+            `;
+            questionDiv.appendChild(questionTitle);
             
-            labelDiv.innerHTML = 
-                <span>${option.label}</span>
-                <span style="color: ${option.color}; font-weight: bold; font-size: 1.1rem;">
-                    ${option.percentage}% (${option.votes})
-                </span>
-            ;
+            // Oblicz procenty dla opcji tego pytania
+            calculatePercentages(questionData.options);
             
-            // Pasek ładowania (progress bar)
-            const barContainer = document.createElement('div');
-            barContainer.style.cssText = 
-                height: 14px;
-                background: #edf2f7;
-                border-radius: 7px;
-                overflow: hidden;
-                box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-                display: ${userVoted ? 'block' : 'none'};
-            ;
-const barFill = document.createElement('div');
-            barFill.style.cssText = 
-                height: 100%;
-                width: ${option.percentage}%;
-                background: linear-gradient(90deg, ${option.color}, ${option.color}99);
-                border-radius: 7px;
-                transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            ;
-            
-            barContainer.appendChild(barFill);
-            
-            // Obsługa kliknięcia
-            optionElement.addEventListener('click', function() {
-                if (userVoted) return; // Jedno głosowanie na sesję
+            // Renderuj każdą opcję odpowiedzi
+            questionData.options.forEach(option => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'survey-option';
+                optionElement.style.cssText = `
+                    margin-bottom: 18px;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                `;
                 
-                // Dodaj głos
-                option.votes += 1;
-                userVoted = true;
-                
-                // Odśwież widok
-                renderOptions();
-                
-                // Pokaż komunikat podziękowania
-                const messages = {
-                    energy: "👂 Dziękujemy! Energy crashes są naszym priorytetem #1.",
-                    menopause: "🍃 Dziękujemy! Perimenopause to kluczowy moduł.",
-                    vulnerable: "🥗 Dziękujemy! 'Vulnerable Day' to sedno naszej metody.",
-                    mood: "😌 Dziękujemy! Mood swings to rdzeń empatycznego AI.",
-                    other: "💭 Dziękujemy za Twoją osobistą historię!"
-                };
-                
-                const thankYou = document.createElement('div');
-                thankYou.style.cssText = 
-                    text-align: center;
-                    margin-top: 20px;
-                    padding: 15px;
-                    background: linear-gradient(135deg, ${option.color}15, ${option.color}05);
-                    border-radius: 10px;
-                    border-left: 4px solid ${option.color};
+                // Główny wiersz opcji (etykieta + wynik)
+                const labelRow = document.createElement('div');
+                labelRow.style.cssText = `
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 16px 20px;
+                    background: white;
+                    border-radius: 12px;
+                    border: 2px solid ${userResponses[questionData.id] && 
+                        (questionData.multipleChoice 
+                            ? userResponses[questionData.id].includes(option.id) 
+                            : userResponses[questionData.id] === option.id) 
+                        ? option.color : '#e2e8f0'};
+                    font-weight: 600;
                     color: #2d3748;
-                    font-weight: 500;
-                    animation: fadeIn 0.5s;
-                ;
-                thankYou.textContent = messages[option.id] || 'Dziękujemy za Twój głos!';
+                    margin-bottom: 8px;
+                    transition: all 0.3s;
+                `;
                 
-                // Animacja
-                thankYou.style.animation = 'fadeIn 0.5s';
+                // Lewa strona: pole wyboru + etykieta
+                const labelLeft = document.createElement('div');
+                labelLeft.style.display = 'flex';
+                labelLeft.style.alignItems = 'center';
+                labelLeft.style.gap = '12px';
+                
+                // Ikona/wygląd w zależności od typu pytania
+                const choiceIndicator = document.createElement('div');
+                choiceIndicator.style.cssText = `
+                    width: 22px;
+                    height: 22px;
+                    border-radius: ${questionData.multipleChoice ? '6px' : '50%'};
+                    border: 2px solid #cbd5e0;
+                    background: ${userResponses[questionData.id] && 
+                        (questionData.multipleChoice 
+                            ? userResponses[questionData.id].includes(option.id) 
+                            : userResponses[questionData.id] === option.id) 
+                        ? option.color : 'white'};
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 0.8rem;
+                `;
+                
+                if (userResponses[questionData.id] && 
+                    (questionData.multipleChoice 
+                        ? userResponses[questionData.id].includes(option.id) 
+                        : userResponses[questionData.id] === option.id)) {
+                    choiceIndicator.innerHTML = questionData.multipleChoice ? '✓' : '●';
+                }
+                
+                labelLeft.appendChild(choiceIndicator);
+                labelLeft.innerHTML += `<span>${option.label}</span>`;
+                
+                // Prawa strona: procent i liczba głosów
+                const labelRight = document.createElement('div');
+                labelRight.innerHTML = `
+                    <span style="color: ${option.color}; font-weight: bold; font-size: 1.1rem;">
+                        ${option.percentage}% (${option.votes})
+                    </span>
+                `;
+                
+                labelRow.appendChild(labelLeft);
+                labelRow.appendChild(labelRight);
+                
+                // Pasek postępu (pokazuje się po głosowaniu)
+                const barContainer = document.createElement('div');
+                barContainer.style.cssText = `
+                    height: 12px;
+                    background: #edf2f7;
+                    border-radius: 6px;
+                    overflow: hidden;
+                    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+                    display: ${userResponses[questionData.id] ? 'block' : 'none'};
+                `;
+                
+                const barFill = document.createElement('div');
+                barFill.style.cssText = `
+                    height: 100%;
+                    width: ${option.percentage}%;
+                    background: linear-gradient(90deg, ${option.color}, ${option.color}99);
+                    border-radius: 6px;
+                    transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+                `;
+                
+                barContainer.appendChild(barFill);
+                
+                // Obsługa kliknięcia (głosowania)
+                optionElement.addEventListener('click', function() {
+                    // Dla pytań jednokrotnego wyboru
+                    if (!questionData.multipleChoice) {
+                        // Jeśli już głosowano na to pytanie, zignoruj
+                        if (userResponses[questionData.id]) return;
+                        
+                        // Zarejestruj głos w danych
+                        option.votes += 1;
+                        userResponses[questionData.id] = option.id;
+                        
+                        // Pokaż komunikat
+                        showThankYouMessage(option, questionData.id);
+                    } 
+                    // Dla pytań wielokrotnego wyboru
+                    else {
+                        // Inicjalizuj tablicę, jeśli jeszcze nie istnieje
+                        if (!userResponses[questionData.id]) {
+                            userResponses[questionData.id] = [];
+                        }
+                        
+                        // Jeśli opcja już wybrana, odznacz (toggle)
+                        const optionIndex = userResponses[questionData.id].indexOf(option.id);
+                        if (optionIndex > -1) {
+                            userResponses[questionData.id].splice(optionIndex, 1);
+                            option.votes -= 1; // Odejmij głos
+                        } else {
+                            userResponses[questionData.id].push(option.id);
+                            option.votes += 1; // Dodaj głos
+                        }
+                    }
+                    
+                    // Odśwież widok ankiety
+                    renderSurvey();
+                    
+                    // W prawdziwej aplikacji: tutaj wyślij dane na serwer
+                    console.log('Aktualne odpowiedzi:', userResponses);
+                });
+                
+                // Efekty hover
+                optionElement.addEventListener('mouseenter', function() {
+                    if (!userResponses[questionData.id] || 
+                        (questionData.multipleChoice && !userResponses[questionData.id].includes(option.id)) ||
+                        (!questionData.multipleChoice && userResponses[questionData.id] !== option.id)) {
+                        labelRow.style.borderColor = option.color;
+                        labelRow.style.boxShadow = `0 4px 12px ${option.color}40`;
+                    }
+                });
+                
+                optionElement.addEventListener('mouseleave', function() {
+                    if (!userResponses[questionData.id] || 
+                        (questionData.multipleChoice && !userResponses[questionData.id].includes(option.id)) ||
+                        (!questionData.multipleChoice && userResponses[questionData.id] !== option.id)) {
+                        labelRow.style.borderColor = '#e2e8f0';
+                        labelRow.style.boxShadow = 'none';
+                    }
+                });
+                
+                optionElement.appendChild(labelRow);
+                optionElement.appendChild(barContainer);
+                questionDiv.appendChild(optionElement);
+            });
+            
+            container.appendChild(questionDiv);
+        });
+        
+        // Dodaj komunikat, jeśli wszystkie pytania są wypełnione
+        const answeredCount = Object.keys(userResponses).length;
+        if (answeredCount === surveyData.length) {
+            const thankYouDiv = document.createElement('div');
+            thankYouDiv.style.cssText = `
+                text-align: center;
+                margin-top: 20px;
+                padding: 20px;
+                background: linear-gradient(135deg, #9F7AEA15, #E07A9A05);
+                border-radius: 12px;
+                border: 2px dashed #9F7AEA;
+                color: #2d3748;
+                font-weight: 500;
+                animation: fadeIn 0.5s;
+            `;
+            thankYouDiv.innerHTML = `
+                <strong>🎉 Dziękujemy za wypełnienie ankiety!</strong><br>
+                <small style="color: #718096;">Twoje odpowiedzi pomogą nam ulepszyć serwis.</small>
+            `;
+            
+            // Dodaj animację, jeśli nie została jeszcze dodana
+            if (!document.querySelector('#survey-animations')) {
                 const style = document.createElement('style');
-                style.textContent = 
+                style.id = 'survey-animations';
+                style.textContent = `
                     @keyframes fadeIn {
                         from { opacity: 0; transform: translateY(10px); }
                         to { opacity: 1; transform: translateY(0); }
                     }
-                ;
+                `;
                 document.head.appendChild(style);
-                
-                container.appendChild(thankYou);
-                
-                // W prawdziwej wersji: tutaj wyślij głos na serwer
-                console.log('Vote recorded:', option.id);
-            });
+            }
             
-            // Hover efekt
-            optionElement.addEventListener('mouseenter', function() {
-                if (!userVoted) {
-                    labelDiv.style.borderColor = option.color;
-                    labelDiv.style.boxShadow = 0 4px 12px ${option.color}40;
-                }
-            });
-            
-            optionElement.addEventListener('mouseleave', function() {
-                if (!userVoted) {
-                    labelDiv.style.borderColor = '#e2e8f0';
-                    labelDiv.style.boxShadow = 'none';
-                }
-            });
-            
-            optionElement.appendChild(labelDiv);
-            optionElement.appendChild(barContainer);
-            container.appendChild(optionElement);
-        });
+            container.appendChild(thankYouDiv);
+        }
     }
     
-    // Inicjalizacja
-    renderOptions();
+    // Funkcja pokazująca komunikat po głosowaniu (dla pytań jednokrotnych)
+    function showThankYouMessage(option, questionId) {
+        const messages = {
+            ocena: {
+                '5': '⭐ Super! Cieszymy się, że strona Ci się podoba!',
+                '4': '👍 Dziękujemy za pozytywną opinię!',
+                '3': '🤔 Dzięki za szczerość. Pracujemy nad ulepszeniami.',
+                '2': '🙏 Twoja opinia pomoże nam być lepszymi.',
+                '1': '😔 Przykro nam to słyszeć. Skontaktuj się z nami, pomożemy.'
+            },
+            ulubione: '✅ Dziękujemy za Twój wybór!'
+        };
+        
+        // W praktyce ten komunikat można wyświetlić jako toast/notification
+        console.log(messages[questionId]?.[option.id] || 'Dziękujemy za głos!');
+    }
+    
+    // Inicjalizacja ankiety
+    renderSurvey();
 });
 </script>
 <!-- WAITLIST CARD WITH LIVE COUNTER -->
