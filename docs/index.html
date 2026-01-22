@@ -603,13 +603,11 @@ function showResults() {
     const resultsSection = document.getElementById('vote-results');
     if (resultsSection) {
         resultsSection.style.display = 'block';
-        // POPRAWIONE PRZEWIJANIE:
-        // Mały timeout zapewni, że sekcja jest już wyrenderowana przed przewinięciem
+        // PRZEWIŃ DO CAŁEGO KONTENERA ANKIETY (GDZIE SĄ WYNIKI)
         setTimeout(() => {
-            resultsSection.scrollIntoView({ 
+            document.getElementById('aegisens-vote-widget').scrollIntoView({ 
                 behavior: 'smooth', 
-                block: 'start',        // Zmienione z 'nearest' na 'start'
-                inline: 'nearest'
+                block: 'start'
             });
         }, 50);
     }
