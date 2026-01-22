@@ -477,10 +477,10 @@ Cast Your Vote & See Results
 </div>
 
 <script>
-// Czekaj, aż cała strona (DOM) będzie załadowana
+// Czekaj na pełne załadowanie DOM
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Symulacja bazy danych głosów
+    // Symulowane dane głosów – w realu pobieraj z backendu
     let voteCounts = {
         energy: 42,
         menopause: 38,
@@ -489,7 +489,6 @@ document.addEventListener('DOMContentLoaded', function() {
         other: 15
     };
 
-    // Mapowanie wartości na dynamiczne teksty
     const responseMessages = {
         energy: "👂 Rozumiem... właśnie nad ENERGY CRASHES pracujemy najmocniej. To nasz priorytet #1.",
         menopause: "🍃 Rozumiem... właśnie nad NAVIGATING PERIMENOPAUSE pracujemy najmocniej. To kluczowy moduł.",
@@ -498,162 +497,120 @@ document.addEventListener('DOMContentLoaded', function() {
         other: "💭 Dziękujemy za szczerość. Twoja osobista historia jest dla nas bezcenna."
     };
 
-    // 1. Obsługa pojawiania się pola tekstowego dla "Other"
+    // 1. Pokazuj pole "Other" tylko po wybraniu
     const voteRadios = document.querySelectorAll('input[name="vote"]');
-    if (voteRadios.length > 0) {
-        voteRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                const otherContainer = document.getElementById('other-input-container');
-                const otherTextarea = document.getElementById('other-text');
-                const dynamicText = document.getElementById('dynamic-response');
-                
-                if (this.value === 'other') {
-                    if (otherContainer) otherContainer.style.display = 'block';
-                    if (otherTextarea) otherTextarea.focus();
-                } else {
-                    if (otherContainer) otherContainer.style.display = 'none';
-                    if (otherTextarea) otherTextarea.value = '';
-                    if (document.getElementById('char-count')) {
-                        document.getElementById('char-count').textContent = '0';
-                    }
-                }
-                // Podgląd dynamicznej odpowiedzi
-                if (dynamicText) {
-                    dynamicText.textContent = responseMessages[this.value] || "";
-                }
-            });
+    voteRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const otherContainer = document.getElementById('other-input-container');
+            const dynamicText = document.getElementById('dynamic-response');
+            
+            if (this.value === 'other') {
+                otherContainer.style.display = 'block';
+                document.getElementById('other-text').focus();
+            } else {
+                otherContainer.style.display = 'none';
+                document.getElementById('other-text').value = '';
+                document.getElementById('char-count').textContent = '0';
+            }
+            
+            // Podgląd odpowiedzi
+            dynamicText.textContent = responseMessages[this.value] || "";
         });
-    }
+    });
 
-    // 2. Licznik znaków dla pola "Other"
+    // 2. Licznik znaków w "Other"
     const otherText = document.getElementById('other-text');
     if (otherText) {
         otherText.addEventListener('input', function() {
-            const charCount = document.getElementById('char-count');
-            if (charCount) charCount.textContent = this.value.length;
+            document.getElementById('char-count').textContent = this.value.length;
         });
     }
 
-    // 3. Obsługa głosowania
+    // 3. Submit – głosowanie
     const voteForm = document.getElementById('feature-vote-form');
-if (voteForm) {
-        voteForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const selected = document.querySelector('input[name="vote"]:checked');
-            
-            if (!selected) { 
-                alert('Please choose one option to cast your vote.'); 
-                return; 
-            }
-            
-            const voteValue = selected.value;
-            
-            // Jeśli wybrano "other", sprawdź pole tekstowe
-            if (voteValue === 'other') {
-                const otherText = document.getElementById('other-text');
-                if (otherText && otherText.value.trim() === '') {
-                    alert('Please describe your health mystery in the text field.');
-                    return;
-                }
-                console.log('Other vote recorded:', otherText ? otherText.value : '');
-            }
-            
-            // Symulacja zapisania głosu
-            if (voteCounts.hasOwnProperty(voteValue)) {
-                voteCounts[voteValue] += 1;
-            }
-            
-            // Funkcja pokazująca wyniki
-function showResults() {
-    const total = Object.values(voteCounts).reduce((a, b) => a + b, 0);
-    const container = document.getElementById('results-bar-container');
-    
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    const labels = {
-        energy: '👂 Energy Crashes',
-        menopause: '🍃 Perimenopause',
-        histamine: '🥗 "Vulnerable Day"',
-        mood: '😌 Mood Swings',
-        other: '💭 Other'
-    };
-    
-    for (const [key, count] of Object.entries(voteCounts)) {
-        const percent = total > 0 ? Math.round((count / total) * 100) : 0;
-        const label = labels[key] || key;
-        const barColor = key === 'other' ? '#81E6D9' : '#E07A9A';
+    voteForm.addEventListener('submit', function(e) {
+        e.preventDefault();
         
-        const bar = 
-            <div style="margin-bottom: 20px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="font-weight: 700; color: #2d3748;">${label}</span>
-                    <span style="color: #9F7AEA; font-weight: bold; font-size: 1.1rem;">${percent}% (${count} votes)</span>
-                </div>
-                <div style="height: 14px; background: #edf2f7; border-radius: 7px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
-                    <div style="height: 100%; width: ${percent}%; background: linear-gradient(90deg, ${barColor}, ${key === 'other' ? '#4FD1C7' : '#9F7AEA'}); border-radius: 7px; transition: width 1s ease-out;"></div>
-                </div>
-            </div>
-        ;
-        container.innerHTML += bar;
-    }
-    
-    // Pokaż sekcję z wynikami
-    const resultsSection = document.getElementById('vote-results');
-    if (resultsSection) {
-        resultsSection.style.display = 'block';
-        // PRZEWIŃ DO CAŁEGO KONTENERA ANKIETY (GDZIE SĄ WYNIKI)
-        setTimeout(() => {
-            document.getElementById('aegisens-vote-widget').scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start'
-            });
-        }, 50);
-    }
-}
-    // Funkcja pokazująca wyniki
+        const selected = document.querySelector('input[name="vote"]:checked');
+        if (!selected) {
+            alert('Wybierz jedną opcję, żeby oddać głos.');
+            return;
+        }
+        
+        const voteValue = selected.value;
+        
+        // Walidacja "Other"
+        if (voteValue === 'other') {
+            const otherText = document.getElementById('other-text');
+            if (!otherText || otherText.value.trim() === '') {
+                alert('Opisz proszę swój największy problem zdrowotny.');
+                return;
+            }
+            console.log('Other:', otherText.value);
+        }
+        
+        // Symulacja zapisu głosu
+        if (voteCounts[voteValue] !== undefined) {
+            voteCounts[voteValue] += 1;
+        }
+        
+        // Pokaz komunikat
+        const dynamicResponse = document.getElementById('dynamic-response');
+        dynamicResponse.textContent = responseMessages[voteValue] || "Dziękujemy za Twój głos!";
+        dynamicResponse.style.color = '#E07A9A';
+        dynamicResponse.style.fontWeight = 'bold';
+        
+        // Pokaz wyniki
+        showResults();
+        
+        // Wyłącz formularz
+        voteForm.style.opacity = '0.7';
+        const submitBtn = voteForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '✓ Głos oddany!';
+        submitBtn.style.background = '#a0aec0';
+    });
+
+    // Funkcja wyświetlająca wyniki
     function showResults() {
-    const total = Object.values(voteCounts).reduce((a, b) => a + b, 0);
-    const container = document.getElementById('results-bar-container');
-    
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    const labels = {
-        energy: '👂 Energy Crashes',
-        menopause: '🍃 Perimenopause',
-        histamine: '🥗 "Vulnerable Day"',
-        mood: '😌 Mood Swings',
-        other: '💭 Other'
-    };
-    
-    for (const [key, count] of Object.entries(voteCounts)) {
-        const percent = total > 0 ? Math.round((count / total) * 100) : 0;
-        const label = labels[key] || key;
-        const barColor = key === 'other' ? '#81E6D9' : '#E07A9A';
+        const total = Object.values(voteCounts).reduce((a, b) => a + b, 0);
+const container = document.getElementById('results-bar-container');
+        if (!container) return;
         
-        const bar = 
-            <div style="margin-bottom: 20px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="font-weight: 700; color: #2d3748;">${label}</span>
-                    <span style="color: #9F7AEA; font-weight: bold; font-size: 1.1rem;">${percent}% (${count} votes)</span>
+        container.innerHTML = ''; // wyczyść poprzednie
+        
+        const labels = {
+            energy: '👂 Energy Crashes',
+            menopause: '🍃 Perimenopause',
+            histamine: '🥗 "Vulnerable Day"',
+            mood: '😌 Mood Swings',
+            other: '💭 Other'
+        };
+        
+        for (const [key, count] of Object.entries(voteCounts)) {
+            const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+            const label = labels[key] || key;
+            const barColor = key === 'other' ? '#81E6D9' : '#E07A9A';
+            
+            const barHTML = 
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="font-weight: 700; color: #2d3748;">${label}</span>
+                        <span style="color: #9F7AEA; font-weight: bold; font-size: 1.1rem;">\( {percent}% ( \){count})</span>
+                    </div>
+                    <div style="height: 14px; background: #edf2f7; border-radius: 7px; overflow: hidden;">
+                        <div style="height: 100%; width: ${percent}%; background: linear-gradient(90deg, ${barColor}, ${key === 'other' ? '#4FD1C7' : '#9F7AEA'}); transition: width 1s ease-out;"></div>
+                    </div>
                 </div>
-                <div style="height: 14px; background: #edf2f7; border-radius: 7px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
-                    <div style="height: 100%; width: ${percent}%; background: linear-gradient(90deg, ${barColor}, ${key === 'other' ? '#4FD1C7' : '#9F7AEA'}); border-radius: 7px; transition: width 1s ease-out;"></div>
-                </div>
-            </div>
-        ;
-        container.innerHTML += bar;
+            ;
+            container.innerHTML += barHTML;
+        }
+        
+        // Pokaz sekcję wyników
+        document.getElementById('vote-results').style.display = 'block';
+        document.getElementById('vote-results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-    
-    // Pokaż sekcję z wynikami
-    const resultsSection = document.getElementById('vote-results');
-    if (resultsSection) {
-        resultsSection.style.display = 'block';
-    }
-}
+});
 </script>
 <!-- WAITLIST CARD WITH LIVE COUNTER -->
             <div class="waitlist-card" id="waitlist">
