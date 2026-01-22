@@ -418,7 +418,7 @@ a.logo .logo-text-content .slogan {
                 </div>
                 <p class="hero-note">Be among the first to experience health that <em>senses</em> you.</p>
             </div>
-            <!-- ANKIETA: SHAPE THE FUTURE - WERSJA ULEPSZONA -->
+            <!-- ANKIETA: SHAPE THE FUTURE - WERSJA ULEPSZONA (z Vulnerable Day) -->
 <div id="aegisens-vote-widget" style="margin-top: 3rem; padding: 2.5rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 20px; border: 2px solid #E07A9A; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
     <h3 style="color: #2d3748; margin-bottom: 10px; font-size: 1.8rem;">🗳️ Shape Our 2026 Roadmap</h3>
     <p style="color: #4a5568; margin-bottom: 1.8rem; font-size: 1.1rem;">Cast your vote. It directly guides what we build next. What's your single biggest health mystery?</p>
@@ -435,7 +435,7 @@ a.logo .logo-text-content .slogan {
             </label>
             <label style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 12px; border: 2px solid #e2e8f0; cursor: pointer; transition: all 0.3s;">
                 <input type="radio" name="vote" value="histamine" style="margin-right: 15px; transform: scale(1.3);">
-                <span style="font-weight: 600; color: #2d3748;">🥗 Food & histamine reactions</span>
+                <span style="font-weight: 600; color: #2d3748;">🥗 Navigating my "Vulnerable Day"</span>
             </label>
             <label style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 12px; border: 2px solid #e2e8f0; cursor: pointer; transition: all 0.3s;">
                 <input type="radio" name="vote" value="mood" style="margin-right: 15px; transform: scale(1.3);">
@@ -477,123 +477,159 @@ Cast Your Vote & See Results
 </div>
 
 <script>
-// Symulacja bazy danych głosów
-let voteCounts = {
-    energy: 42,
-    menopause: 38,
-    histamine: 55,
-    mood: 27,
-    other: 15
-};
-
-// Mapowanie wartości na dynamiczne teksty
-const responseMessages = {
-    energy: "👂 Rozumiem... właśnie nad ENERGY CRASHES pracujemy najmocniej. To nasz priorytet #1.",
-    menopause: "🍃 Rozumiem... właśnie nad NAVIGATING PERIMENOPAUSE pracujemy najmocniej. To kluczowy moduł.",
-    histamine: "🥗 Rozumiem... właśnie nad FOOD & HISTAMINE REACTIONS pracujemy najmocniej. To sedno naszej metody.",
-    mood: "😌 Rozumiem... właśnie nad MANAGING MOOD SWINGS pracujemy najmocniej. To rdzeń empatycznego AI.",
-    other: "💭 Dziękujemy za szczerość. Twoja osobista historia jest dla nas bezcenna."
-};
-
-// Obsługa pojawiania się pola tekstowego dla "Other"
-document.querySelectorAll('input[name="vote"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        const otherContainer = document.getElementById('other-input-container');
-        const otherTextarea = document.getElementById('other-text');
-        if (this.value === 'other') {
-            otherContainer.style.display = 'block';
-            otherTextarea.focus();
-        } else {
-            otherContainer.style.display = 'none';
-            otherTextarea.value = ''; // Czyść pole przy zmianie opcji
-            document.getElementById('char-count').textContent = '0';
-        }
-        // Podgląd dynamicznej odpowiedzi
-        const dynamicText = document.getElementById('dynamic-response');
-        dynamicText.textContent = responseMessages[this.value] || "";
-    });
-});
-
-// Licznik znaków dla pola "Other"
-document.getElementById('other-text').addEventListener('input', function() {
-    document.getElementById('char-count').textContent = this.value.length;
-});
-
-// Obsługa głosowania
-document.getElementById('feature-vote-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const selected = document.querySelector('input[name="vote"]:checked');
-    if (!selected) { 
-        alert('Please choose one option to cast your vote.'); 
-        return; 
-    }
+// Czekaj, aż cała strona (DOM) będzie załadowana
+document.addEventListener('DOMContentLoaded', function() {
     
-    const voteValue = selected.value;
-    
-    // Jeśli wybrano "other", zapisz wartość z pola tekstowego (symulacja)
-    if (voteValue === 'other') {
-        const otherText = document.getElementById('other-text').value.trim();
-        if (otherText === '') {
-            alert('Please describe your health mystery in the text field.');
-            return;
-        }
-        console.log('Other vote recorded:', otherText); // Tutaj w prawdziwej wersji wysyłamy to na serwer
-    }
-// Symulacja zapisania głosu
-    voteCounts[voteValue] += 1;
-    
-    // Pokaz wyniki
-    showResults();
-    
-    // Wyłącz formularz po oddaniu głosu
-    document.getElementById('feature-vote-form').style.opacity = '0.7';
-    document.querySelector('#feature-vote-form button').disabled = true;
-    document.querySelector('#feature-vote-form button').textContent = '✓ Vote Cast!';
-    document.querySelector('#feature-vote-form button').style.background = '#a0aec0';
-    
-    // Ustaw finalny tekst potwierdzenia
-    document.getElementById('dynamic-response').textContent = responseMessages[voteValue] || "Thank you for your vote!";
-    document.getElementById('dynamic-response').style.color = '#E07A9A';
-    document.getElementById('dynamic-response').style.fontWeight = 'bold';
-});
-
-// Funkcja pokazująca wyniki
-function showResults() {
-    const total = Object.values(voteCounts).reduce((a, b) => a + b, 0);
-    const container = document.getElementById('results-bar-container');
-    container.innerHTML = ''; // wyczyść
-    
-    const labels = {
-        energy: '👂 Energy Crashes',
-        menopause: '🍃 Perimenopause',
-        histamine: '🥗 Histamine/Food',
-        mood: '😌 Mood Swings',
-        other: '💭 Other'
+    // Symulacja bazy danych głosów
+    let voteCounts = {
+        energy: 42,
+        menopause: 38,
+        histamine: 55,
+        mood: 27,
+        other: 15
     };
-    
-    for (const [key, count] of Object.entries(voteCounts)) {
-        const percent = total > 0 ? Math.round((count / total) * 100) : 0;
-        const label = labels[key];
-        const barColor = key === 'other' ? '#81E6D9' : '#E07A9A'; // Dla "Other" zielonkawy akcent
-        
-        const bar = 
-            <div style="margin-bottom: 20px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="font-weight: 700; color: #2d3748;">${label}</span>
-                    <span style="color: #9F7AEA; font-weight: bold; font-size: 1.1rem;">${percent}% (${count} votes)</span>
-                </div>
-                <div style="height: 14px; background: #edf2f7; border-radius: 7px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
-                    <div style="height: 100%; width: ${percent}%; background: linear-gradient(90deg, ${barColor}, ${key === 'other' ? '#4FD1C7' : '#9F7AEA'}); border-radius: 7px; transition: width 1s ease-out;"></div>
-                </div>
-            </div>
-        ;
-        container.innerHTML += bar;
+
+    // Mapowanie wartości na dynamiczne teksty
+    const responseMessages = {
+        energy: "👂 Rozumiem... właśnie nad ENERGY CRASHES pracujemy najmocniej. To nasz priorytet #1.",
+        menopause: "🍃 Rozumiem... właśnie nad NAVIGATING PERIMENOPAUSE pracujemy najmocniej. To kluczowy moduł.",
+        histamine: "🥗 Rozumiem... właśnie nad NAVIGATING YOUR 'VULNERABLE DAY' pracujemy najmocniej. To sedno naszej metody.",
+        mood: "😌 Rozumiem... właśnie nad MANAGING MOOD SWINGS pracujemy najmocniej. To rdzeń empatycznego AI.",
+        other: "💭 Dziękujemy za szczerość. Twoja osobista historia jest dla nas bezcenna."
+    };
+
+    // 1. Obsługa pojawiania się pola tekstowego dla "Other"
+    const voteRadios = document.querySelectorAll('input[name="vote"]');
+    if (voteRadios.length > 0) {
+        voteRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const otherContainer = document.getElementById('other-input-container');
+                const otherTextarea = document.getElementById('other-text');
+                const dynamicText = document.getElementById('dynamic-response');
+                
+                if (this.value === 'other') {
+                    if (otherContainer) otherContainer.style.display = 'block';
+                    if (otherTextarea) otherTextarea.focus();
+                } else {
+                    if (otherContainer) otherContainer.style.display = 'none';
+                    if (otherTextarea) otherTextarea.value = '';
+                    if (document.getElementById('char-count')) {
+                        document.getElementById('char-count').textContent = '0';
+                    }
+                }
+                // Podgląd dynamicznej odpowiedzi
+                if (dynamicText) {
+                    dynamicText.textContent = responseMessages[this.value] || "";
+                }
+            });
+        });
     }
-    // Pokaż sekcję z wynikami
-    document.getElementById('vote-results').style.display = 'block';
-    // Płynne przewinięcie do wyników
-    document.getElementById('vote-results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
+
+    // 2. Licznik znaków dla pola "Other"
+    const otherText = document.getElementById('other-text');
+    if (otherText) {
+        otherText.addEventListener('input', function() {
+            const charCount = document.getElementById('char-count');
+            if (charCount) charCount.textContent = this.value.length;
+        });
+    }
+
+    // 3. Obsługa głosowania
+    const voteForm = document.getElementById('feature-vote-form');
+if (voteForm) {
+        voteForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const selected = document.querySelector('input[name="vote"]:checked');
+            
+            if (!selected) { 
+                alert('Please choose one option to cast your vote.'); 
+                return; 
+            }
+            
+            const voteValue = selected.value;
+            
+            // Jeśli wybrano "other", sprawdź pole tekstowe
+            if (voteValue === 'other') {
+                const otherText = document.getElementById('other-text');
+                if (otherText && otherText.value.trim() === '') {
+                    alert('Please describe your health mystery in the text field.');
+                    return;
+                }
+                console.log('Other vote recorded:', otherText ? otherText.value : '');
+            }
+            
+            // Symulacja zapisania głosu
+            if (voteCounts.hasOwnProperty(voteValue)) {
+                voteCounts[voteValue] += 1;
+            }
+            
+            // Pokaz wyniki
+            showResults();
+            
+            // Wyłącz formularz po oddaniu głosu
+            voteForm.style.opacity = '0.7';
+            const submitButton = voteForm.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = '✓ Vote Cast!';
+                submitButton.style.background = '#a0aec0';
+            }
+            
+            // Ustaw finalny tekst potwierdzenia
+            const dynamicResponse = document.getElementById('dynamic-response');
+            if (dynamicResponse) {
+                dynamicResponse.textContent = responseMessages[voteValue] || "Thank you for your vote!";
+                dynamicResponse.style.color = '#E07A9A';
+                dynamicResponse.style.fontWeight = 'bold';
+            }
+        });
+    }
+
+    // Funkcja pokazująca wyniki
+    function showResults() {
+        const total = Object.values(voteCounts).reduce((a, b) => a + b, 0);
+        const container = document.getElementById('results-bar-container');
+        
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        const labels = {
+            energy: '👂 Energy Crashes',
+            menopause: '🍃 Perimenopause',
+            histamine: '🥗 "Vulnerable Day"',
+            mood: '😌 Mood Swings',
+            other: '💭 Other'
+        };
+        
+        for (const [key, count] of Object.entries(voteCounts)) {
+            const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+            const label = labels[key] || key;
+            const barColor = key === 'other' ? '#81E6D9' : '#E07A9A';
+            
+            const bar = 
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="font-weight: 700; color: #2d3748;">${label}</span>
+                        <span style="color: #9F7AEA; font-weight: bold; font-size: 1.1rem;">${percent}% (${count} votes)</span>
+                    </div>
+                    <div style="height: 14px; background: #edf2f7; border-radius: 7px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                        <div style="height: 100%; width: ${percent}%; background: linear-gradient(90deg, ${barColor}, ${key === 'other' ? '#4FD1C7' : '#9F7AEA'}); border-radius: 7px; transition: width 1s ease-out;"></div>
+                    </div>
+                </div>
+            ;
+            container.innerHTML += bar;
+        }
+        
+        // Pokaż sekcję z wynikami
+        const resultsSection = document.getElementById('vote-results');
+        if (resultsSection) {
+            resultsSection.style.display = 'block';
+            // Płynne przewinięcie do wyników
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+});
 </script>
 <!-- WAITLIST CARD WITH LIVE COUNTER -->
             <div class="waitlist-card" id="waitlist">
