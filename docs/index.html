@@ -418,17 +418,38 @@ a.logo .logo-text-content .slogan {
                 </div>
                 <p class="hero-note">Be among the first to experience health that <em>senses</em> you.</p>
             </div>
-<!-- POLL VOTING SECTION - ENGLISH VERSION -->
+<!-- POLL VOTING SECTION - FIXED TEST MODE -->
 <div id="aegisens-vote-widget" style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 16px; border: 2px solid #E07A9A; text-align: center; box-shadow: 0 6px 20px rgba(0,0,0,0.04); position: relative; overflow: hidden;">
     <h3 style="color: #2d3748; margin-bottom: 8px; font-size: 1.4rem; font-weight: 700; padding: 0 10px;">🗳️ Shape Our 2026 Roadmap</h3>
-    <p style="color: #FFFFF0; margin-bottom: 1.3rem; font-size: 0.95rem; line-height: 1.4; padding: 0 10px;">Click your biggest health mystery. See live community results instantly.</p>
+    <p style="color: #4a5568; margin-bottom: 1.3rem; font-size: 0.95rem; line-height: 1.4; padding: 0 10px;">Click your biggest health mystery. See live community results instantly.</p>
+    
+    <!-- TEST MODE NOTICE -->
+    <div id="test-mode-notice" style="background: #F6AD55; color: white; padding: 8px 12px; border-radius: 6px; margin: 0 10px 15px; font-size: 0.85rem; font-weight: bold; text-align: center; display: none;">
+        🧪 TEST MODE ACTIVE - Multiple votes allowed
+    </div>
     
     <!-- MAIN CONTAINER -->
     <div id="vote-options-container" style="max-width: 100%; margin: 0 auto; padding: 0 10px;">
         <!-- Options will appear here -->
     </div>
+    
+    <!-- CONTROL PANEL -->
+    <div id="control-panel" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 1px dashed #e2e8f0; display: none;">
+        <div style="font-size: 0.85rem; color: #4a5568; margin-bottom: 10px; font-weight: 600;">🧪 Test Controls</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+            <button id="reset-votes-btn" style="background: #FC8181; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">
+                Reset All Votes
+            </button>
+            <button id="restore-defaults-btn" style="background: #9F7AEA; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">
+                Restore Sample Data
+            </button>
+            <button id="clear-my-vote-btn" style="background: #F6AD55; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">
+                Clear My Vote
+            </button>
+        </div>
+    </div>
 
-    <p style="font-size: 0.8rem; color: ivory; margin-top: 1.3rem; line-height: 1.3; padding: 0 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.1);"><em>Click to vote. One vote per person. Results update in real-time.</em></p>
+    <p style="font-size: 0.8rem; color: ivory; margin-top: 1.3rem; line-height: 1.3; padding: 0 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.1);"><em>Click to vote. Results update in real-time.</em></p>
 </div>
 
 <script>
@@ -436,9 +457,12 @@ a.logo .logo-text-content .slogan {
 const POLL_ID = 'health_mystery_poll_2024';
 const STORAGE_KEY = `poll_data_${POLL_ID}`;
 const VOTE_KEY = `${POLL_ID}_hasVoted`;
-const TEST_MODE = true;
-// Default data structure
-let pollData = [
+
+// 🔥 IMPORTANT: SET TEST MODE HERE
+const TEST_MODE = true; // Change to false for production
+
+// DEFAULT DATA WITH SAMPLE VOTES
+const DEFAULT_DATA = [
     { id: 'energy', label: '👂 Unpredictable energy crashes', votes: 42, color: '#E07A9A' },
     { id: 'menopause', label: '🍃 Navigating perimenopause', votes: 38, color: '#9F7AEA' },
     { id: 'vulnerable', label: '🥗 Navigating my "Vulnerable Day"', votes: 55, color: '#F687B3' },
@@ -451,31 +475,42 @@ function loadPollData() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
         try {
-            const parsed = JSON.parse(saved);
-            // Merge with default to ensure all options exist
-            pollData = pollData.map(defaultOpt => {
-                const savedOpt = parsed.find(p => p.id === defaultOpt.id);
-                return savedOpt ? { ...defaultOpt, votes: savedOpt.votes } : defaultOpt;
-            });
+            return JSON.parse(saved);
         } catch (e) {
             console.error('Error loading poll data:', e);
+            return JSON.parse(JSON.stringify(DEFAULT_DATA)); // Deep copy
         }
     }
+    // If no saved data, return defaults
+    return JSON.parse(JSON.stringify(DEFAULT_DATA)); // Deep copy
 }
 
-function savePollData() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(pollData));
+function savePollData(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function clearUserVote() {
+    localStorage.removeItem(VOTE_KEY);
+    console.log('✓ User vote cleared');
 }
 
 // ========== POLL LOGIC ==========
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('vote-options-container');
+    const testModeNotice = document.getElementById('test-mode-notice');
+    const controlPanel = document.getElementById('control-panel');
+    
+    // Show test mode notice if enabled
+    if (TEST_MODE) {
+        testModeNotice.style.display = 'block';
+        controlPanel.style.display = 'block';
+    }
     
     // Load existing data
-    loadPollData();
+    let pollData = loadPollData();
     
-    // Check if user already voted
-    const hasVoted = localStorage.getItem(VOTE_KEY);
+    // Check if user already voted (ignore in test mode)
+    let userVotedOption = TEST_MODE ? null : localStorage.getItem(VOTE_KEY);
     
     // Calculate percentages
     function calculatePercentages() {
@@ -483,24 +518,47 @@ document.addEventListener('DOMContentLoaded', function() {
         pollData.forEach(opt => {
             opt.percentage = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
         });
+        return totalVotes;
     }
     
     // Render the poll
     function renderPoll() {
-        calculatePercentages();
+        const totalVotes = calculatePercentages();
         container.innerHTML = '';
+        
+        console.log('Rendering poll. TEST_MODE:', TEST_MODE, 'User voted for:', userVotedOption);
+        console.log('Poll data:', pollData);
+        
+        // Show total votes in control panel
+        if (TEST_MODE) {
+            const existingTotal = document.getElementById('total-votes-display');
+            if (!existingTotal) {
+                const totalDisplay = document.createElement('div');
+                totalDisplay.id = 'total-votes-display';
+                totalDisplay.style.cssText = `
+                    font-size: 0.8rem;
+                    color: #718096;
+                    margin-top: 10px;
+                    text-align: center;
+                `;
+                controlPanel.appendChild(totalDisplay);
+            }
+            document.getElementById('total-votes-display').textContent = `Total votes: ${totalVotes}`;
+        }
         
         pollData.forEach(option => {
             const optionEl = document.createElement('div');
             optionEl.className = 'vote-option';
             
-            const hasVotedOnThis = hasVoted === option.id;
+            const userVotedForThis = userVotedOption === option.id;
+            const isClickable = !userVotedOption || TEST_MODE;
             
             optionEl.style.cssText = `
                 margin-bottom: 12px;
                 text-align: left;
-                cursor: ${hasVoted ? 'default' : 'pointer'};
+                cursor: ${isClickable ? 'pointer' : 'default'};
                 transition: all 0.2s;
+                opacity: ${isClickable ? 1 : 0.9};
             `;
             
             const button = document.createElement('div');
@@ -510,76 +568,96 @@ document.addEventListener('DOMContentLoaded', function() {
                 padding: 12px 14px;
                 background: white;
                 border-radius: 10px;
-                border: 1.5px solid ${hasVotedOnThis ? option.color : '#e2e8f0'};
+                border: 2px solid ${userVotedForThis ? option.color : '#e2e8f0'};
                 font-weight: 600;
                 color: #2d3748;
                 margin-bottom: 6px;
                 font-size: 0.92rem;
                 transition: all 0.2s;
+                position: relative;
             `;
             
-            // Add checkmark if voted for this option
-            if (hasVotedOnThis) {
-                button.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <span style="flex: 1; padding-right: 10px; display: flex; align-items: center; gap: 8px;">
-                            ${option.label}
-                            <span style="color: ${option.color}; font-size: 0.8rem;">✓ Voted</span>
-                        </span>
-                        <span style="color: ${option.color}; font-weight: bold; white-space: nowrap;">
-                            ${option.percentage}% <span style="opacity: 0.7; font-size: 0.8rem;">(${option.votes})</span>
-                        </span>
-                    </div>
-                    <div style="height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
-                        <div style="height: 100%; width: ${option.percentage}%; background: linear-gradient(90deg, ${option.color}, ${option.color}99); border-radius: 4px; transition: width 1s;"></div>
-                    </div>
+            // Add vote indicator if user voted for this option
+            if (userVotedForThis) {
+                const voteBadge = document.createElement('div');
+                voteBadge.style.cssText = `
+                    position: absolute;
+                    top: -8px;
+                    right: -8px;
+                    background: ${option.color};
+                    color: white;
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.7rem;
+                    font-weight: bold;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
                 `;
-            } else {
-                button.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <span style="flex: 1; padding-right: 10px;">${option.label}</span>
-                        <span style="color: ${option.color}; font-weight: bold; white-space: nowrap;">
-                            ${option.percentage}% <span style="opacity: 0.7; font-size: 0.8rem;">(${option.votes})</span>
-                        </span>
-                    </div>
-                    <div style="height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; display: ${hasVoted ? 'block' : 'none'};">
-                        <div style="height: 100%; width: ${option.percentage}%; background: linear-gradient(90deg, ${option.color}, ${option.color}99); border-radius: 4px; transition: width 1s;"></div>
-                    </div>
-                `;
+                voteBadge.textContent = '✓';
+                button.appendChild(voteBadge);
             }
             
-            // Add click handler if not voted yet
-            if (!hasVoted) {
-                optionEl.addEventListener('click', function() {
-                    // Record vote
-                    option.votes += 1;
+            button.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="flex: 1; padding-right: 10px;">${option.label}</span>
+                    <span style="color: ${option.color}; font-weight: bold; white-space: nowrap;">
+                        ${option.percentage}% <span style="opacity: 0.7; font-size: 0.8rem;">(${option.votes})</span>
+                    </span>
+                </div>
+                <div style="height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; display: block;">
+                    <div style="height: 100%; width: ${option.percentage}%; background: linear-gradient(90deg, ${option.color}, ${option.color}99); border-radius: 4px; transition: width 0.5s;"></div>
+                </div>
+            `;
+            
+            // Add click handler
+            optionEl.addEventListener('click', function() {
+                if (!isClickable) {
+                    console.log('Cannot vote - already voted and not in test mode');
+                    return;
+                }
+                
+                console.log('Voting for:', option.id);
+                
+                // Add vote
+                option.votes += 1;
+                
+                // Update user vote record (only if not in test mode)
+                if (!TEST_MODE) {
+                    userVotedOption = option.id;
                     localStorage.setItem(VOTE_KEY, option.id);
-                    
-                    // Save data
-                    savePollData();
-                    
-                    // Show thank you message
-                    showThankYouMessage(option);
-                    
-                    // Update display
-                    setTimeout(() => {
-                        renderPoll();
-                    }, 300);
-                });
+                }
                 
-                // Hover effects
-                optionEl.addEventListener('mouseenter', function() {
+                // Save data
+                savePollData(pollData);
+                
+                // Show thank you message
+                showThankYouMessage(option);
+                
+                // Update display
+                setTimeout(() => {
+                    renderPoll();
+                }, 300);
+            });
+            
+            // Hover effects
+            optionEl.addEventListener('mouseenter', function() {
+                if (isClickable && !userVotedForThis) {
                     button.style.borderColor = option.color;
-                    button.style.boxShadow = `0 3px 8px ${option.color}30`;
+                    button.style.boxShadow = `0 3px 8px ${option.color}40`;
                     button.style.transform = 'translateY(-2px)';
-                });
-                
-                optionEl.addEventListener('mouseleave', function() {
+                }
+            });
+            
+            optionEl.addEventListener('mouseleave', function() {
+                if (isClickable && !userVotedForThis) {
                     button.style.borderColor = '#e2e8f0';
                     button.style.boxShadow = 'none';
                     button.style.transform = 'translateY(0)';
-                });
-            }
+                }
+            });
             
             optionEl.appendChild(button);
             container.appendChild(optionEl);
@@ -611,6 +689,97 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         messageBox.textContent = messages[option.id] || 'Thank you for your vote!';
         container.appendChild(messageBox);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (messageBox.parentNode) {
+                messageBox.style.opacity = '0';
+                messageBox.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    if (messageBox.parentNode) {
+                        messageBox.parentNode.removeChild(messageBox);
+                    }
+                }, 500);
+            }
+        }, 5000);
+    }
+    
+    // ========== CONTROL PANEL FUNCTIONS ==========
+    
+    // Reset all votes to zero
+    document.getElementById('reset-votes-btn').addEventListener('click', function() {
+        if (confirm('Reset ALL votes to zero? This cannot be undone.')) {
+            pollData.forEach(option => {
+                option.votes = 0;
+            });
+            savePollData(pollData);
+            userVotedOption = null;
+            clearUserVote();
+            renderPoll();
+            
+            showTempMessage('All votes have been reset to zero.', '#4FD1C7');
+        }
+    });
+    
+    // Restore default sample data
+    document.getElementById('restore-defaults-btn').addEventListener('click', function() {
+        if (confirm('Restore sample voting data? This will replace current votes.')) {
+            pollData = JSON.parse(JSON.stringify(DEFAULT_DATA)); // Deep copy
+            savePollData(pollData);
+            userVotedOption = null;
+            clearUserVote();
+            renderPoll();
+            
+            showTempMessage('Sample data restored!', '#68D391');
+        }
+    });
+    
+    // Clear user's vote
+    document.getElementById('clear-my-vote-btn').addEventListener('click', function() {
+        if (userVotedOption) {
+            // Remove 1 vote from the option user voted for
+            const votedOption = pollData.find(opt => opt.id === userVotedOption);
+            if (votedOption && votedOption.votes > 0) {
+                votedOption.votes -= 1;
+            }
+            savePollData(pollData);
+        }
+        
+        userVotedOption = null;
+        clearUserVote();
+        renderPoll();
+        
+        showTempMessage('Your vote has been cleared. You can vote again!', '#F6AD55');
+    });
+    
+    // Helper function for temporary messages
+    function showTempMessage(text, color) {
+        const msg = document.createElement('div');
+        msg.style.cssText = `
+            text-align: center;
+            margin: 15px 10px 0;
+            padding: 10px;
+            background: ${color}20;
+            border-radius: 8px;
+            border-left: 3px solid ${color};
+            color: #2d3748;
+            font-size: 0.85rem;
+            animation: fadeIn 0.5s;
+        `;
+        msg.textContent = '✓ ' + text;
+        container.appendChild(msg);
+        
+        setTimeout(() => {
+            if (msg.parentNode) {
+                msg.style.opacity = '0';
+                msg.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    if (msg.parentNode) {
+                        msg.parentNode.removeChild(msg);
+                    }
+                }, 500);
+            }
+        }, 3000);
     }
     
     // Initial render
@@ -622,6 +791,15 @@ document.addEventListener('DOMContentLoaded', function() {
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        button:active {
+            transform: translateY(0);
         }
     `;
     document.head.appendChild(style);
