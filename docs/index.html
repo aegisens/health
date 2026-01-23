@@ -418,241 +418,116 @@ a.logo .logo-text-content .slogan {
                 </div>
                 <p class="hero-note">Be among the first to experience health that <em>senses</em> you.</p>
             </div>
-<!-- POLL VOTING SECTION - FIXED TEST MODE -->
-<div id="aegisens-vote-widget" style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 16px; border: 2px solid #E07A9A; text-align: center; box-shadow: 0 6px 20px rgba(0,0,0,0.04); position: relative; overflow: hidden;">
-    <h3 style="color: #2d3748; margin-bottom: 8px; font-size: 1.4rem; font-weight: 700; padding: 0 10px;">🗳️ Shape Our 2026 Roadmap</h3>
-    <p style="color: #4a5568; margin-bottom: 1.3rem; font-size: 0.95rem; line-height: 1.4; padding: 0 10px;">Click your biggest health mystery. See live community results instantly.</p>
-    
-    <!-- TEST MODE NOTICE -->
-    <div id="test-mode-notice" style="background: #F6AD55; color: white; padding: 8px 12px; border-radius: 6px; margin: 0 10px 15px; font-size: 0.85rem; font-weight: bold; text-align: center; display: none;">
-        🧪 TEST MODE ACTIVE - Multiple votes allowed
-    </div>
-    
-    <!-- MAIN CONTAINER -->
-    <div id="vote-options-container" style="max-width: 100%; margin: 0 auto; padding: 0 10px;">
-        <!-- Options will appear here -->
-    </div>
-    
-    <!-- CONTROL PANEL -->
-    <div id="control-panel" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 1px dashed #e2e8f0; display: none;">
-        <div style="font-size: 0.85rem; color: #4a5568; margin-bottom: 10px; font-weight: 600;">🧪 Test Controls</div>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-            <button id="reset-votes-btn" style="background: #FC8181; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">
-                Reset All Votes
-            </button>
-            <button id="restore-defaults-btn" style="background: #9F7AEA; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">
-                Restore Sample Data
-            </button>
-            <button id="clear-my-vote-btn" style="background: #F6AD55; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">
-                Clear My Vote
-            </button>
-        </div>
-    </div>
-
-    <p style="font-size: 0.8rem; color: ivory; margin-top: 1.3rem; line-height: 1.3; padding: 0 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.1);"><em>Click to vote. Results update in real-time.</em></p>
-</div>
-
 <script>
-// ========== CONFIGURATION ==========
-const POLL_ID = 'health_mystery_poll_2024';
-const STORAGE_KEY = `poll_data_${POLL_ID}`;
-const VOTE_KEY = `${POLL_ID}_hasVoted`;
-
-// 🔥 IMPORTANT: SET TEST MODE HERE
-const TEST_MODE = true; // Change to false for production
-
-// DEFAULT DATA WITH SAMPLE VOTES
-const DEFAULT_DATA = [
-    { id: 'energy', label: '👂 Unpredictable energy crashes', votes: 42, color: '#E07A9A' },
-    { id: 'menopause', label: '🍃 Navigating perimenopause', votes: 38, color: '#9F7AEA' },
-    { id: 'vulnerable', label: '🥗 Navigating my "Vulnerable Day"', votes: 55, color: '#F687B3' },
-    { id: 'mood', label: '😌 Managing mood swings', votes: 27, color: '#81E6D9' },
-    { id: 'other', label: '💭 Other health mystery', votes: 15, color: '#68D391' }
-];
-
-// ========== DATA MANAGEMENT ==========
-function loadPollData() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-        try {
-            return JSON.parse(saved);
-        } catch (e) {
-            console.error('Error loading poll data:', e);
-            return JSON.parse(JSON.stringify(DEFAULT_DATA)); // Deep copy
-        }
-    }
-    // If no saved data, return defaults
-    return JSON.parse(JSON.stringify(DEFAULT_DATA)); // Deep copy
-}
-
-function savePollData(data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-function clearUserVote() {
-    localStorage.removeItem(VOTE_KEY);
-    console.log('✓ User vote cleared');
-}
-
-// ========== POLL LOGIC ==========
 document.addEventListener('DOMContentLoaded', function() {
+    const DEFAULT_DATA = [
+        { id: 'energy', label: '👂 Unpredictable energy crashes', votes: 42, color: '#E07A9A' },
+        { id: 'menopause', label: '🍃 Navigating perimenopause', votes: 38, color: '#9F7AEA' },
+        { id: 'vulnerable', label: '🥗 Navigating my "Vulnerable Day"', votes: 55, color: '#F687B3' },
+        { id: 'mood', label: '😌 Managing mood swings', votes: 27, color: '#81E6D9' },
+        { id: 'other', label: '💭 Other health mystery', votes: 15, color: '#68D391' }
+    ];
+
+    const STORAGE_KEY = 'aegisens_poll_data';
+    const USER_VOTE_KEY = 'aegisens_user_vote';
+    
+    let pollData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || JSON.parse(JSON.stringify(DEFAULT_DATA));
+    let userVotedOption = localStorage.getItem(USER_VOTE_KEY) || null;
+    
     const container = document.getElementById('vote-options-container');
-    const testModeNotice = document.getElementById('test-mode-notice');
-    const controlPanel = document.getElementById('control-panel');
     
-    // Show test mode notice if enabled
-    if (TEST_MODE) {
-        testModeNotice.style.display = 'block';
-        controlPanel.style.display = 'block';
+    function savePollData(data) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
     
-    // Load existing data
-    let pollData = loadPollData();
-    
-    // Check if user already voted (ignore in test mode)
-    let userVotedOption = TEST_MODE ? null : localStorage.getItem(VOTE_KEY);
-    
-    // Calculate percentages
-    function calculatePercentages() {
-        const totalVotes = pollData.reduce((sum, opt) => sum + opt.votes, 0);
-        pollData.forEach(opt => {
-            opt.percentage = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
-        });
-        return totalVotes;
+    function clearUserVote() {
+        localStorage.removeItem(USER_VOTE_KEY);
+        userVotedOption = null;
     }
     
-    // Render the poll
     function renderPoll() {
-        const totalVotes = calculatePercentages();
+        if (!container) return;
+        
         container.innerHTML = '';
-        
-        console.log('Rendering poll. TEST_MODE:', TEST_MODE, 'User voted for:', userVotedOption);
-        console.log('Poll data:', pollData);
-        
-        // Show total votes in control panel
-        if (TEST_MODE) {
-            const existingTotal = document.getElementById('total-votes-display');
-            if (!existingTotal) {
-                const totalDisplay = document.createElement('div');
-                totalDisplay.id = 'total-votes-display';
-                totalDisplay.style.cssText = `
-                    font-size: 0.8rem;
-                    color: #718096;
-                    margin-top: 10px;
-                    text-align: center;
-                `;
-                controlPanel.appendChild(totalDisplay);
-            }
-            document.getElementById('total-votes-display').textContent = `Total votes: ${totalVotes}`;
-        }
+        const totalVotes = pollData.reduce((sum, opt) => sum + opt.votes, 0);
         
         pollData.forEach(option => {
+            const percentage = totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0;
+            const isUserVotedForThis = userVotedOption === option.id;
+            const isClickable = !userVotedOption;
+            
             const optionEl = document.createElement('div');
-            optionEl.className = 'vote-option';
+            optionEl.style.cssText = 'margin-bottom: 25px; text-align: left; cursor: pointer; transition: all 0.3s;';
             
-            const userVotedForThis = userVotedOption === option.id;
-            const isClickable = !userVotedOption || TEST_MODE;
-            
-            optionEl.style.cssText = `
-                margin-bottom: 12px;
-                text-align: left;
-                cursor: ${isClickable ? 'pointer' : 'default'};
-                transition: all 0.2s;
-                opacity: ${isClickable ? 1 : 0.9};
-            `;
-            
-            const button = document.createElement('div');
-            button.style.cssText = `
-                display: flex;
-                flex-direction: column;
-                padding: 12px 14px;
+            const button = document.createElement('button');
+            button.style.cssText = 
+                width: 100%;
+                padding: 18px 20px;
                 background: white;
-                border-radius: 10px;
-                border: 2px solid ${userVotedForThis ? option.color : '#e2e8f0'};
+                border: 2px solid ${isUserVotedForThis ? option.color : '#e2e8f0'};
+                border-radius: 12px;
                 font-weight: 600;
                 color: #2d3748;
-                margin-bottom: 6px;
-                font-size: 0.92rem;
-                transition: all 0.2s;
-                position: relative;
-            `;
+                text-align: left;
+                cursor: ${isClickable ? 'pointer' : 'default'};
+                transition: all 0.3s;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            ;
             
-            // Add vote indicator if user voted for this option
-            if (userVotedForThis) {
-                const voteBadge = document.createElement('div');
-                voteBadge.style.cssText = `
-                    position: absolute;
-                    top: -8px;
-                    right: -8px;
-                    background: ${option.color};
-                    color: white;
-                    width: 22px;
-                    height: 22px;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 0.7rem;
-                    font-weight: bold;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                `;
-                voteBadge.textContent = '✓';
-                button.appendChild(voteBadge);
+            button.innerHTML = 
+                <span>${option.label}</span>
+                <span style="color: ${option.color}; font-weight: bold; font-size: 1.1rem;">
+                    ${percentage}% (${option.votes})
+                </span>
+            ;
+            
+            // Progress bar (only show if user voted)
+            if (userVotedOption) {
+                const progressBar = document.createElement('div');
+                progressBar.style.cssText = 
+                    height: 8px;
+                    background: #edf2f7;
+                    border-radius: 4px;
+                    overflow: hidden;
+                    margin-top: 12px;
+                ;
+                
+                const progressFill = document.createElement('div');
+                progressFill.style.cssText = 
+                    height: 100%;
+                    width: ${percentage}%;
+                    background: linear-gradient(90deg, ${option.color}, ${option.color}99);
+                    border-radius: 4px;
+                    transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+                ;
+                
+                progressBar.appendChild(progressFill);
+                button.appendChild(progressBar);
             }
             
-            button.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <span style="flex: 1; padding-right: 10px;">${option.label}</span>
-                    <span style="color: ${option.color}; font-weight: bold; white-space: nowrap;">
-                        ${option.percentage}% <span style="opacity: 0.7; font-size: 0.8rem;">(${option.votes})</span>
-                    </span>
-                </div>
-                <div style="height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; display: block;">
-                    <div style="height: 100%; width: ${option.percentage}%; background: linear-gradient(90deg, ${option.color}, ${option.color}99); border-radius: 4px; transition: width 0.5s;"></div>
-                </div>
-            `;
-            
-            // Add click handler
-            optionEl.addEventListener('click', function() {
-                if (!isClickable) {
-                    console.log('Cannot vote - already voted and not in test mode');
-                    return;
-                }
-                
-                console.log('Voting for:', option.id);
-                
-                // Add vote
-                option.votes += 1;
-                
-                // Update user vote record (only if not in test mode)
-                if (!TEST_MODE) {
+            if (isClickable) {
+                button.addEventListener('click', function() {
+option.votes += 1;
                     userVotedOption = option.id;
-                    localStorage.setItem(VOTE_KEY, option.id);
-                }
-                
-                // Save data
-                savePollData(pollData);
-                
-                // Show thank you message
-                showThankYouMessage(option);
-                
-                // Update display
-                setTimeout(() => {
+                    localStorage.setItem(USER_VOTE_KEY, option.id);
+                    savePollData(pollData);
                     renderPoll();
-                }, 300);
-            });
+                    showThankYouMessage(option);
+                });
+            }
             
-            // Hover effects
             optionEl.addEventListener('mouseenter', function() {
-                if (isClickable && !userVotedForThis) {
+                if (isClickable && !userVotedOption) {
                     button.style.borderColor = option.color;
-                    button.style.boxShadow = `0 3px 8px ${option.color}40`;
+                    button.style.boxShadow = 0 4px 12px ${option.color}40;
                     button.style.transform = 'translateY(-2px)';
                 }
             });
             
             optionEl.addEventListener('mouseleave', function() {
-                if (isClickable && !userVotedForThis) {
+                if (isClickable && !userVotedOption) {
                     button.style.borderColor = '#e2e8f0';
                     button.style.boxShadow = 'none';
                     button.style.transform = 'translateY(0)';
@@ -662,6 +537,9 @@ document.addEventListener('DOMContentLoaded', function() {
             optionEl.appendChild(button);
             container.appendChild(optionEl);
         });
+        
+        // Add admin panel (HIDDEN by default)
+        addAdminPanel();
     }
     
     // Show thank you message
@@ -675,7 +553,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         
         const messageBox = document.createElement('div');
-        messageBox.style.cssText = `
+        messageBox.style.cssText = 
             text-align: center;
             margin: 15px 10px 0;
             padding: 12px;
@@ -686,11 +564,10 @@ document.addEventListener('DOMContentLoaded', function() {
             font-weight: 500;
             font-size: 0.9rem;
             animation: fadeIn 0.5s;
-        `;
+        ;
         messageBox.textContent = messages[option.id] || 'Thank you for your vote!';
         container.appendChild(messageBox);
         
-        // Auto-remove after 5 seconds
         setTimeout(() => {
             if (messageBox.parentNode) {
                 messageBox.style.opacity = '0';
@@ -704,80 +581,84 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     }
     
-    // ========== CONTROL PANEL FUNCTIONS ==========
+    // ========== ADMIN PANEL (SECURE BACKDOOR) ==========
     
-    // 1. UKRYCIE PANELU DLA PUBLICZNOŚCI
-    const controlPanelHTML = 
-        <div id="admin-control-panel" style="display: none; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px; border: 2px dashed #cbd5e0; text-align: center;">
-            <h4 style="margin-top: 0; color: #4a5568;">Admin Controls</h4>
-            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                <button id="reset-votes-btn" style="padding: 10px 20px; background: #FEB2B2; color: #9B2C2C; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
-                    Reset All Votes
-                </button>
-                <button id="restore-defaults-btn" style="padding: 10px 20px; background: #9AE6B4; color: #276749; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
-                    Restore Sample Data
-                </button>
-                <button id="clear-my-vote-btn" style="padding: 10px 20px; background: #FBD38D; color: #B45309; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
-                    Clear My Vote
-                </button>
+    function addAdminPanel() {
+        // Check if panel already exists
+        if (document.getElementById('admin-control-panel')) return;
+        
+        const panelHTML = `
+            <div id="admin-control-panel" style="display: none; margin-top: 40px; padding: 25px; background: #f8f9fa; border-radius: 15px; border: 2px dashed #cbd5e0; text-align: center;">
+                <h4 style="margin-top: 0; color: #4a5568; margin-bottom: 20px;">🔧 Admin Controls (Hidden from users)</h4>
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
+                    <button id="reset-votes-btn" style="padding: 12px 24px; background: #FEB2B2; color: #9B2C2C; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        🔄 Reset All Votes
+                    </button>
+                    <button id="restore-defaults-btn" style="padding: 12px 24px; background: #9AE6B4; color: #276749; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+📊 Restore Sample Data
+                    </button>
+                    <button id="clear-my-vote-btn" style="padding: 12px 24px; background: #FBD38D; color: #B45309; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        🗑️ Clear My Vote
+                    </button>
+                </div>
+                <p style="font-size: 0.85rem; color: #a0aec0; margin-top: 10px;">
+                    This panel is hidden from regular users. To unlock: Open browser console (F12) and type: <code>unlockAdminPanel('AegisensStealth2025')</code>
+                </p>
             </div>
-            <p style="font-size: 0.8rem; color: #a0aec0; margin-top: 15px;">Visible only to admin. Users cannot see this panel.</p>
-        </div>
-    ;
-    
-    // Wstaw panel kontrolny na stronę (ukryty)
-    const pollContainer = document.querySelector('#aegisens-vote-widget') || document.body;
-    pollContainer.insertAdjacentHTML('beforeend', controlPanelHTML);
-    
-    // 2. FUNKCJE ADMINA (jak wcześniej, ale odwołują się do nowych przycisków)
-    document.getElementById('reset-votes-btn').addEventListener('click', function() {
-        if (confirm('Reset ALL votes to zero? This cannot be undone.')) {
-            pollData.forEach(option => {
-                option.votes = 0;
-            });
-            savePollData(pollData);
-            userVotedOption = null;
-            clearUserVote();
-            renderPoll();
-            
-            showTempMessage('All votes have been reset to zero.', '#4FD1C7');
-        }
-    });
-    
-    document.getElementById('restore-defaults-btn').addEventListener('click', function() {
-        if (confirm('Restore sample voting data? This will replace current votes.')) {
-            pollData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-            savePollData(pollData);
-            userVotedOption = null;
-            clearUserVote();
-            renderPoll();
-            
-            showTempMessage('Sample data restored!', '#68D391');
-        }
-    });
-    
-    document.getElementById('clear-my-vote-btn').addEventListener('click', function() {
-        if (userVotedOption) {
-            const votedOption = pollData.find(opt => opt.id === userVotedOption);
-            if (votedOption && votedOption.votes > 0) {
-                votedOption.votes -= 1;
+        ;
+        
+        container.insertAdjacentHTML('beforeend', panelHTML);
+        
+        // Setup event listeners
+        document.getElementById('reset-votes-btn').addEventListener('click', function() {
+            if (confirm('Reset ALL votes to zero? This cannot be undone.')) {
+                pollData.forEach(option => option.votes = 0);
+                savePollData(pollData);
+                userVotedOption = null;
+                clearUserVote();
+                renderPoll();
+                showTempMessage('All votes have been reset to zero.', '#4FD1C7');
             }
-            savePollData(pollData);
-        }
+        });
         
-        userVotedOption = null;
-        clearUserVote();
-        renderPoll();
+        document.getElementById('restore-defaults-btn').addEventListener('click', function() {
+            if (confirm('Restore sample voting data? This will replace current votes.')) {
+                pollData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+                savePollData(pollData);
+                userVotedOption = null;
+                clearUserVote();
+                renderPoll();
+                showTempMessage('Sample data restored!', '#68D391');
+            }
+        });
         
-        showTempMessage('Your vote has been cleared. You can vote again!', '#F6AD55');
-    });
-// 3. TAJNA FUNKCJA BACKDOOR DLA CIEBIE
-    window.showAdminPanel = function() {
-        const panel = document.getElementById('admin-control-panel');
-        if (panel) {
-            panel.style.display = 'block';
-            alert('Admin panel unlocked! Panel is now visible.');
-            console.log('🔓 Admin panel unlocked. To hide it again, run: hideAdminPanel()');
+        document.getElementById('clear-my-vote-btn').addEventListener('click', function() {
+            if (userVotedOption) {
+                const votedOption = pollData.find(opt => opt.id === userVotedOption);
+                if (votedOption && votedOption.votes > 0) votedOption.votes -= 1;
+                savePollData(pollData);
+            }
+            userVotedOption = null;
+            clearUserVote();
+            renderPoll();
+            showTempMessage('Your vote has been cleared. You can vote again!', '#F6AD55');
+        });
+    }
+    
+    // SECURE BACKDOOR FUNCTION (password protected)
+    window.unlockAdminPanel = function(password) {
+        if (password === 'AegisensStealth2025') { // CHANGE THIS PASSWORD!
+            const panel = document.getElementById('admin-control-panel');
+            if (panel) {
+                panel.style.display = 'block';
+                panel.scrollIntoView({ behavior: 'smooth' });
+                console.log('✅ Admin panel unlocked! To hide: hideAdminPanel()');
+                return true;
+            }
+        } else {
+            alert('Incorrect password.');
+            console.log('❌ Incorrect password.');
+            return false;
         }
     };
     
@@ -789,19 +670,66 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
     
-    // 4. AUTOMATYCZNE POKAZYWANIE PANELU (tylko jeśli w URL jest #admin)
+    // Auto-unlock if URL contains #admin
     if (window.location.hash === '#admin') {
-        setTimeout(() => window.showAdminPanel(), 1000);
+        setTimeout(() => unlockAdminPanel('AegisensStealth2025'), 1000);
     }
-
-    // ... (reszta kodu bez zmian: renderPoll, showThankYouMessage, showTempMessage) ...
+    
+    // Helper function for temporary messages
+    function showTempMessage(text, color) {
+        const msg = document.createElement('div');
+        msg.style.cssText = 
+            text-align: center;
+            margin: 15px 10px 0;
+            padding: 12px;
+            background: ${color}20;
+            border-radius: 8px;
+            border-left: 3px solid ${color};
+color: #2d3748;
+            font-size: 0.9rem;
+            animation: fadeIn 0.5s;
+        ;
+        msg.textContent = '✓ ' + text;
+        container.appendChild(msg);
+        
+        setTimeout(() => {
+            if (msg.parentNode) {
+                msg.style.opacity = '0';
+                msg.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    if (msg.parentNode) msg.parentNode.removeChild(msg);
+                }, 500);
+            }
+        }, 3000);
+    }
     
     // Initial render
     renderPoll();
     
-    // ... (dodanie stylów animacji) ...
+    // Add animation style
+    const style = document.createElement('style');
+    style.textContent = 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        #admin-control-panel button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+    `;
+    document.head.appendChild(style);
 });
 </script>
+
+
 <!-- WAITLIST CARD WITH LIVE COUNTER -->
             <div class="waitlist-card" id="waitlist">
                 <h3>✨ Join Our Private Beta</h3>
