@@ -418,7 +418,7 @@ a.logo .logo-text-content .slogan {
                 </div>
                 <p class="hero-note">Be among the first to experience health that <em>senses</em> you.</p>
             </div>
-<!-- COMPLETE VOTING POLL WITH ADMIN CONTROLS -->
+<!-- COMPLETE VOTING POLL - CLEAN PUBLIC VIEW + ADMIN MODAL -->
 <div id="aegisens-vote-widget" style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); border-radius: 16px; border: 2px solid #E07A9A; text-align: center; box-shadow: 0 6px 20px rgba(0,0,0,0.04); position: relative; overflow: hidden;">
     <h3 style="color: #2d3748; margin-bottom: 8px; font-size: 1.4rem; font-weight: 700; padding: 0 10px;">🗳️ Shape Our 2026 Roadmap</h3>
     <p style="color: #4a5568; margin-bottom: 1.3rem; font-size: 0.95rem; line-height: 1.4; padding: 0 10px;">Click your biggest health mystery. See live community results instantly.</p>
@@ -428,7 +428,14 @@ a.logo .logo-text-content .slogan {
         <!-- Options will appear here -->
     </div>
 
-    <p style="font-size: 0.8rem; color: ivory; margin-top: 1.3rem; line-height: 1.3; padding: 0 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.1);"><em>Click to vote. One vote per person. Results update in real-time.</em></p>
+    <!-- HIDDEN ADMIN TRIGGER (visible to all but subtle) -->
+    <div id="admin-trigger" style="text-align: center; margin-top: 20px; cursor: pointer; opacity: 0.4; transition: opacity 0.3s;" title="Admin Access">
+        <div style="width: 32px; height: 32px; background: #e2e8f0; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #a0aec0; font-size: 1rem;">
+            ⚙️
+        </div>
+    </div>
+
+    <p style="font-size: 0.8rem; color: ivory; margin-top: 1rem; line-height: 1.3; padding: 0 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.1);"><em>Click to vote. One vote per person. Results update in real-time.</em></p>
 </div>
 
 <script>
@@ -453,6 +460,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let userVotedOption = localStorage.getItem(USER_VOTE_KEY) || null;
     
     const container = document.getElementById('vote-options-container');
+    const adminTrigger = document.getElementById('admin-trigger');
     
     function savePollData(data) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -498,7 +506,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                z-index: 9999;
+                z-index: 10000;
                 animation: fadeIn 0.3s;
             ">
                 <div style="
@@ -512,7 +520,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 ">
                     <h3 style="margin-top: 0; color: #2d3748; margin-bottom: 20px;">🔐 Admin Access</h3>
                     <p style="color: #718096; margin-bottom: 25px; font-size: 0.95rem;">
-                        Enter admin password to access controls
+                        Enter admin password to access dashboard
                     </p>
                     <input type="password" id="admin-password-input" placeholder="Password" style="
                         width: 100%;
@@ -584,7 +592,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (input.value === ADMIN_PASSWORD) {
             setAdminAccess(true);
             document.getElementById('admin-login-modal').remove();
-            showAdminPanel();
+            showAdminDashboard();
         } else {
             error.style.display = 'block';
             input.style.borderColor = '#FC8181';
@@ -593,151 +601,387 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // ========== HIDDEN ADMIN PANEL ==========
-    function showAdminPanel() {
-        // Remove existing panel
-        const existingPanel = document.getElementById('admin-control-panel');
-        if (existingPanel) existingPanel.remove();
+    // ========== ADMIN DASHBOARD MODAL ==========
+    function showAdminDashboard() {
+        // Remove existing dashboard
+        const existingDashboard = document.getElementById('admin-dashboard-modal');
+        if (existingDashboard) existingDashboard.remove();
         
         const totalVotes = pollData.reduce((sum, opt) => sum + opt.votes, 0);
+        const sortedData = [...pollData].sort((a, b) => b.votes - a.votes);
         
-        const panelHTML = `
-            <div id="admin-control-panel" style="
-                margin-top: 40px;
-                padding: 25px;
-                background: linear-gradient(135deg, rgba(159, 122, 234, 0.08) 0%, rgba(224, 122, 154, 0.08) 100%);
-                border-radius: 15px;
-                border: 2px solid #9F7AEA;
-                position: relative;
-                animation: slideIn 0.5s;
+        const dashboardHTML = `
+            <div id="admin-dashboard-modal" style="
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10001;
+                animation: fadeIn 0.3s;
+                padding: 20px;
+                box-sizing: border-box;
             ">
-                <button id="hide-admin-btn" style="
-                    position: absolute;
-                    top: 15px;
-                    right: 15px;
-                    background: #e2e8f0;
-                    color: #4a5568;
-                    border: none;
-                    width: 32px;
-                    height: 32px;
-                    border-radius: 50%;
-                    cursor: pointer;
-                    font-size: 1.2rem;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                <div style="
+                    background: white;
+                    border-radius: 20px;
+                    width: 100%;
+                    max-width: 900px;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+                    position: relative;
                 ">
-                    ×
-                </button>
-                
-                <h4 style="margin-top: 0; color: #2d3748; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                    <span style="background: #9F7AEA; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">🔧</span>
-                    Admin Controls
-                </h4>
-                
-                <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem;">
-                        <span style="color: #718096;">Total Votes:</span>
-                        <span style="font-weight: bold; color: #2d3748;">${totalVotes}</span>
+                    <!-- HEADER -->
+                    <div style="
+                        background: linear-gradient(135deg, #9F7AEA, #E07A9A);
+                        color: white;
+                        padding: 25px 30px;
+                        border-radius: 20px 20px 0 0;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    ">
+                        <div>
+                            <h2 style="margin: 0; font-size: 1.8rem; display: flex; align-items: center; gap: 12px;">
+                                📊 Poll Analytics Dashboard
+                            </h2>
+                            <p style="margin: 8px 0 0; opacity: 0.9; font-size: 0.95rem;">
+                                Session expires in 2 hours • Total votes: <strong>${totalVotes}</strong>
+                            </p>
+                        </div>
+                        <button id="close-admin-dashboard" style="
+                            background: rgba(255,255,255,0.2);
+                            color: white;
+                            border: none;
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            cursor: pointer;
+                            font-size: 1.5rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            transition: all 0.3s;
+                        ">
+                            ×
+                        </button>
                     </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
-                        <span style="color: #718096;">Your Vote:</span>
-                        <span style="font-weight: bold; color: ${userVotedOption ? pollData.find(o => o.id === userVotedOption)?.color || '#4a5568' : '#a0aec0'}">
-                            ${userVotedOption ? pollData.find(o => o.id === userVotedOption)?.label.split(' ')[0] || 'Voted' : 'Not voted'}
-                        </span>
+                    
+                    <!-- MAIN CONTENT -->
+                    <div style="padding: 30px;">
+                        <!-- STATS OVERVIEW -->
+                        <div style="
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                            gap: 20px;
+                            margin-bottom: 30px;
+                        ">
+                            <div style="
+                                background: #f8f9fa;
+                                padding: 20px;
+                                border-radius: 12px;
+                                border-left: 5px solid #9F7AEA;
+                            ">
+                                <div style="font-size: 0.9rem; color: #718096; margin-bottom: 8px;">Total Votes</div>
+                                <div style="font-size: 2.5rem; font-weight: bold; color: #2d3748;">${totalVotes}</div>
+                            </div>
+                            <div style="
+                                background: #f8f9fa;
+                                padding: 20px;
+                                border-radius: 12px;
+                                border-left: 5px solid #E07A9A;
+                            ">
+                                <div style="font-size: 0.9rem; color: #718096; margin-bottom: 8px;">Most Popular</div>
+                                <div style="font-size: 1.2rem; font-weight: bold; color: #2d3748;">
+                                    ${sortedData[0].label.split(' ')[0]} (${sortedData[0].votes})
+                                </div>
+                            </div>
+                            <div style="
+                                background: #f8f9fa;
+                                padding: 20px;
+                                border-radius: 12px;
+                                border-left: 5px solid #68D391;
+                            ">
+                                <div style="font-size: 0.9rem; color: #718096; margin-bottom: 8px;">Options</div>
+                                <div style="font-size: 2.5rem; font-weight: bold; color: #2d3748;">${pollData.length}</div>
+                            </div>
+                        </div>
+                        
+                        <!-- DETAILED VOTE TABLE -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="color: #2d3748; margin-bottom: 20px; font-size: 1.3rem;">
+                                📋 Detailed Vote Counts
+                            </h3>
+                            <div style="overflow-x: auto;">
+                                <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+                                    <thead>
+                                        <tr style="background: #f8f9fa; border-bottom: 2px solid #e2e8f0;">
+                                            <th style="text-align: left; padding: 15px; color: #718096; min-width: 200px;">Option</th>
+                                            <th style="text-align: center; padding: 15px; color: #718096; min-width: 100px;">Votes</th>
+                                            <th style="text-align: center; padding: 15px; color: #718096; min-width: 100px;">Percentage</th>
+                                            <th style="text-align: center; padding: 15px; color: #718096; min-width: 150px;">Visual</th>
+                                            <th style="text-align: center; padding: 15px; color: #718096; min-width: 150px;">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${sortedData.map((option, index) => {
+                                            const percentage = totalVotes > 0 ? ((option.votes / totalVotes) * 100).toFixed(1) : 0;
+                                            return `
+                                                <tr style="border-bottom: 1px solid #f1f5f9; ${index === 0 ? 'background: #f0fff4;' : ''}">
+                                                    <td style="padding: 15px; color: #2d3748;">
+                                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                                            <div style="width: 16px; height: 16px; border-radius: 50%; background: ${option.color};"></div>
+                                                            <div>
+                                                                <div style="font-weight: 600;">${option.label}</div>
+                                                                <div style="font-size: 0.85rem; color: #718096;">ID: ${option.id}</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td style="text-align: center; padding: 15px; font-weight: bold; color: ${option.color}; font-size: 1.2rem;">
+                                                        ${option.votes}
+                                                    </td>
+                                                    <td style="text-align: center; padding: 15px;">
+                                                        <div style="font-weight: bold; color: #2d3748; font-size: 1.1rem;">
+                                                            ${percentage}%
+                                                        </div>
+                                                    </td>
+                                                    <td style="text-align: center; padding: 15px;">
+                                                        <div style="width: 120px; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 0 auto; overflow: hidden;">
+                                                            <div style="height: 100%; width: ${percentage}%; background: ${option.color}; border-radius: 4px;"></div>
+                                                        </div>
+                                                        <div style="font-size: 0.85rem; color: #718096; margin-top: 5px;">
+                                                            ${option.votes} / ${totalVotes}
+                                                        </div>
+                                                    </td>
+                                                    <td style="text-align: center; padding: 15px;">
+                                                        <div style="display: flex; gap: 8px; justify-content: center;">
+                                                            <button onclick="addVoteToOption('${option.id}', 1)" style="
+                                                                background: ${option.color};
+                                                                color: white;
+                                                                border: none;
+                                                                padding: 8px 12px;
+                                                                border-radius: 6px;
+                                                                cursor: pointer;
+                                                                font-size: 0.85rem;
+                                                                font-weight: 600;
+                                                            ">
+                                                                +1 Vote
+                                                            </button>
+                                                            <button onclick="resetOptionVotes('${option.id}')" style="
+                                                                background: #FC8181;
+                                                                color: white;
+                                                                border: none;
+                                                                padding: 8px 12px;
+                                                                border-radius: 6px;
+                                                                cursor: pointer;
+                                                                font-size: 0.85rem;
+                                                                font-weight: 600;
+                                                            ">
+                                                                Reset
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            `;
+                                        }).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- ADMIN CONTROLS -->
+                        <div style="
+                            background: linear-gradient(135deg, #f8f9fa, #edf2f7);
+                            padding: 25px;
+                            border-radius: 15px;
+                            border: 2px dashed #cbd5e0;
+                        ">
+                            <h3 style="color: #2d3748; margin-bottom: 20px; font-size: 1.3rem;">
+                                ⚙️ Management Tools
+                            </h3>
+                            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                <button id="reset-all-votes" style="
+                                    flex: 1;
+                                    min-width: 180px;
+                                    padding: 15px;
+                                    background: linear-gradient(135deg, #FEB2B2, #FC8181);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 10px;
+                                    cursor: pointer;
+                                    font-size: 1rem;
+                                    font-weight: 600;
+                                    transition: all 0.3s;
+                                ">
+                                    🔄 Reset All Votes
+                                </button>
+                                <button id="restore-default-data" style="
+                                    flex: 1;
+                                    min-width: 180px;
+                                    padding: 15px;
+                                    background: linear-gradient(135deg, #9AE6B4, #68D391);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 10px;
+                                    cursor: pointer;
+                                    font-size: 1rem;
+                                    font-weight: 600;
+                                    transition: all 0.3s;
+                                ">
+                                    📊 Restore Default Data
+                                </button>
+                                <button id="export-data" style="
+                                    flex: 1;
+                                    min-width: 180px;
+                                    padding: 15px;
+                                    background: linear-gradient(135deg, #9F7AEA, #805AD5);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 10px;
+                                    cursor: pointer;
+                                    font-size: 1rem;
+                                    font-weight: 600;
+                                    transition: all 0.3s;
+                                ">
+                                    💾 Export Data
+                                </button>
+                                <button id="add-test-votes" style="
+                                    flex: 1;
+                                    min-width: 180px;
+                                    padding: 15px;
+                                    background: linear-gradient(135deg, #FBD38D, #F6AD55);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 10px;
+                                    cursor: pointer;
+                                    font-size: 1rem;
+                                    font-weight: 600;
+                                    transition: all 0.3s;
+                                ">
+                                    🧪 Add 10 Test Votes
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- FOOTER -->
+                        <div style="
+                            margin-top: 30px;
+                            padding-top: 20px;
+                            border-top: 1px solid #e2e8f0;
+                            text-align: center;
+                            color: #a0aec0;
+                            font-size: 0.85rem;
+                        ">
+                            <p>Dashboard will auto-update when votes change. Last refresh: <span id="dashboard-last-refresh">${new Date().toLocaleTimeString()}</span></p>
+                            <p>To logout, close this window or wait for session expiration.</p>
+                        </div>
                     </div>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px;">
-                    <button id="reset-votes-btn" style="
-                        padding: 14px;
-                        background: linear-gradient(135deg, #FEB2B2, #FC8181);
-                        color: white;
-                        border: none;
-                        border-radius: 8px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        transition: all 0.3s;
-                    ">
-                        🔄 Reset All
-                    </button>
-                    <button id="restore-defaults-btn" style="
-                        padding: 14px;
-                        background: linear-gradient(135deg, #9AE6B4, #68D391);
-                        color: white;
-                        border: none;
-                        border-radius: 8px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        transition: all 0.3s;
-                    ">
-                        📊 Restore Defaults
-                    </button>
-                    <button id="clear-my-vote-btn" style="
-                        padding: 14px;
-                        background: linear-gradient(135deg, #FBD38D, #F6AD55);
-                        color: white;
-                        border: none;
-                        border-radius: 8px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        transition: all 0.3s;
-                    ">
-                        🗑️ Clear My Vote
-                    </button>
-                </div>
-                
-                <div style="font-size: 0.8rem; color: #a0aec0; text-align: center; padding-top: 15px; border-top: 1px dashed #e2e8f0;">
-                    Admin session expires in 2 hours
                 </div>
             </div>
         `;
         
-        container.insertAdjacentHTML('beforeend', panelHTML);
+        document.body.insertAdjacentHTML('beforeend', dashboardHTML);
         
-        // Event listeners for admin buttons
-        document.getElementById('hide-admin-btn').addEventListener('click', () => {
-            document.getElementById('admin-control-panel').remove();
+        // Event listeners
+        document.getElementById('close-admin-dashboard').addEventListener('click', () => {
+            document.getElementById('admin-dashboard-modal').remove();
         });
         
-        document.getElementById('reset-votes-btn').addEventListener('click', function() {
+        document.getElementById('reset-all-votes').addEventListener('click', function() {
             if (confirm('Reset ALL votes to zero? This cannot be undone.')) {
                 pollData.forEach(option => option.votes = 0);
                 savePollData(pollData);
                 userVotedOption = null;
                 clearUserVote();
                 renderPoll();
-                showTempMessage('All votes have been reset to zero.', '#4FD1C7');
+                showAdminDashboard(); // Refresh dashboard
+                showNotification('All votes have been reset to zero.', 'info');
             }
         });
         
-        document.getElementById('restore-defaults-btn').addEventListener('click', function() {
+        document.getElementById('restore-default-data').addEventListener('click', function() {
             if (confirm('Restore default voting data?')) {
                 pollData = JSON.parse(JSON.stringify(DEFAULT_DATA));
                 savePollData(pollData);
                 userVotedOption = null;
                 clearUserVote();
                 renderPoll();
-                showTempMessage('Default data restored!', '#68D391');
+                showAdminDashboard(); // Refresh dashboard
+                showNotification('Default data restored!', 'success');
             }
         });
         
-        document.getElementById('clear-my-vote-btn').addEventListener('click', function() {
-            if (userVotedOption) {
-                const votedOption = pollData.find(opt => opt.id === userVotedOption);
-                if (votedOption && votedOption.votes > 0) {
-                    votedOption.votes -= 1;
-                }
-                savePollData(pollData);
+        document.getElementById('export-data').addEventListener('click', function() {
+            const exportData = {
+                pollId: 'aegisens_health_poll',
+                exportedAt: new Date().toISOString(),
+                totalVotes: totalVotes,
+                options: pollData
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
+                type: 'application/json' 
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `poll-data-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Data exported successfully!', 'success');
+        });
+        
+        document.getElementById('add-test-votes').addEventListener('click', function() {
+            for (let i = 0; i < 10; i++) {
+                const randomOption = pollData[Math.floor(Math.random() * pollData.length)];
+                randomOption.votes += 1;
             }
-            userVotedOption = null;
-            clearUserVote();
+            savePollData(pollData);
             renderPoll();
-            showTempMessage('Your vote has been cleared.', '#F6AD55');
+            showAdminDashboard(); // Refresh dashboard
+            showNotification('10 test votes added!', 'info');
+        });
+        
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('admin-dashboard-modal')) {
+                document.getElementById('admin-dashboard-modal').remove();
+            }
         });
     }
     
-    // ========== MAIN POLL RENDER ==========
+    // ========== GLOBAL ADMIN FUNCTIONS ==========
+    window.addVoteToOption = function(optionId, count = 1) {
+        const option = pollData.find(opt => opt.id === optionId);
+        if (option) {
+            option.votes += count;
+            savePollData(pollData);
+            renderPoll();
+            showAdminDashboard(); // Refresh dashboard
+            showNotification(`Added ${count} vote(s) to ${option.label.split(' ')[0]}`, 'success');
+        }
+    };
+    
+    window.resetOptionVotes = function(optionId) {
+        const option = pollData.find(opt => opt.id === optionId);
+        if (option && confirm(`Reset votes for "${option.label}" to zero?`)) {
+            option.votes = 0;
+            savePollData(pollData);
+            renderPoll();
+            showAdminDashboard(); // Refresh dashboard
+            showNotification(`Reset votes for ${option.label.split(' ')[0]}`, 'info');
+        }
+    };
+    
+    // ========== MAIN POLL RENDER (CLEAN PUBLIC VIEW) ==========
     function renderPoll() {
         if (!container) return;
         
@@ -752,7 +996,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const optionEl = document.createElement('div');
             optionEl.className = 'vote-option';
             optionEl.style.cssText = `
-                margin-bottom: 25px;
+                margin-bottom: 20px;
                 text-align: left;
                 cursor: ${isClickable ? 'pointer' : 'default'};
                 transition: all 0.3s;
@@ -799,14 +1043,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 button.appendChild(voteBadge);
             }
             
+            // SHOW ONLY PERCENTAGES (no vote counts) - Clean public view
             button.innerHTML = `
                 <span style="flex: 1; padding-right: 10px;">${option.label}</span>
                 <span style="color: ${option.color}; font-weight: bold; white-space: nowrap;">
-                    ${percentage}% <span style="opacity: 0.7; font-size: 0.8rem;">(${option.votes})</span>
+                    ${percentage}%
                 </span>
             `;
             
-            // Progress bar (show for all options when someone has voted)
+            // Progress bar
             const progressBar = document.createElement('div');
             progressBar.style.cssText = `
                 height: 8px;
@@ -850,82 +1095,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     button.style.boxShadow = 'none';
                     button.style.transform = 'translateY(0)';
                 });
-                
-                // Touch support for mobile
-                optionEl.addEventListener('touchstart', function(e) {
-                    button.style.borderColor = option.color;
-                    button.style.boxShadow = `0 3px 8px ${option.color}30`;
-                    button.style.transform = 'translateY(-1px)';
-                    e.preventDefault();
-                });
-                
-                optionEl.addEventListener('touchend', function() {
-                    button.style.borderColor = isUserVotedForThis ? option.color : '#e2e8f0';
-                    button.style.boxShadow = 'none';
-                    button.style.transform = 'translateY(0)';
-                });
             }
             
             optionEl.appendChild(button);
             container.appendChild(optionEl);
         });
         
-        // Add hidden admin trigger (only visible to admin)
-        addAdminTrigger();
-        
-        // Show admin panel if already authenticated
-        if (isAdminAuthenticated()) {
-            showAdminPanel();
+        // Auto-refresh dashboard if open
+        if (document.getElementById('admin-dashboard-modal')) {
+            setTimeout(() => {
+                if (isAdminAuthenticated()) {
+                    showAdminDashboard();
+                }
+            }, 500);
         }
-    }
-    
-    // ========== HIDDEN ADMIN TRIGGER ==========
-    function addAdminTrigger() {
-        // Remove existing trigger
-        const existingTrigger = document.getElementById('admin-trigger');
-        if (existingTrigger) existingTrigger.remove();
-        
-        const triggerHTML = `
-            <div id="admin-trigger" style="
-                text-align: center;
-                margin-top: 30px;
-                opacity: 0.3;
-                transition: opacity 0.3s;
-                cursor: pointer;
-            " title="Admin Access">
-                <div style="
-                    width: 40px;
-                    height: 40px;
-                    background: #e2e8f0;
-                    border-radius: 50%;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #a0aec0;
-                    font-size: 1.2rem;
-                    margin-bottom: 5px;
-                ">
-                    ⚙️
-                </div>
-                <div style="font-size: 0.7rem; color: #a0aec0;">
-                    Admin
-                </div>
-            </div>
-        `;
-        
-        container.insertAdjacentHTML('beforeend', triggerHTML);
-        
-        document.getElementById('admin-trigger').addEventListener('click', function() {
-            showAdminLoginModal();
-        });
-        
-        document.getElementById('admin-trigger').addEventListener('mouseenter', function() {
-            this.style.opacity = '1';
-        });
-        
-        document.getElementById('admin-trigger').addEventListener('mouseleave', function() {
-            this.style.opacity = '0.3';
-        });
     }
     
     // ========== HELPER FUNCTIONS ==========
@@ -967,48 +1150,83 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     }
     
-    function showTempMessage(text, color) {
-        const msg = document.createElement('div');
-        msg.style.cssText = `
-            text-align: center;
-            margin: 15px 10px 0;
-            padding: 12px;
-            background: ${color}20;
-            border-radius: 8px;
-            border-left: 3px solid ${color};
-            color: #2d3748;
-            font-size: 0.9rem;
-            animation: fadeIn 0.5s;
+    function showNotification(text, type = 'info') {
+        const colors = {
+            info: '#4FD1C7',
+            success: '#68D391',
+            warning: '#F6AD55',
+            error: '#FC8181'
+        };
+        
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid ${colors[type]};
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 10002;
+            animation: slideInRight 0.3s;
+            max-width: 300px;
         `;
-        msg.textContent = '✓ ' + text;
-        container.appendChild(msg);
+        notification.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="color: ${colors[type]}; font-size: 1.2rem;">✓</div>
+                <div style="color: #2d3748; font-size: 0.9rem;">${text}</div>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
         
         setTimeout(() => {
-            if (msg.parentNode) {
-                msg.style.opacity = '0';
-                msg.style.transition = 'opacity 0.5s';
-                setTimeout(() => {
-                    if (msg.parentNode) msg.parentNode.removeChild(msg);
-                }, 500);
-            }
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 500);
         }, 3000);
     }
     
-    // ========== KEYBOARD SHORTCUT ==========
+    // ========== EVENT LISTENERS ==========
+    adminTrigger.addEventListener('click', function() {
+        if (isAdminAuthenticated()) {
+            showAdminDashboard();
+        } else {
+            showAdminLoginModal();
+        }
+    });
+    
+    adminTrigger.addEventListener('mouseenter', function() {
+        this.style.opacity = '1';
+    });
+    
+    adminTrigger.addEventListener('mouseleave', function() {
+        this.style.opacity = '0.4';
+    });
+    
+    // Keyboard shortcut: Ctrl+Shift+A for admin
     document.addEventListener('keydown', function(e) {
-        // Ctrl+Shift+A to open admin (only if not already open)
         if (e.ctrlKey && e.shiftKey && e.key === 'A') {
             e.preventDefault();
-            if (!isAdminAuthenticated() && !document.getElementById('admin-login-modal')) {
-                showAdminLoginModal();
+            if (!document.getElementById('admin-login-modal') && !document.getElementById('admin-dashboard-modal')) {
+                if (isAdminAuthenticated()) {
+                    showAdminDashboard();
+                } else {
+                    showAdminLoginModal();
+                }
             }
         }
     });
     
-    // ========== URL HASH DETECTION ==========
+    // Auto-login from URL hash
     if (window.location.hash === '#admin') {
         setTimeout(() => {
-            if (!isAdminAuthenticated()) {
+            if (!isAdminAuthenticated() && !document.getElementById('admin-login-modal')) {
                 showAdminLoginModal();
             }
         }, 1000);
@@ -1021,12 +1239,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const style = document.createElement('style');
     style.textContent = `
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
         .vote-option:hover div:first-child {
             transform: translateY(-2px);
@@ -1035,13 +1253,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .vote-option:active div:first-child {
             transform: translateY(0);
         }
-        #admin-control-panel button:hover {
-            transform: translateY(-3px);
+        button:hover {
+            transform: translateY(-2px);
             box-shadow: 0 8px 16px rgba(0,0,0,0.15);
         }
-        #admin-login-modal input:focus {
-            outline: none;
-            border-color: #9F7AEA;
+        button:active {
+            transform: translateY(0);
         }
         
         /* Responsive design */
@@ -1055,6 +1272,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 padding: 14px 16px !important;
                 font-size: 0.9rem !important;
             }
+            #admin-dashboard-modal > div {
+                max-height: 95vh !important;
+                margin: 10px !important;
+            }
         }
         @media (max-width: 480px) {
             #aegisens-vote-widget h3 {
@@ -1063,9 +1284,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .vote-option div:first-child {
                 padding: 12px 14px !important;
                 font-size: 0.88rem !important;
-            }
-            #admin-control-panel {
-                padding: 20px !important;
             }
         }
     `;
