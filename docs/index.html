@@ -706,7 +706,30 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // ========== CONTROL PANEL FUNCTIONS ==========
     
-    // Reset all votes to zero
+    // 1. UKRYCIE PANELU DLA PUBLICZNOŚCI
+    const controlPanelHTML = 
+        <div id="admin-control-panel" style="display: none; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px; border: 2px dashed #cbd5e0; text-align: center;">
+            <h4 style="margin-top: 0; color: #4a5568;">Admin Controls</h4>
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button id="reset-votes-btn" style="padding: 10px 20px; background: #FEB2B2; color: #9B2C2C; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                    Reset All Votes
+                </button>
+                <button id="restore-defaults-btn" style="padding: 10px 20px; background: #9AE6B4; color: #276749; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                    Restore Sample Data
+                </button>
+                <button id="clear-my-vote-btn" style="padding: 10px 20px; background: #FBD38D; color: #B45309; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                    Clear My Vote
+                </button>
+            </div>
+            <p style="font-size: 0.8rem; color: #a0aec0; margin-top: 15px;">Visible only to admin. Users cannot see this panel.</p>
+        </div>
+    ;
+    
+    // Wstaw panel kontrolny na stronę (ukryty)
+    const pollContainer = document.querySelector('#aegisens-vote-widget') || document.body;
+    pollContainer.insertAdjacentHTML('beforeend', controlPanelHTML);
+    
+    // 2. FUNKCJE ADMINA (jak wcześniej, ale odwołują się do nowych przycisków)
     document.getElementById('reset-votes-btn').addEventListener('click', function() {
         if (confirm('Reset ALL votes to zero? This cannot be undone.')) {
             pollData.forEach(option => {
@@ -721,10 +744,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Restore default sample data
     document.getElementById('restore-defaults-btn').addEventListener('click', function() {
         if (confirm('Restore sample voting data? This will replace current votes.')) {
-            pollData = JSON.parse(JSON.stringify(DEFAULT_DATA)); // Deep copy
+            pollData = JSON.parse(JSON.stringify(DEFAULT_DATA));
             savePollData(pollData);
             userVotedOption = null;
             clearUserVote();
@@ -734,10 +756,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Clear user's vote
     document.getElementById('clear-my-vote-btn').addEventListener('click', function() {
         if (userVotedOption) {
-            // Remove 1 vote from the option user voted for
             const votedOption = pollData.find(opt => opt.id === userVotedOption);
             if (votedOption && votedOption.votes > 0) {
                 votedOption.votes -= 1;
@@ -751,58 +771,35 @@ document.addEventListener('DOMContentLoaded', function() {
         
         showTempMessage('Your vote has been cleared. You can vote again!', '#F6AD55');
     });
+// 3. TAJNA FUNKCJA BACKDOOR DLA CIEBIE
+    window.showAdminPanel = function() {
+        const panel = document.getElementById('admin-control-panel');
+        if (panel) {
+            panel.style.display = 'block';
+            alert('Admin panel unlocked! Panel is now visible.');
+            console.log('🔓 Admin panel unlocked. To hide it again, run: hideAdminPanel()');
+        }
+    };
     
-    // Helper function for temporary messages
-    function showTempMessage(text, color) {
-        const msg = document.createElement('div');
-        msg.style.cssText = `
-            text-align: center;
-            margin: 15px 10px 0;
-            padding: 10px;
-            background: ${color}20;
-            border-radius: 8px;
-            border-left: 3px solid ${color};
-            color: #2d3748;
-            font-size: 0.85rem;
-            animation: fadeIn 0.5s;
-        `;
-        msg.textContent = '✓ ' + text;
-        container.appendChild(msg);
-        
-        setTimeout(() => {
-            if (msg.parentNode) {
-                msg.style.opacity = '0';
-                msg.style.transition = 'opacity 0.5s';
-                setTimeout(() => {
-                    if (msg.parentNode) {
-                        msg.parentNode.removeChild(msg);
-                    }
-                }, 500);
-            }
-        }, 3000);
+    window.hideAdminPanel = function() {
+        const panel = document.getElementById('admin-control-panel');
+        if (panel) {
+            panel.style.display = 'none';
+            console.log('🔒 Admin panel hidden.');
+        }
+    };
+    
+    // 4. AUTOMATYCZNE POKAZYWANIE PANELU (tylko jeśli w URL jest #admin)
+    if (window.location.hash === '#admin') {
+        setTimeout(() => window.showAdminPanel(), 1000);
     }
+
+    // ... (reszta kodu bez zmian: renderPoll, showThankYouMessage, showTempMessage) ...
     
     // Initial render
     renderPoll();
     
-    // Add animation style
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-    `;
-    document.head.appendChild(style);
+    // ... (dodanie stylów animacji) ...
 });
 </script>
 <!-- WAITLIST CARD WITH LIVE COUNTER -->
