@@ -1305,213 +1305,39 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 
-    <!-- FORMULARZ -->
-    <form id="working-waitlist-form">
-        <input type="email" id="working-email" placeholder="your.email@example.com" required>
-        <input type="text" id="working-influencer" placeholder="Influencer code (optional)">
-        <input type="hidden" id="working-country" value="Unknown">
-        
-        <button type="submit" id="working-submit-btn">
-            <span id="btn-text">Secure My Spot</span>
-            <div id="btn-spinner" style="display: none;">⏳</div>
-        </button>
-    </form>
+    <!-- ===== TUTAJ WKLEJ GOOGLE FORM IFRAME ===== -->
+    <!-- USUŃ CALY FORM I KOMUNIKATY PONIŻEJ -->
+    <!-- A WKLEJ TO: -->
 
-    <!-- KOMUNIKATY -->
-    <div id="working-success" style="display: none;">
-        <div style="color: #10B981; font-size: 48px; margin-bottom: 15px;">✓</div>
-        <h4>You're on the list! 🎉</h4>
-        <p>Thank you for joining the Aegisens beta waitlist.</p>
-        <p style="font-size: 0.9em; color: #6B7280;">We'll notify you when your spot opens.</p>
-    </div>
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeWng0uphZw6B0JWFPLl5JuS5tdwQpqd-enyjgmhlV1bwztTw/viewform?embedded=true" width="500" height="600" frameborder="0" marginheight="0" marginwidth="0">Ładuję…</iframe>
+
+    <!-- ===== KONIEC GOOGLE FORM ===== -->
     
-    <div id="working-error" style="display: none; color: #EF4444;">
-        <p id="error-message"></p>
-    </div>
+    <p class="form-note">✅ No spam. 🔒 Privacy-first. Unsubscribe anytime.</p>
 </div>
 
 <script>
-// ===== KONFIGURACJA =====
-const WORKING_CONFIG = {
-    APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycby7iPSv_rEDp-T1pSWR7ps8nRboLQh-wtucj2glxXaGOnTQfOUDCiJSlLIKrm2wtdhq/exec'
-};
-
-// ===== INICJALIZACJA =====
+// TYLKO TEN KOD ZOSTAW - RESZTĘ USUŃ
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('✅ Waitlist initialized');
-    
-    // Wykryj kraj
-    detectCountry();
-    
-    // Obsługa formularza
-    const form = document.getElementById('working-waitlist-form');
-    form.addEventListener('submit', handleSubmit);
-    
-    // Przywróć licznik
-    const savedCount = localStorage.getItem('waitlist_count');
-    if (savedCount) {
-        document.getElementById('waitlist-counter').textContent = savedCount;
-    }
-});
-
-// ===== FUNKCJE =====
-function detectCountry() {
-    const countryField = document.getElementById('working-country');
-    
-    // Szybkie wykrywanie (bez API key)
-    fetch('https://ipapi.co/country_name/')
-        .then(r => r.ok ? r.text() : 'Unknown')
-        .then(country => {
-            countryField.value = country || 'Unknown';
-        })
-        .catch(() => {
-            // Fallback z browser language
-            const lang = navigator.language || navigator.userLanguage;
-            if (lang.includes('pl')) countryField.value = 'Poland';
-            else if (lang.includes('es')) countryField.value = 'Spain';
-            else if (lang.includes('de')) countryField.value = 'Germany';
-            else if (lang.includes('fr')) countryField.value = 'France';
-            else countryField.value = 'Unknown';
-        });
-}
-
-async function handleSubmit(e) {
-    e.preventDefault();
-    
-    const email = document.getElementById('working-email').value.trim();
-    const influencer = document.getElementById('working-influencer').value.trim();
-    const country = document.getElementById('working-country').value;
-    
-    // Walidacja
-    if (!isValidEmail(email)) {
-        showError('Please enter a valid email address.');
-        return;
-    }
-    
-    // Pokaż ładowanie
-    showLoading(true);
-    
-    // Metoda 1: Otwórz w nowej zakładce (zawsze działa)
-    const params = new URLSearchParams();
-    params.append('email', email);
-    params.append('country', country);
-    params.append('influencer', influencer);
-    params.append('source', 'aegisens_website');
-    
-    const submitUrl = `${WORKING_CONFIG.APPS_SCRIPT_URL}?${params.toString()}`;
-    
-    // Otwórz w nowej karcie
-    const newTab = window.open(submitUrl, '_blank');
-    
-    // Metoda 2: Niewidoczny iframe (backup)
-    setTimeout(() => {
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = submitUrl;
-        document.body.appendChild(iframe);
-        
-        // Po 2 sekundach usuń iframe i pokaż sukces
-        setTimeout(() => {
-            iframe.remove();
-            
-            // Pokaż sukces
-            showSuccess();
-            
-            // Zaktualizuj licznik
-            updateCounter();
-            
-            // Wyczyść formularz
-            document.getElementById('working-email').value = '';
-            document.getElementById('working-influencer').value = '';
-            
-        }, 2000);
-        
-    }, 500);
-}
-
-function showLoading(show) {
-    const btn = document.getElementById('working-submit-btn');
-    const btnText = document.getElementById('btn-text');
-    const spinner = document.getElementById('btn-spinner');
-    
-    if (show) {
-        btn.disabled = true;
-        btnText.textContent = 'Processing...';
-        spinner.style.display = 'inline-block';
-    } else {
-        btn.disabled = false;
-        btnText.textContent = 'Secure My Spot';
-        spinner.style.display = 'none';
-    }
-}
-
-function showSuccess() {
-    // Ukryj formularz
-    document.getElementById('working-waitlist-form').style.display = 'none';
-    
-    // Pokaż sukces
-    document.getElementById('working-success').style.display = 'block';
-    
-    // Ukryj błędy
-    document.getElementById('working-error').style.display = 'none';
-    
-    // Wyłącz ładowanie
-    showLoading(false);
-}
-
-function showError(message) {
-    const errorDiv = document.getElementById('working-error');
-    const errorMsg = document.getElementById('error-message');
-    
-    errorMsg.textContent = message;
-    errorDiv.style.display = 'block';
-    
-    // Auto-hide po 5 sekundach
-    setTimeout(() => {
-        errorDiv.style.display = 'none';
-    }, 5000);
-    
-    // Wyłącz ładowanie
-    showLoading(false);
-}
-
-function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function updateCounter() {
     const counter = document.getElementById('waitlist-counter');
-    const current = parseInt(counter.textContent) || 284;
-    const newValue = current + 1;
+    let count = 284;
     
-    // Animacja
-    counter.style.transform = 'scale(1.2)';
-    counter.style.color = '#9F7AEA';
-    
-    setTimeout(() => {
-        counter.textContent = newValue;
-        counter.style.transform = 'scale(1)';
-        counter.style.color = '';
-    }, 300);
-    
-    // Zapisz w localStorage
-    localStorage.setItem('waitlist_count', newValue);
-}
-
-// ===== TEST FUNKCJI =====
-function testWaitlist() {
-    const testEmail = 'test' + Date.now() + '@example.com';
-    document.getElementById('working-email').value = testEmail;
-    
-    console.log('🧪 Testing with email:', testEmail);
-    
-    // Symuluj submit
-    const event = new Event('submit', { cancelable: true });
-    document.getElementById('working-waitlist-form').dispatchEvent(event);
-}
+    // Update counter every 30 seconds
+    setInterval(() => {
+        count += Math.floor(Math.random() * 2) + 1;
+        counter.textContent = count;
+        
+        // Quick animation
+        counter.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            counter.style.transform = 'scale(1)';
+        }, 300);
+    }, 30000);
+});
 </script>
 
 <style>
+/* TEN STYLE ZOSTAW */
 .waitlist-card {
     max-width: 480px;
     margin: 40px auto;
@@ -1561,62 +1387,6 @@ function testWaitlist() {
 .counter-incentive {
     color: #9F7AEA;
     font-size: 0.95rem;
-}
-
-#working-waitlist-form input {
-    width: 100%;
-    padding: 16px;
-    margin-bottom: 15px;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 1rem;
-    box-sizing: border-box;
-    transition: all 0.3s;
-}
-
-#working-waitlist-form input:focus {
-    border-color: #9F7AEA;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(159, 122, 234, 0.1);
-}
-
-#working-submit-btn {
-    width: 100%;
-    padding: 18px;
-    background: linear-gradient(90deg, #E07A9A, #9F7AEA);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-#working-submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(224, 122, 154, 0.3);
-}
-
-#working-submit-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-#working-success {
-    text-align: center;
-    padding: 30px;
-    background: rgba(16, 185, 129, 0.05);
-    border-radius: 15px;
-    border: 2px solid #10B981;
-}
-
-#working-error {
-    padding: 15px;
-    background: rgba(239, 68, 68, 0.05);
-    border-radius: 10px;
-    border: 1px solid #EF4444;
-    margin-top: 20px;
 }
 </style>
 </body>
