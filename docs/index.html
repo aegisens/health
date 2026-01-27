@@ -1304,8 +1304,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
 
-                <!-- WAITLIST FORM -->
-              <!-- ===== AEGISENS PRIVATE WAITLIST v2.0 ===== -->
+                <!-- ===== AEGISENS PRIVATE WAITLIST v2.1 (FIXED) ===== -->
 <div style="max-width: 480px; margin: 40px auto; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(224, 122, 154, 0.1); border: 2px solid #E07A9A;">
     <h3 style="color: #2d3748; text-align: center; margin-bottom: 10px; font-size: 1.8rem;">✨ Join Our Private Beta</h3>
     <p style="color: #4a5568; text-align: center; margin-bottom: 30px; font-size: 1.1rem;">Limited spots for health pioneers. Your data stays with us.</p>
@@ -1330,7 +1329,6 @@ document.addEventListener('DOMContentLoaded', function() {
                    style="width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box;">
         </div>
         <input type="hidden" id="user-country">
-        <input type="hidden" name="source" value="aegisens_website">
         
         <button type="submit" id="submit-btn"
                 style="width: 100%; padding: 18px; background: linear-gradient(90deg, #E07A9A, #9F7AEA); color: white; border: none; border-radius: 50px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: all 0.3s;">
@@ -1354,76 +1352,93 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <script>
-// Konfiguracja
+// ===== KONFIGURACJA =====
 const CONFIG = {
-    SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxWASn0BTbEpXfIQ_ZS-OxbXIfwJpiNDMTGzo1YNC764BdorRgksw6OYn38mVxy6BEv/exec' // TU WKLEJ SWÓJ URL
+    // 🔽 TU WKLEJ SWÓJ URL SKRYPTU (z /exec)
+    SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxWASn0BTbEpXfIQ_ZS-OxbXIfwJpiNDMTGzo1YNC764BdorRgksw6OYn38mVxy6BEv/exec'
 };
 
-// Inicjalizacja
+// ===== INICJALIZACJA =====
 document.addEventListener('DOMContentLoaded', function() {
-    // Wykryj kraj
+    // 1. Wykryj kraj (bezpiecznie, z fallbackiem)
     fetch('https://ipapi.co/json/')
-        .then(r => r.json())
+        .then(r => r.ok ? r.json() : Promise.reject())
         .then(data => {
             document.getElementById('user-country').value = data.country_code || 'XX';
         })
         .catch(() => {
             document.getElementById('user-country').value = 'XX';
+})
+        .finally(() => {
+            console.log('Country detection completed');
         });
     
-    // Obsługa formularza
+    // 2. Obsługa formularza
     const form = document.getElementById('aegisens-private-waitlist');
-const submitBtn = document.getElementById('submit-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    const emailInput = document.getElementById('waitlist-email');
     
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        const email = document.getElementById('waitlist-email').value.trim();
+        const email = emailInput.value.trim();
         const influencer = document.getElementById('influencer-code').value.trim();
         const country = document.getElementById('user-country').value;
         
-        // Walidacja
-        if (!email || !email.includes('@')) {
-            showError('Please enter a valid email address.');
+        // ===== WALIDACJA =====
+        if (!email) {
+            showError('Please enter your email address.');
+            emailInput.focus();
             return;
         }
         
-        // Przygotuj dane
-        const formData = new FormData();
-        formData.append('email', email);
-        formData.append('influencer', influencer);
-        formData.append('country', country);
-        formData.append('source', 'aegisens_website');
+        if (!email.includes('@') || !email.includes('.')) {
+            showError('Please enter a valid email address.');
+            emailInput.focus();
+            return;
+        }
         
-        // Zablokuj przycisk
+        // ===== PRZYGOTUJ DANE (FIXED FORMAT) =====
+        const params = new URLSearchParams();
+        params.append('email', email);
+        params.append('influencer', influencer);
+        params.append('country', country);
+        params.append('source', 'aegisens_website');
+        
+        // ===== WYŚLIJ =====
         submitBtn.disabled = true;
         submitBtn.textContent = 'Sending...';
         submitBtn.style.opacity = '0.7';
         
         try {
-            // Wyślij do Google Apps Script
             const response = await fetch(CONFIG.SCRIPT_URL, {
                 method: 'POST',
-                body: formData
+                body: params,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
             });
             
             const result = await response.json();
+            console.log('Server response:', result);
             
             if (response.ok) {
-                // Sukces
+                // SUKCES
                 form.style.display = 'none';
                 document.getElementById('success-msg').style.display = 'block';
-                
-                // Aktualizuj licznik
                 updateCounter();
+                
+                // Opcjonalnie: wyczyść formularz
+                emailInput.value = '';
+                document.getElementById('influencer-code').value = '';
             } else {
-                showError(result.message || 'Submission failed. Try again.');
+                showError(result.message || 'Submission failed. Please try again.');
             }
         } catch (error) {
+            console.error('Fetch error:', error);
             showError('Network error. Please check your connection.');
-            console.error('Waitlist error:', error);
         } finally {
-            // Odblokuj przycisk
+            // Przywróć przycisk
             submitBtn.disabled = false;
             submitBtn.textContent = 'Secure My Spot';
             submitBtn.style.opacity = '1';
@@ -1431,22 +1446,42 @@ const submitBtn = document.getElementById('submit-btn');
     });
 });
 
-// Funkcje pomocnicze
+// ===== FUNKCJE POMOCNICZE =====
 function showError(message) {
     const errorDiv = document.getElementById('error-msg');
     document.getElementById('error-text').textContent = message;
     errorDiv.style.display = 'block';
-    setTimeout(() => errorDiv.style.display = 'none', 5000);
+    // Auto-hide po 5 sekundach
+    setTimeout(() => {
+        errorDiv.style.display = 'none';
+    }, 5000);
 }
 
 function updateCounter() {
     const counter = document.getElementById('aegisens-counter');
-    const current = parseInt(counter.textContent);
+    const current = parseInt(counter.textContent) || 284;
     counter.textContent = current + 1;
     // Animacja
     counter.style.transform = 'scale(1.2)';
     setTimeout(() => counter.style.transform = 'scale(1)', 300);
 }
+
+// ===== TEST API (opcjonalnie) =====
+window.testWaitlistAPI = function(testEmail = 'test@example.com') {
+    const params = new URLSearchParams();
+    params.append('email', testEmail);
+    params.append('country', 'TEST');
+    params.append('source', 'console_test');
+    
+    fetch(CONFIG.SCRIPT_URL, {
+        method: 'POST',
+        body: params,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(r => r.json())
+    .then(console.log)
+    .catch(console.error);
+};
 </script>
 </body>
 </html>
