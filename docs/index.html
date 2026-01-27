@@ -1457,18 +1457,148 @@ if (formContainer) {
     }
 
     // --- PODŁĄCZENIE FORMULARZA ---
-    var form = document.getElementById('waitlist-form'); // ZMIEŃ ID TUTAJ JEŚLI TRZEBA!
-    if (form) {
-        form.addEventListener('submit', handleFormSubmit);
-        console.log('Aegisens Test Form: Ready! Emails to:', targetEmail);
-    } else {
-        console.warn('Aegisens Test Form: Form not found. Current ID: waitlist-form');
-    }
+   <!-- ===== AEGISENS PRIVATE WAITLIST v2.0 ===== -->
+<div style="max-width: 480px; margin: 40px auto; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(224, 122, 154, 0.1); border: 2px solid #E07A9A;">
+    <h3 style="color: #2d3748; text-align: center; margin-bottom: 10px; font-size: 1.8rem;">✨ Join Our Private Beta</h3>
+    <p style="color: #4a5568; text-align: center; margin-bottom: 30px; font-size: 1.1rem;">Limited spots for health pioneers. Your data stays with us.</p>
+    
+    <!-- LIVE COUNTER -->
+    <div style="background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); padding: 20px; border-radius: 15px; margin-bottom: 30px; text-align: center; border: 2px dashed #E07A9A;">
+        <div style="font-size: 3rem; font-weight: 800; color: #E07A9A; line-height: 1;" id="aegisens-counter">284</div>
+        <div style="color: #4a5568; font-weight: 600; margin: 10px 0;">pioneers already joined</div>
+        <div style="color: #9F7AEA; font-size: 0.95rem;">
+            <span style="color: #E07A9A;">🎁</span> First 200 get a <strong>free personalized report</strong>
+        </div>
+    </div>
+    
+    <!-- FORMULARZ -->
+    <form id="aegisens-private-waitlist">
+        <div style="margin-bottom: 20px;">
+            <input type="email" id="waitlist-email" placeholder="your.email@example.com" required 
+                   style="width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; transition: all 0.3s;">
+        </div>
+        <div style="margin-bottom: 25px;">
+            <input type="text" id="influencer-code" placeholder="Influencer code (optional)"
+                   style="width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box;">
+        </div>
+        <input type="hidden" id="user-country">
+        <input type="hidden" name="source" value="aegisens_website">
+        
+        <button type="submit" id="submit-btn"
+                style="width: 100%; padding: 18px; background: linear-gradient(90deg, #E07A9A, #9F7AEA); color: white; border: none; border-radius: 50px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: all 0.3s;">
+            Secure My Spot
+        </button>
+    </form>
+    
+    <!-- SUKCES -->
+    <div id="success-msg" style="display: none; margin-top: 25px; padding: 20px; background: rgba(104, 211, 145, 0.1); border-radius: 10px; border-left: 4px solid #68D391; text-align: center;">
+        <p style="color: #276749; font-weight: 600; margin: 0;">🎉 You're in! Check your email for confirmation.</p>
+    </div>
+    
+    <!-- BŁĄD -->
+    <div id="error-msg" style="display: none; margin-top: 25px; padding: 20px; background: rgba(254, 178, 178, 0.1); border-radius: 10px; border-left: 4px solid #FC8181; text-align: center;">
+        <p style="color: #9B2C2C; font-weight: 600; margin: 0;" id="error-text">Error</p>
+    </div>
+    
+    <p style="text-align: center; color: #a0aec0; font-size: 0.9rem; margin-top: 30px;">
+        🔒 <strong>Your privacy first:</strong> We never share emails. No spam. GDPR compliant.
+    </p>
+</div>
 
-    // --- RÓŻOWY PRZYCISK CTA ---
-    var btn = document.querySelector('a[href*="#"], .button, button');
-    if (btn) { btn.style.backgroundColor = buttonColor; btn.style.borderColor = buttonColor; }
+<script>
+// Konfiguracja
+const CONFIG = {
+    SCRIPT_URL: 'https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID/exec' // TU WKLEJ SWÓJ URL
+};
+
+// Inicjalizacja
+document.addEventListener('DOMContentLoaded', function() {
+    // Wykryj kraj
+    fetch('https://ipapi.co/json/')
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('user-country').value = data.country_code || 'XX';
+        })
+        .catch(() => {
+            document.getElementById('user-country').value = 'XX';
+        });
+    
+    // Obsługa formularza
+    const form = document.getElementById('aegisens-private-waitlist');
+const submitBtn = document.getElementById('submit-btn');
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('waitlist-email').value.trim();
+        const influencer = document.getElementById('influencer-code').value.trim();
+        const country = document.getElementById('user-country').value;
+        
+        // Walidacja
+        if (!email || !email.includes('@')) {
+            showError('Please enter a valid email address.');
+            return;
+        }
+        
+        // Przygotuj dane
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('influencer', influencer);
+        formData.append('country', country);
+        formData.append('source', 'aegisens_website');
+        
+        // Zablokuj przycisk
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.style.opacity = '0.7';
+        
+        try {
+            // Wyślij do Google Apps Script
+            const response = await fetch(CONFIG.SCRIPT_URL, {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (response.ok) {
+                // Sukces
+                form.style.display = 'none';
+                document.getElementById('success-msg').style.display = 'block';
+                
+                // Aktualizuj licznik
+                updateCounter();
+            } else {
+                showError(result.message || 'Submission failed. Try again.');
+            }
+        } catch (error) {
+            showError('Network error. Please check your connection.');
+            console.error('Waitlist error:', error);
+        } finally {
+            // Odblokuj przycisk
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Secure My Spot';
+            submitBtn.style.opacity = '1';
+        }
+    });
 });
+
+// Funkcje pomocnicze
+function showError(message) {
+    const errorDiv = document.getElementById('error-msg');
+    document.getElementById('error-text').textContent = message;
+    errorDiv.style.display = 'block';
+    setTimeout(() => errorDiv.style.display = 'none', 5000);
+}
+
+function updateCounter() {
+    const counter = document.getElementById('aegisens-counter');
+    const current = parseInt(counter.textContent);
+    counter.textContent = current + 1;
+    // Animacja
+    counter.style.transform = 'scale(1.2)';
+    setTimeout(() => counter.style.transform = 'scale(1)', 300);
+}
 </script>
 </body>
 </html>
