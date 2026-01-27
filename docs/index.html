@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1291,48 +1290,184 @@ document.addEventListener('DOMContentLoaded', function() {
     document.head.appendChild(style);
 });
 </script>
-<!-- ===== NAJPROSTSZY FORMULARZ ===== -->
-<div style="max-width: 480px; margin: 40px auto; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(224, 122, 154, 0.1); border: 2px solid #E07A9A; text-align: center;">
-    <h3 style="color: #2d3748; margin-bottom: 10px; font-size: 1.8rem;">✨ Join Our Private Beta</h3>
-    <p style="color: #4a5568; margin-bottom: 30px; font-size: 1.1rem;">Limited spots for health pioneers.</p>
-    
-    <!-- LICZNIK -->
-    <div style="background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); padding: 20px; border-radius: 15px; margin-bottom: 30px; border: 2px dashed #E07A9A;">
-        <div style="font-size: 3rem; font-weight: 800; color: #E07A9A;" id="simple-counter">284</div>
-        <div style="color: #4a5568; font-weight: 600; margin: 10px 0;">pioneers already joined</div>
-        <div style="color: #9F7AEA; font-size: 0.95rem;">
-            First 200 receive a <strong>free personalized insights report</strong>.
+<!-- WAITLIST CARD WITH LIVE COUNTER -->
+            <div class="waitlist-card" id="waitlist">
+                <h3>✨ Join Our Private Beta</h3>
+                <p>Limited spots available for empathetic health pioneers.</p>
+
+                <!-- LIVE COUNTER -->
+                <div class="counter-container">
+                    <div class="counter-number" id="waitlist-counter">284</div>
+                    <div class="counter-label">pioneers already joined</div>
+                    <div class="counter-incentive">
+                        <i class="fas fa-gift"></i> First 200 receive a <strong>free personalized insights report</strong>.
+                    </div>
+                </div>
+
+                <!-- WAITLIST FORM -->
+                <form id="waitlist-form" onsubmit="event.preventDefault(); handleWaitlistSubmit();">
+                    <input type="email" name="email" placeholder="Your email" id="waitlist-email">
+<button onclick="submitWaitlist()">Secure My Spot</button>
+                </form>
+                <p class="form-note">✅ No spam. 🔒 Privacy-first. Unsubscribe anytime.</p>
+            </div>
         </div>
+    </section>
+
+    <!-- VIDEO DEMO PLACEHOLDER -->
+    <section id="demo-placeholder" class="section">
+        <div class="container">
+            <div class="demo-icon"><i class="fas fa-video"></i></div>
+            <h2>See Aegisens in Action</h2>
+            <p class="demo-placeholder-text">Our 60-second demo video is coming soon. It will show you exactly how our AI predicts your "Vulnerable Day" and offers empathetic guidance.</p>
+            <p><em>Check back here in the next 24 hours!</em></p>
+        </div>
+    </section>
+
+    <!-- VISION SECTION -->
+    <section id="vision" class="section">
+        <div class="container">
+            <h2>🚀 The Aegisens Vision</h2>
+            <div class="vision-grid">
+                <div class="vision-card">
+                    <div class="vision-icon">🍲</div>
+                    <!-- UPDATED HEADLINE -->
+                    <h3>Hormonal Harmony: support through menstruation, perimenopause, menopause and beyond.</h3>
+                    <p>Personalized support for women's health through every life stage.</p>
+                    <div class="launch-tag">Launch: Q4 2026</div>
+                </div>
+                <div class="vision-card">
+                    <div class="vision-icon">👥</div>
+                    <h3>Health Community</h3>
+                    <p>Connect with people sharing similar health journeys. Exchange experiences and support.</p>
+                    <div class="launch-tag">Launch: Q3 2026</div>
+                </div>
+                <div class="vision-card">
+                    <div class="vision-icon">🌸</div>
+                    <h3>AI-Powered Nutrition</h3>
+                    <p>Meals tailored to your real-time health needs, delivered when you need them most.</p>
+                    <div class="launch-tag">Launch: Q2 2026</div>
+                </div>
+            </div>
+            <p style="text-align: center; color: #a0aec0; margin-top: 2rem; font-style: italic;">
+                Future feature: Verified restaurants + AI = meals tailored to YOUR health needs
+                <p style="text-align: center; color: #9bc8d6; margin-top: 1.5rem; font-size: 1.05rem; font-weight: 500;">
+    A platform for understanding your body's unique language, <span style="color: #ffb8d9;">starting with hormonal health.</span>
+</p>
+            </p>
+        </div>
+    </section>
+
+    <!-- FOUNDER SECTION -->
+    <section id="founder" class="founder-section">
+        <div class="container founder-container">
+            <div class="founder-image">
+                <div class="avatar" style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden;">
+                <img src="/image/founder.jpg" alt="Aegisens Founder" 
+                     style="width: 100%; height: 105%; object-fit: cover;">
+            </div>
+                <h3>Kati</h3>
+                <p style="color: #ffb8d9;">Founder & Vision Keeper</p>
+            </div>
+            <div class="founder-info">
+                <h3>Meet Your Guide</h3>
+                <div class="title">The Heart Behind Aegisens</div>
+<div class="founder-bio">
+                    <p>Hello, I'm Kati. For over a decade, I've navigated the complex intersection of health and technology, witnessing firsthand how data often overshadows the human story.</p>
+                    <p>Aegisens was born from a simple, powerful truth: health is not a metric to be tracked, but a rhythm to be understood. It's the fusion of my professional journey in health-tech and a personal mission to build technology that doesn't just collect data, but truly listens—to your voice, your body's whispers, and your life's phases.</p>
+                    <p>My role here is not just as a founder, but as your partner and the guardian of our core promise: to create a space where you are sensed, not just scanned. Where technology empowers with empathy, guiding you through every changing day so you never have to figure it out alone.</p>
+                    <p>The technology behind this vision is built by a former Google Health AI lead, with decades of experience in making systems not just smart, but deeply perceptive to human nuance.</p>
+    <p>This is more than an app; it's a new way of being with yourself. I'm here to build it with you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-links">
+            <a href="mailto:aegisenshealth@gmail.com">Contact</a>
+            <a href="privacy-policy.html">Privacy</a>
+            <a href="terms-of-service.html">Terms</a>
+        </div>
+        <p>© 2025 Aegisens. "Health That Senses You" – All visions reserved.</p>
+        <p style="font-size: 0.9rem; margin-top: 1rem; color: #718096;">Stealth mode. Building the future with care.</p>
     </div>
-    
-    <!-- GOOGLE FORM -->
-    <iframe 
-        src="https://docs.google.com/forms/d/e/1FAIpQLSeWng0uphZw6B0JWFPLl5JuS5tdwQpqd-enyjgmhlV1bwztTw/viewform?embedded=true"
-        height="500" 
-        frameborder="0" 
-        marginheight="0" 
-        marginwidth="0"
-        style="border-radius: 10px; border: 2px solid #E07A9A;">
-        Ładuję…
-    </iframe>
-    
-    <p style="color: #a0aec0; font-size: 0.9rem; margin-top: 25px;">
-        ✅ No spam. 🔒 Privacy-first. You'll receive a confirmation.
-    </p>
-</div>
+</footer>
 
 <script>
-// Prosty licznik
+// =================== KONFIGURACJA ===================
+var targetEmail = 'aegisenshealth@gmail.com';
+var buttonColor = '#E07A9A';
+var toastDuration = 10000; // 10 SEKUND (by przeczytać)
+
+// =================== FUNKCJA TOAST ===================
+function showAegisensToast(userEmail) {
+    var namePart = userEmail.split('@')[0];
+    var friendlyName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+    var toastHTML = '<div id="aegisensToast" style="position:fixed; top:30px; right:30px; z-index:10000; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; padding:20px 25px; border-radius:16px; max-width:350px; box-shadow:0 10px 30px rgba(0,0,0,0.15); font-family:-apple-system, BlinkMacSystemFont, sans-serif; border-left:5px solid ' + buttonColor + '; transform:translateX(400px); opacity:0; transition:transform 0.5s, opacity 0.5s;"><div style="font-size:18px; font-weight:bold; margin-bottom:5px;"><span style="margin-right:10px;">🫀</span> Got it, ' + friendlyName + '!</div><div style="font-size:14px; line-height:1.5;">Your spot is secure. <strong>Welcome to the health revolution.</strong><br><br><em>Test confirmation sent. Real invites: Jan 2!</em></div><div style="margin-top:12px; font-size:12px; opacity:0.7; border-top:1px solid rgba(255,255,255,0.2); padding-top:8px;">With care, The Aegisens Team</div></div>';
+    var tempDiv = document.createElement('div');
+    tempDiv.innerHTML = toastHTML;
+    document.body.appendChild(tempDiv.firstChild);
+    var toastEl = document.getElementById('aegisensToast');
+    setTimeout(function() { toastEl.style.opacity = '1'; toastEl.style.transform = 'translateX(0)'; }, 10);
+    setTimeout(function() { toastEl.style.opacity = '0'; toastEl.style.transform = 'translateX(400px)'; setTimeout(function() { if(toastEl.parentNode) toastEl.parentNode.removeChild(toastEl); }, 500); }, toastDuration); // UŻYWAMY DŁUŻSZEGO CZASU
+}
+
+// =================== OBSŁUGA FORMULARZA ===================
+function handleFormSubmit(event) {
+    event.preventDefault();
+    var emailField = event.target.querySelector('input[type="email"]');
+    var userEmail = emailField.value.trim();
+    if (!userEmail || userEmail.indexOf('@') < 0) { alert('Please enter a valid email.'); return false; }
+    // 1. POKAŻ TOAST
+    showAegisensToast(userEmail);
+    // 2. WYŚLIJ TEST MAIL
+    var formData = new FormData();
+    formData.append('user_email', userEmail);
+    formData.append('target_email', targetEmail);
+    fetch('https://formsubmit.co/ajax/' + targetEmail, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } }).then(function(r) { return r.json(); }).then(function(data) { console.log('Test email sent to Aegisens inbox.'); }).catch(function(e) { console.warn('Test email failed (but form worked). OK for test.'); });
+    // 3. WYCZYŚĆ POLE
+    emailField.value = '';
+    return false;
+}
+
+// =================== START PO ZAŁADOWANIU STRONY ===================
 document.addEventListener('DOMContentLoaded', function() {
-    const counter = document.getElementById('simple-counter');
-    let count = 284;
-    
-    setInterval(() => {
-        count += Math.floor(Math.random() * 2) + 1;
-        counter.textContent = count;
-        counter.style.transform = 'scale(1.1)';
-        setTimeout(() => counter.style.transform = 'scale(1)', 300);
-    }, 30000);
+    // --- LIVE COUNTER z tekstem "waitlist growing daily" ---
+    var counterNum = document.getElementById('waitlist-counter');
+    var counterLab = document.querySelector('.counter-label');
+    if (counterNum && counterLab) {
+        var count = 284;
+        counterNum.textContent = count + '+';
+        counterLab.innerHTML = 'pioneers joined – <strong style="color:' + buttonColor + '">waitlist growing daily!</strong>';
+        setInterval(function() { count += Math.floor(Math.random() * 3) + 1; counterNum.textContent = count + '+'; }, 30000);
+    }
+
+    // --- DODANIE NAGŁÓWKA "JOIN NOW!" NAD FORMULARZEM ---
+    // Szukamy kontenera formularza (może być div z klasą .ml-form-embedContent lub rodzic form)
+    var formContainer = document.querySelector('.ml-form-embedContent, form#waitlist-form, form[action*="formsubmit"]');
+if (formContainer) {
+        var joinNowHeader = document.createElement('div');
+        joinNowHeader.innerHTML = '<div style="text-align: center; margin-bottom: 20px; font-size: 1.5rem; font-weight: 800; color: ' + buttonColor + '; text-transform: uppercase; letter-spacing: 1px;">Join Now!</div>';
+        // Wstawiamy nagłówek przed formularzem
+        formContainer.parentNode.insertBefore(joinNowHeader, formContainer);
+        console.log('Aegisens: "JOIN NOW!" header added.');
+    }
+
+    // --- PODŁĄCZENIE FORMULARZA ---
+    var form = document.getElementById('waitlist-form'); // ZMIEŃ ID TUTAJ JEŚLI TRZEBA!
+    if (form) {
+        form.addEventListener('submit', handleFormSubmit);
+        console.log('Aegisens Test Form: Ready! Emails to:', targetEmail);
+    } else {
+        console.warn('Aegisens Test Form: Form not found. Current ID: waitlist-form');
+    }
+
+    // --- RÓŻOWY PRZYCISK CTA ---
+    var btn = document.querySelector('a[href*="#"], .button, button');
+    if (btn) { btn.style.backgroundColor = buttonColor; btn.style.borderColor = buttonColor; }
 });
 </script>
 </body>
