@@ -174,42 +174,34 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
-.nav a {
-    color: #ffffff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.nav a:hover {
-    color: #ffb8d9;
-}
-
-/* Przyciski Log In / Register */
 .nav-buttons {
     display: flex;
     gap: 0.75rem;
+    margin-left: auto; /* wypycha na prawo na desktop */
 }
 
-.nav-btn {
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    background: transparent;
-    color: #ffffff;
-    white-space: nowrap;
-}
-
-.nav-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
+@media (max-width: 768px) {
+    .header .container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .nav {
+        order: 2; /* nawigacja na dole */
+        margin-top: 1rem;
+        justify-content: center;
+    }
+    
+    .nav-buttons {
+        order: 1; /* przyciski na górze */
+        margin-left: 0;
+        margin-bottom: 1rem;
+        justify-content: center;
+        width: 100%;
+    }
 }
 
 
