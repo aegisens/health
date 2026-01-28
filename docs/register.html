@@ -131,139 +131,80 @@
             color: #E07A9A;
             font-weight: 600;
             text-decoration: none;
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join Beta | Aegisens</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: #2d3748;
-            background-color: #f7fafc;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        .header {
+}
+        .footer-links {
             text-align: center;
-            margin-bottom: 50px;
+            margin-top: 60px;
+            color: #a0aec0;
+            font-size: 0.9rem;
         }
-        .logo {
-            font-size: 2.2rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, #E07A9A, #9F7AEA);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-        .tagline {
-            font-size: 1.2rem;
-            color: #4a5568;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            align-items: center;
-        }
-        @media (max-width: 768px) {
-            .content { grid-template-columns: 1fr; }
-        }
-        .left-panel {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.07);
-            border: 1px solid #e2e8f0;
-        }
-        .right-panel {
-            padding: 20px;
-        }
-        h1 {
-            color: #1a202c;
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-        .highlight {
-            background: linear-gradient(135deg, rgba(224, 122, 154, 0.08) 0%, rgba(159, 122, 234, 0.08) 100%);
-            border-left: 4px solid #E07A9A;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 25px 0;
-        }
-        .benefits-list {
-            list-style: none;
-            padding: 0;
-        }
-        .benefits-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid #edf2f7;
-            display: flex;
-            align-items: center;
-        }
-        .benefits-list li:last-child {
-            border-bottom: none;
-        }
-        .benefits-list li:before {
-            content: "✓";
-            color: #68D391;
-            font-weight: bold;
-            margin-right: 15px;
-            font-size: 1.2rem;
-        }
-        .waitlist-form {
-            margin-top: 30px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        input[type="email"] {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: border 0.3s;
-        }
-        input[type="email"]:focus {
-            outline: none;
-            border-color: #9F7AEA;
-        }
-        .submit-button {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(90deg, #E07A9A, #9F7AEA);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .submit-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(224, 122, 154, 0.3);
-        }
-        .login-link {
-            text-align: center;
-            margin-top: 25px;
-            color: #4a5568;
-        }
-        .login-link a {
+        .footer-links a {
             color: #E07A9A;
-            font-weight: 600;
             text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Aegisens</div>
+            <p class="tagline">Join the beta of the first AI that listens to your body's whispers.</p>
+        </div>
+        
+        <div class="content">
+            <div class="left-panel">
+                <h1>Join the Beta Waitlist</h1>
+                <p>Secure your spot for exclusive early access. We're rolling out invites in waves to ensure the best experience.</p>
+                
+                <div class="highlight">
+                    <strong>🚀 What you'll get as a beta pioneer:</strong>
+                    <ul class="benefits-list" style="margin-top: 15px;">
+                        <li><strong>Exclusive digital badge</strong> as a founding member</li>
+                        <li><strong>Priority access</strong> to all features before public launch</li>
+                        <li>Direct influence on <strong>product roadmap</strong></li>
+                        <li>Invitation to the <strong>private Support Circle</strong></li>
+                        <li>Personalized <strong>health insights report</strong></li>
+                    </ul>
+                </div>
+                
+                <div class="waitlist-form">
+                    <form id="waitlistForm" action="https://formsubmit.co/aegisenshealth@gmail.com" method="POST">
+                        <input type="hidden" name="_subject" value="New Beta Waitlist Signup">
+                        <input type="hidden" name="_template" value="table">
+                        
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="youremail@example.com" required>
+                        </div>
+                        
+                        <button type="submit" class="submit-button">Secure My Beta Spot</button>
+                    </form>
+                    
+                    <div class="login-link">
+                        Already have an invite code? <a href="/login.html">Sign in here</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div style="background: linear-gradient(135deg, rgba(159, 122, 234, 0.05) 0%, rgba(224, 122, 154, 0.05) 100%); padding: 30px; border-radius: 15px; border: 2px dashed #E07A9A;">
+                    <h3 style="color: #2d3748; margin-top: 0;">🧭 How It Works</h3>
+                    <ol style="line-height: 1.8; color: #4a5568;">
+                        <li><strong>Join the waitlist</strong> with your email address.</li>
+                        <li><strong>Receive your unique invitation code</strong> when your turn arrives (we'll email you).</li>
+                        <li><strong>Use your code on the Sign In page</strong> to activate your beta account.</li>
+                        <li><strong>Start your journey</strong> with personalized health insights and community access.</li>
+                    </ol>
+                    <p style="font-style: italic; color: #9F7AEA; margin-top: 20px; font-weight: 500;">
+                        We're building this carefully, with you. Your patience will be rewarded with a truly transformative experience.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-links">
+            <a href="https://aegisens.com">← Back to Home</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
 <a href="/terms-of-service.html">Terms of Service</a>
             <p style="margin-top: 20px;">© 2026 Aegisens. Empathetic AI for your health rhythms.</p>
         </div>
