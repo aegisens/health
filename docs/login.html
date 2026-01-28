@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Aegisens</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background-color: #f7fafc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 440px;
+            padding: 40px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .logo a {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #E07A9A, #9F7AEA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.07);
+            border: 1px solid #e2e8f0;
+        }
+        h1 {
+            color: #1a202c;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        .subtitle {
+            color: #4a5568;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+        .invite-code-box {
+            background: linear-gradient(135deg, rgba(224, 122, 154, 0.08) 0%, rgba(159, 122, 234, 0.08) 100%);
+            border-left: 4px solid #E07A9A;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .invite-code-box h3 {
+            color: #2d3748;
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border 0.3s;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #9F7AEA;
+        }
+        .login-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #E07A9A, #9F7AEA);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 10px;
+        }
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(224, 122, 154, 0.3);
+        }
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            color: #a0aec0;
+            position: relative;
+        }
+        .divider:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+        }
+        .waitlist-cta {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .waitlist-button {
+display: inline-block;
+            padding: 14px 30px;
+            background: transparent;
+            color: #E07A9A;
+            border: 2px solid #E07A9A;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .waitlist-button:hover {
+            background: rgba(224, 122, 154, 0.05);
+        }
+        .footer-links {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+        .footer-links a {
+            color: #E07A9A;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <a href="https://aegisens.com">Aegisens</a>
+        </div>
+        <div class="card">
+            <h1>Welcome Back</h1>
+            <p class="subtitle">Sign in to your Aegisens beta account.</p>
+            
+            <div class="invite-code-box">
+                <h3>🔑 Invitation-Based Access</h3>
+                <p>Beta access is currently invitation-only. If you have received a unique invite code, enter it below.</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="inviteCode">Invitation Code</label>
+                    <input type="text" id="inviteCode" placeholder="e.g., AEGIS-PIONEER-XXXX" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" disabled>
+                    <p style="font-size: 0.85rem; color: #a0aec0; margin-top: 5px;">Password will be set after code validation.</p>
+                </div>
+                
+                <button type="submit" class="login-button">Validate & Continue</button>
+            </form>
+            
+            <div class="divider"><span>Don't have a code yet?</span></div>
+            
+            <div class="waitlist-cta">
+                <p style="color: #4a5568; margin-bottom: 20px;">Join our waitlist to receive your exclusive invitation code when your turn arrives.</p>
+                <a href="/register.html" class="waitlist-button">Join the Waitlist</a>
+            </div>
+        </div>
+        
+        <div class="footer-links">
+            <a href="https://aegisens.com">← Back to Home</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms-of-service.html">Terms</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const code = document.getElementById('inviteCode').value.trim();
+            
+            // Prosta walidacja - w fazie 2 będzie łączyć z bazą kodów
+            if (code.length < 5) {
+                alert('Please enter a valid invitation code.');
+                return;
+            }
+            
+            // Symulacja "sprawdzania kodu"
+            alert('Thank you! Your invitation code is being validated.\n\nFor now, beta access is rolling out in waves. If your code is valid, you will receive password setup instructions via email shortly.\n\nContinue building your health story with us.');
+            // W fazie 2: tutaj będzie przekierowanie do właściwej rejestracji
+        });
+    </script>
+</body>
+</html>
