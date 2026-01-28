@@ -172,39 +172,142 @@
         /* ===== NAVIGATION BUTTONS ===== */
 .nav {
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-end; /* WSZYSTKO DO PRAWEJ */
     gap: 1rem;
+    width: 100%;
 }
 
+/* Górne linki - ZAWSZE W JEDNEJ LINII */
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: flex-end; /* do prawej */
+    width: 100%;
+    flex-wrap: nowrap; /* ZAPOBIEGA ZŁAMANIU NA NOWĄ LINIĘ */
+}
+
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    white-space: nowrap; /* ZAPOBIEGA ŁAMANIU TEKSTU */
+}
+
+.nav-links a:hover {
+    color: #ffb8d9;
+}
+
+/* Dolne przyciski - też do prawej */
 .nav-buttons {
     display: flex;
     gap: 0.75rem;
-    margin-left: auto; /* wypycha na prawo na desktop */
+    justify-content: flex-end; /* do prawej */
+    width: 100%;
 }
 
+.nav-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-    .header .container {
-        flex-direction: column;
+    .nav {
         align-items: stretch;
     }
     
-    .nav {
-        order: 2; /* nawigacja na dole */
-        margin-top: 1rem;
-        justify-content: center;
+    .nav-links {
+        /* NA TELEFONIE TEŻ W JEDNEJ LINII */
+        flex-wrap: wrap; /* pozwala na zawijanie jeśli nie ma miejsca */
+        justify-content: center; /* wyśrodkowanie na telefonie */
+        gap: 1rem; /* mniejszy gap na telefonie */
+    }
+    
+    .nav-links a {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        text-align: center;
     }
     
     .nav-buttons {
-        order: 1; /* przyciski na górze */
-        margin-left: 0;
-        margin-bottom: 1rem;
-        justify-content: center;
-        width: 100%;
+        justify-content: center; /* na telefonie wyśrodkowane */
+        margin-top: 0.5rem;
+    }
+    
+    .nav-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        max-width: 140px;
     }
 }
 
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .nav {
+        align-items: stretch;
+    }
+    
+    .nav-links {
+        /* NA TELEFONIE TEŻ W JEDNEJ LINII */
+        flex-wrap: wrap; /* pozwala na zawijanie jeśli nie ma miejsca */
+        justify-content: center; /* wyśrodkowanie na telefonie */
+        gap: 1rem; /* mniejszy gap na telefonie */
+    }
+    
+    .nav-links a {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+    
+    .nav-buttons {
+        justify-content: center; /* na telefonie wyśrodkowane */
+        margin-top: 0.5rem;
+    }
+    
+    .nav-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        max-width: 140px;
+    }
+}
 
+/* Dla bardzo małych ekranów */
+@media (max-width: 480px) {
+    .nav-links {
+        gap: 0.5rem; /* jeszcze mniejszy odstęp */
+    }
+    
+    .nav-links a {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+    
+    .nav-buttons {
+        gap: 0.5rem;
+    }
+    
+    .nav-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        max-width: 120px;
+    }
+}
         /* ===== VIDEO DEMO PLACEHOLDER ===== */
         #demo-placeholder {
             text-align: center; padding: 3rem; margin-top: 3rem;
