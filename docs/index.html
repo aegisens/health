@@ -175,13 +175,14 @@
     flex-direction: column;
     align-items: flex-end; /* WSZYSTKO DO PRAWEJ */
     gap: 0.75rem;
+    padding-right: 20px; /* MARGINES DLA DESKTOP */
 }
 
 /* Górne linki - w jednej linii do prawej */
 .nav-links {
     display: flex;
     gap: 1.5rem;
-    justify-content: flex-end; /* do prawej */
+    justify-content: flex-end;
 }
 
 .nav-links a {
@@ -195,11 +196,11 @@
     color: #ffb8d9;
 }
 
-/* Dolne przyciski - też w jednej linii do prawej */
+/* Linia 2: Log In, Register - w jednej linii do prawej */
 .nav-buttons {
     display: flex;
     gap: 0.75rem;
-    justify-content: flex-end; /* do prawej */
+    justify-content: flex-end;
 }
 
 .nav-btn {
@@ -221,27 +222,49 @@
     transform: translateY(-2px);
 }
 
+/* Linia 3: INSTINCT SHOP - w nowej linii do prawej */
+.nav-shop {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 0.25rem;
+}
+
+.shop-btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ffb8d9, #a3bffa);
+    color: white;
+    border: none;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+}
+
+.shop-btn:hover {
+    background: linear-gradient(135deg, #ffa0cf, #8fabf8);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 184, 217, 0.3);
+}
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
     .nav {
-        align-items: flex-end; /* całość do prawej */
-        padding-right: 1rem; 
+        align-items: flex-end;
         width: 100%;
+        padding-right: 15px; /* WIĘKSZY MARGINES NA TELEFONIE */
     }
     
     /* NA TELEFONIE TEŻ W JEDNEJ LINII (ale mogą się zawijać) */
-    @media (max-width: 768px) {
-    .nav {
-        padding-right: 1rem;  /* GŁÓWNE ROZWIĄZANIE */
-        width: 100%;
-    }
-    
     .nav-links {
         flex-wrap: wrap;
         justify-content: flex-end;
-        gap: 0.75rem;
-        padding-right: 0.5rem;
+        gap: 1rem;
+        width: 100%;
+        padding-right: 5px; /* dodatkowy margines */
     }
     
     .nav-links a {
@@ -253,13 +276,27 @@
         justify-content: flex-end;
         width: 100%;
         margin-top: 0.5rem;
+        padding-right: 5px;
     }
     
     .nav-btn {
         padding: 8px 16px;
         font-size: 0.9rem;
     }
+    
+    .nav-shop {
+        justify-content: flex-end;
+        margin-top: 0.5rem;
+        padding-right: 5px;
+    }
+    
+    .shop-btn {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+        margin-right: 0; /* usunięcie domyślnego marginesu */
+    }
 }
+
 
         /* ===== VIDEO DEMO PLACEHOLDER ===== */
         #demo-placeholder {
@@ -540,7 +577,12 @@ a.logo .logo-text-content .slogan {
         <a href="login.html" class="nav-btn login-btn" target="_blank">Log In</a>
         <a href="register.html" class="nav-btn register-btn" target="_blank">Register</a>
     </div>
+
+                <div class="nav-shop">
+        <a href="instinct.html" class="shop-btn" target="_blank">INSTINCT SHOP</a>
+    </div>
 </nav>
+
         </div>
     </header>
 
