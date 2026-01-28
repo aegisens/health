@@ -195,9 +195,6 @@
 .nav-links a:hover {
     color: #ffb8d9;
 }
-.login-button, .register-button {
-    display: none;
-}
 /* Linia 2: Log In, Register - w jednej linii do prawej */
 .nav-buttons {
     display: flex;
@@ -217,7 +214,10 @@
     color: #ffffff;
     white-space: nowrap;
 }
-
+.nav-btn.login-button, 
+.nav-btn.register-button {
+    display: none;
+}
 .nav-btn:hover {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.5);
