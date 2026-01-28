@@ -1473,95 +1473,169 @@ document.addEventListener('DOMContentLoaded', function() {
         setInterval(function() {
             count += Math.floor(Math.random() * 3) + 1;
             counterNum.textContent = count + '+';
+            // Animacja
+            counterNum.style.transform = 'scale(1.1)';
+            setTimeout(() => counterNum.style.transform = 'scale(1)', 300);
         }, 30000);
     }
 
     // === "JOIN NOW!" HEADER ABOVE FORM ===
-    const formContainer = document.querySelector('.ml-form-embedContent, form#waitlist-form, form[action*="formsubmit"], form[action*="formspree"], form[action*="script.google"]');
+    // Szukamy rzeczywistego formularza
+    const waitlistForm = document.getElementById('waitlist-form') || 
+                         document.querySelector('form[action*="formsubmit"]') ||
+                         document.querySelector('form[action*="google"]');
     
-    if (formContainer && !document.querySelector('.aegisens-join-header')) {
+    if (waitlistForm && !document.querySelector('.aegisens-join-header')) {
         const joinNowHeader = document.createElement('div');
         joinNowHeader.className = 'aegisens-join-header';
-        joinNowHeader.innerHTML = '<div style="text-align: center; margin-bottom: 20px; font-size: clamp(1.2rem, 4vw, 1.5rem); font-weight: 800; color: ' + buttonColor + '; text-transform: uppercase; letter-spacing: 1px; line-height: 1.2;">Join Now!</div>';
-        formContainer.parentNode.insertBefore(joinNowHeader, formContainer);
+        joinNowHeader.innerHTML = '<div style="text-align: center; margin-bottom: 20px; font-size: 1.5rem; font-weight: 800; color: ' + buttonColor + '; text-transform: uppercase; letter-spacing: 1px;">Join Now!</div>';
+        waitlistForm.parentNode.insertBefore(joinNowHeader, waitlistForm);
         console.log('✅ Aegisens: "JOIN NOW!" header added.');
     }
 
-    // === RESPONSIVE FORM HANDLER ===
-    const form = document.getElementById('waitlist-form');
+    // === FORM HANDLER - POPRAWIONY ===
+    // Szukamy formularza do obsługi
+    const form = document.getElementById('waitlist-form') || 
+                 document.querySelector('form[action*="formsubmit"]') ||
+                 document.querySelector('form[action*="https://script.google.com"]');
+    
     if (form) {
-        form.addEventListener('submit', async function(e) {
+        console.log('✅ Found form:', form.action);
+        
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             
             const btn = form.querySelector('button[type="submit"]');
-            const msg = document.getElementById('form-message') || document.createElement('div');
+            if (!btn) return;
             
-            if (!msg.parentNode) {
-                msg.className = 'form-message';
-                msg.style.cssText = 'margin-top: 10px; font-size: 0.9rem; min-height: 20px;';
-                form.appendChild(msg);
-            }
+            // Sprawdzamy czy to FormSubmit.co
+            const isFormSubmit = form.action.includes('formsubmit.co');
+            const isGoogleScript = form.action.includes('script.google.com');
             
             // Loading state
-            const originalBtn = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            const originalText = btn.textContent || btn.innerHTML;
+            btn.innerHTML = '⏳ Processing...';
             btn.disabled = true;
-            msg.innerHTML = '';
             
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: new FormData(form)
-                });
-                
-                if (response.ok) {
-                    msg.innerHTML = '✅ <strong>Thank you!</strong><br>You\'re on the waitlist. Check your email.';
-                    msg.style.color = '#10B981';
-                    
-                    // Reset form & increment counter
-                    form.reset();
+            // Jeśli to FormSubmit - wysyłamy normalnie
+            if (isFormSubmit) {
+                // FormSubmit nie potrzebuje fetch - form działa natywnie
+                // Ale dodajemy opóźnienie dla UX
+                setTimeout(() => {
+                    // Inkrementuj licznik
                     if (counterNum) {
-                        let currentCount = parseInt(counterNum.textContent) || 284;
-                        counterNum.textContent = (currentCount + 1) + '+';
+                        const current = parseInt(counterNum.textContent) || 284;
+                        counterNum.textContent = (current + 1) + '+';
                     }
+                    
+                    // Pokaż sukces
+                    showMessage('✅ Added to waitlist! Check your email.', 'success', form);
+                    
+                    // Przywróć przycisk po 2 sekundach
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }, 2000);
+                }, 1000);
+                
+                // Pozwól formularzowi wysłać się normalnie
+                return true;
+            }
+            
+            // Jeśli to Google Apps Script - obsługujemy przez nowe okno
+            if (isGoogleScript) {
+                // Pobierz email z formularza
+                const emailInput = form.querySelector('input[type="email"]');
+                const email = emailInput ? emailInput.value : '';
+                
+                if (email && email.includes('@')) {
+                    // Otwórz w nowym oknie
+                    window.open(form.action + '?email=' + encodeURIComponent(email), '_blank');
+                    
+                    // Sukces po 1 sekundzie
+                    setTimeout(() => {
+                        if (counterNum) {
+                            const current = parseInt(counterNum.textContent) || 284;
+                            counterNum.textContent = (current + 1) + '+';
+                        }
+                        showMessage('✅ Successfully added!', 'success', form);
+                        
+                        // Wyczyść formularz
+                        form.reset();
+                        
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }, 1000);
                 } else {
-                    throw new Error('Server response not OK');
+                    showMessage('❌ Please enter a valid email', 'error', form);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
                 }
-            } catch (error) {
-                msg.innerHTML = '❌ Error. Please try again.';
-                msg.style.color = '#EF4444';
-                console.error('Form submit error:', error);
-            } finally {
-                btn.innerHTML = originalBtn;
-                btn.disabled = false;
-                // Clear message after 5s
-                setTimeout(() => { 
-                    if (msg.innerHTML.includes('Thank you')) msg.innerHTML = ''; 
-                }, 5000);
             }
         });
+    } else {
+        console.warn('⚠️ No form found on page');
+    }
+
+    // === FUNKCJE POMOCNICZE ===
+    function showMessage(text, type, formElement) {
+        // Usuń poprzednie komunikaty
+        const oldMsg = formElement.querySelector('.form-message');
+        if (oldMsg) oldMsg.remove();
+        
+        // Stwórz nowy komunikat
+        const msg = document.createElement('div');
+        msg.className = 'form-message';
+        msg.innerHTML = text;
+        msg.style.cssText = `
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            ${type === 'success' ? 
+                'background: #d4edda; color: #155724; border: 1px solid #c3e6cb;' : 
+                'background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;'}
+        `;
+        
+        formElement.appendChild(msg);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (msg.parentNode) {
+                msg.style.opacity = '0';
+                msg.style.transition = 'opacity 0.5s';
+                setTimeout(() => msg.remove(), 500);
+            }
+        }, 5000);
     }
 
     // === RESPONSIVE FORM WIDTH FIX ===
     function adjustFormWidth() {
-        const forms = document.querySelectorAll('form#waitlist-form, .waitlist-card form');
+        const forms = document.querySelectorAll('#waitlist-form, form[action*="formsubmit"], .waitlist-card form');
         forms.forEach(form => {
             form.style.maxWidth = '100%';
             form.style.width = '100%';
             
+            // Ustaw szerokość inputów na 100%
             const inputs = form.querySelectorAll('input, textarea, select');
             inputs.forEach(input => {
                 input.style.width = '100%';
                 input.style.boxSizing = 'border-box';
                 input.style.padding = '12px 16px';
+                input.style.marginBottom = '10px';
             });
             
-            const btns = form.querySelectorAll('button[type="submit"]');
-            btns.forEach(btn => {
-                btn.style.width = '100%';
-                btn.style.padding = '14px 20px';
-                btn.style.boxSizing = 'border-box';
-            });
+            // Ustaw szerokość przycisku
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.style.width = '100%';
+                submitBtn.style.padding = '14px 20px';
+                submitBtn.style.boxSizing = 'border-box';
+                submitBtn.style.fontWeight = 'bold';
+            }
         });
     }
     
@@ -1571,7 +1645,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Re-apply on window resize
     window.addEventListener('resize', adjustFormWidth);
     
-    console.log('✅ Aegisens script loaded: Counter + Form + Responsive fixes');
+    console.log('✅ Aegisens script loaded successfully');
 });
 <script>
 </body>
