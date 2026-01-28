@@ -230,11 +230,17 @@
     }
     
     /* NA TELEFONIE TEŻ W JEDNEJ LINII (ale mogą się zawijać) */
-    .nav-links {
-        flex-wrap: wrap; /* pozwala na zawijanie */
-        justify-content: flex-end;
-        gap: 1rem;
+    @media (max-width: 768px) {
+    .nav {
+        padding-right: 1rem;  /* GŁÓWNE ROZWIĄZANIE */
         width: 100%;
+    }
+    
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        padding-right: 0.5rem;
     }
     
     .nav-links a {
