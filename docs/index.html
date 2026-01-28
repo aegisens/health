@@ -1456,73 +1456,123 @@ function handleFormSubmit(event) {
     return false;
 }
 
-// =================== START PO ZAŁADOWANIU STRONY ===================
+// =================== AEGISENS WAITLIST COUNTER & FORM SCRIPT ===================
 document.addEventListener('DOMContentLoaded', function() {
-    // --- LIVE COUNTER z tekstem "waitlist growing daily" ---
-    var counterNum = document.getElementById('waitlist-counter');
-    var counterLab = document.querySelector('.counter-label');
+    const buttonColor = '#B87333'; // Zgodne z Twoim designem
+    
+    // === LIVE COUNTER (284+ stays) ===
+    const counterNum = document.getElementById('waitlist-counter') || document.getElementById('live-counter');
+    const counterLab = document.querySelector('.counter-label');
+    
     if (counterNum && counterLab) {
-        var count = 284;
+        let count = 284;
         counterNum.textContent = count + '+';
         counterLab.innerHTML = 'pioneers joined – <strong style="color:' + buttonColor + '">waitlist growing daily!</strong>';
-        setInterval(function() { count += Math.floor(Math.random() * 3) + 1; counterNum.textContent = count + '+'; }, 30000);
+        
+        // Increment every 30 seconds
+        setInterval(function() {
+            count += Math.floor(Math.random() * 3) + 1;
+            counterNum.textContent = count + '+';
+        }, 30000);
     }
 
-    // --- DODANIE NAGŁÓWKA "JOIN NOW!" NAD FORMULARZEM ---
-    // Szukamy kontenera formularza (może być div z klasą .ml-form-embedContent lub rodzic form)
-    var formContainer = document.querySelector('.ml-form-embedContent, form#waitlist-form, form[action*="formsubmit"]');
-if (formContainer) {
-        var joinNowHeader = document.createElement('div');
-        joinNowHeader.innerHTML = '<div style="text-align: center; margin-bottom: 20px; font-size: 1.5rem; font-weight: 800; color: ' + buttonColor + '; text-transform: uppercase; letter-spacing: 1px;">Join Now!</div>';
-        // Wstawiamy nagłówek przed formularzem
-        formContainer.parentNode.insertBefore(joinNowHeader, formContainer);
-        console.log('Aegisens: "JOIN NOW!" header added.');
-    }
-
-    // --- PODŁĄCZENIE FORMULARZA ---
-    <script>
-// Licznik (symulacja)
-function updateCounter() {
-  const counter = document.getElementById('live-counter');
-  let count = parseInt(counter.textContent);
-  counter.textContent = count + 1;
-}
-setInterval(updateCounter, 10000);
-
-// Formularz handler
-document.getElementById('waitlist-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  const form = this;
-  const btn = form.querySelector('button');
-  const msg = document.getElementById('form-message');
-  
-  // Loading
-  const originalBtn = btn.innerHTML;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Zapisywanie...';
-  btn.disabled = true;
-  
-  try {
-    const response = await fetch(form.action, {
-      method: 'POST',
-      body: new FormData(form)
-    });
+    // === "JOIN NOW!" HEADER ABOVE FORM ===
+    const formContainer = document.querySelector('.ml-form-embedContent, form#waitlist-form, form[action*="formsubmit"], form[action*="formspree"], form[action*="script.google"]');
     
-    if (response.ok) {
-      msg.innerHTML = '✅ <strong>Dziękujemy!</strong><br>Jesteś na liście. Sprawdź email.';
-      msg.style.color = '#10B981';
-      form.reset();
-      updateCounter(); // +1 do licznika
+    if (formContainer && !document.querySelector('.aegisens-join-header')) {
+        const joinNowHeader = document.createElement('div');
+        joinNowHeader.className = 'aegisens-join-header';
+        joinNowHeader.innerHTML = '<div style="text-align: center; margin-bottom: 20px; font-size: clamp(1.2rem, 4vw, 1.5rem); font-weight: 800; color: ' + buttonColor + '; text-transform: uppercase; letter-spacing: 1px; line-height: 1.2;">Join Now!</div>';
+        formContainer.parentNode.insertBefore(joinNowHeader, formContainer);
+        console.log('✅ Aegisens: "JOIN NOW!" header added.');
     }
-  } catch (error) {
-    msg.innerHTML = '❌ Błąd. Spróbuj ponownie.';
-    msg.style.color = '#EF4444';
-  } finally {
-    btn.innerHTML = originalBtn;
-    btn.disabled = false;
-    setTimeout(() => { msg.textContent = ''; }, 5000);
-  }
+
+    // === RESPONSIVE FORM HANDLER ===
+    const form = document.getElementById('waitlist-form');
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = form.querySelector('button[type="submit"]');
+            const msg = document.getElementById('form-message') || document.createElement('div');
+            
+            if (!msg.parentNode) {
+                msg.className = 'form-message';
+                msg.style.cssText = 'margin-top: 10px; font-size: 0.9rem; min-height: 20px;';
+                form.appendChild(msg);
+            }
+            
+            // Loading state
+            const originalBtn = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            btn.disabled = true;
+            msg.innerHTML = '';
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form)
+                });
+                
+                if (response.ok) {
+                    msg.innerHTML = '✅ <strong>Thank you!</strong><br>You\'re on the waitlist. Check your email.';
+                    msg.style.color = '#10B981';
+                    
+                    // Reset form & increment counter
+                    form.reset();
+                    if (counterNum) {
+                        let currentCount = parseInt(counterNum.textContent) || 284;
+                        counterNum.textContent = (currentCount + 1) + '+';
+                    }
+                } else {
+                    throw new Error('Server response not OK');
+                }
+            } catch (error) {
+                msg.innerHTML = '❌ Error. Please try again.';
+                msg.style.color = '#EF4444';
+                console.error('Form submit error:', error);
+            } finally {
+                btn.innerHTML = originalBtn;
+                btn.disabled = false;
+                // Clear message after 5s
+                setTimeout(() => { 
+                    if (msg.innerHTML.includes('Thank you')) msg.innerHTML = ''; 
+                }, 5000);
+            }
+        });
+    }
+
+    // === RESPONSIVE FORM WIDTH FIX ===
+    function adjustFormWidth() {
+        const forms = document.querySelectorAll('form#waitlist-form, .waitlist-card form');
+        forms.forEach(form => {
+            form.style.maxWidth = '100%';
+            form.style.width = '100%';
+            
+            const inputs = form.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.style.width = '100%';
+                input.style.boxSizing = 'border-box';
+                input.style.padding = '12px 16px';
+            });
+            
+            const btns = form.querySelectorAll('button[type="submit"]');
+            btns.forEach(btn => {
+                btn.style.width = '100%';
+                btn.style.padding = '14px 20px';
+                btn.style.boxSizing = 'border-box';
+            });
+        });
+    }
+    
+    // Apply responsive fixes
+    adjustFormWidth();
+    
+    // Re-apply on window resize
+    window.addEventListener('resize', adjustFormWidth);
+    
+    console.log('✅ Aegisens script loaded: Counter + Form + Responsive fixes');
 });
-</script>
+
 </body>
 </html>
