@@ -36,7 +36,7 @@ function checkPassword() {
     passwordInput.style.borderColor = '';
     
     // Hasło: 'AegisensStealth2025' (ZMIEN NA SWOJE)
-    if (password === 'AegisensStealth2025') {
+    if (password === "AegisensStealth2025") {
         // UKRYJ login screen
         loginScreen.style.display = 'none';
         
