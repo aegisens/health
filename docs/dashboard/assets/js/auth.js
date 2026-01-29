@@ -25,45 +25,47 @@ function checkPassword() {
     }
     
     // Check password
-    if (inputValue === CORRECT_PASSWORD) {
-        // Successful login
-        loginAttempts = 0;
-        localStorage.removeItem('aegisens_lockout_until');
-        localStorage.setItem('aegisens-authenticated', 'true');
+function checkPassword() {
+    const passwordInput = document.getElementById('passwordInput');
+    const errorMessage = document.getElementById('errorMessage');
+    const loginScreen = document.getElementById('loginScreen');
+    const password = passwordInput.value;
+    
+    // Wyczyść błędy
+    errorMessage.textContent = '';
+    passwordInput.style.borderColor = '';
+    
+    // Hasło: 'aegis2026' (ZMIEN NA SWOJE)
+    if (password === 'aegis2026') {
+        // UKRYJ login screen
+        loginScreen.style.display = 'none';
         
-        // Hide login screen, show dashboard
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('dashboardContainer').classList.add('visible');
+        // POKAŻ dashboard (zakładam że masz <div id="dashboard"> po login-screen)
+        const dashboard = document.getElementById('dashboard');
+        if (dashboard) {
+            dashboard.style.display = 'block';
+        }
         
-        // Trigger event for other scripts
-        window.dispatchEvent(new Event('login-success'));
-        
-        // Save login timestamp
-        localStorage.setItem('aegisens_login_time', Date.now().toString());
+        // Zapisz logowanie
+        localStorage.setItem('aegisensLoggedIn', 'true');
         
     } else {
-        // Failed login
-        loginAttempts++;
-        passwordInput.classList.add('error');
-        errorMessage.textContent = 'Incorrect password. Please try again.';
-        passwordInput.value = '';
-        
-        // Check if max attempts reached
-        if (loginAttempts >= MAX_ATTEMPTS) {
-            const lockoutUntil = Date.now() + LOCKOUT_TIME;
-            localStorage.setItem('aegisens_lockout_until', lockoutUntil.toString());
-            errorMessage.textContent = Too many incorrect attempts. Locked for 30 seconds.;
-            passwordInput.disabled = true;
-            
-            setTimeout(() => {
-                passwordInput.disabled = false;
-                loginAttempts = 0;
-                localStorage.removeItem('aegisens_lockout_until');
-                errorMessage.textContent = '';
-                passwordInput.classList.remove('error');
-                passwordInput.focus();
-            }, LOCKOUT_TIME);
-        }
+        // BŁĄD
+        errorMessage.textContent = '❌ Nieprawidłowe hasło';
+        errorMessage.style.color = '#ff6b6b';
+        passwordInput.style.borderColor = '#ff6b6b';
+        passwordInput.focus();
+    }
+}
+
+// Automatyczne logowanie przy odświeżeniu
+document.addEventListener('DOMContentLoaded', function() {
+    if (localStorage.getItem('aegisensLoggedIn') === 'true') {
+        document.getElementById('loginScreen').style.display = 'none';
+        const dashboard = document.getElementById('dashboard');
+        if (dashboard) dashboard.style.display = 'block';
+    }
+});
         
         // Shake animation
         passwordInput.style.animation = 'none';
