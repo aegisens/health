@@ -35,8 +35,8 @@ function checkPassword() {
     errorMessage.textContent = '';
     passwordInput.style.borderColor = '';
     
-    // Hasło: 'aegis2026' (ZMIEN NA SWOJE)
-    if (password === 'aegis2026') {
+    // Hasło: 'AegisensStealth2025' (ZMIEN NA SWOJE)
+    if (password === 'AegisensStealth2025') {
         // UKRYJ login screen
         loginScreen.style.display = 'none';
         
