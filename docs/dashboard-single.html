@@ -262,7 +262,25 @@
             <div class="error-message" id="errorMessage"></div>
             <button class="login-btn" onclick="checkPassword()">Access Dashboard</button>
         </div>
+        <div class="login-screen" id="loginScreen">
+    <!-- ... pozostały kod ... -->
+    
+    <div class="password-form">
+        <input type="password" class="password-input" id="passwordInput" 
+               placeholder="Enter access password" autocomplete="off">
+        <div class="error-message" id="errorMessage"></div>
         
+        <!-- PRZYCISK z DZIAŁAJĄCĄ FUNKCJĄ -->
+        <button class="login-btn" onclick="
+            const pass = document.getElementById('passwordInput').value;
+            if(pass === "AegisensStealth2025") {
+                window.location.href = 'dashboard/index.html';
+            } else {
+                alert('Wrong password!');
+                document.getElementById('passwordInput').value = '';
+            }
+        ">Access Dashboard</button>
+    </div>
         <p style="color: #A0AEC0; margin-top: 25px; font-size: 0.9rem;">
             For access: <a href="mailto:hello@aegisens.com" style="color: #9F7AEA;">hello@aegisens.com</a>
         </p>
