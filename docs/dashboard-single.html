@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aegisens Dashboard | Hormonal Intelligence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #FEF7F0;
+            color: #2D3748;
+            line-height: 1.6;
+        }
+        
+        /* ===== LOGIN SCREEN ===== */
+        .login-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #fef7f0 0%, #ffe9e9 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .login-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #E07A9A, #9F7AEA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .login-title {
+            font-size: 2rem;
+            color: #2D3748;
+            margin-bottom: 10px;
+        }
+        .login-subtitle {
+            color: #718096;
+            max-width: 500px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .password-form {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(224, 122, 154, 0.15);
+            width: 100%;
+            max-width: 400px;
+        }
+        .password-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #E2E8F0;
+            border-radius: 50px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            font-family: 'Inter', sans-serif;
+        }
+        .password-input:focus {
+            outline: none;
+            border-color: #9F7AEA;
+        }
+        .login-btn {
+            background: linear-gradient(90deg, #E07A9A, #9F7AEA);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.3s;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+        .error-message {
+            color: #FC8181;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+        
+        /* ===== DASHBOARD (hidden until login) ===== */
+        .dashboard-container {
+            display: none;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #E2E8F0;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #E07A9A, #9F7AEA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .user-greeting h1 {
+		font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(224, 122, 154, 0.08);
+            border: 1px solid #E2E8F0;
+            margin-bottom: 25px;
+        }
+        .card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Recipes Grid */
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .recipe-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #E2E8F0;
+            transition: all 0.3s;
+        }
+        .recipe-card:hover {
+            border-color: #E07A9A;
+            transform: translateY(-3px);
+        }
+        .recipe-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2D3748;
+            margin-bottom: 5px;
+        }
+        .recipe-subtitle {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .recipe-meta {
+            font-size: 0.85rem;
+            color: #A0AEC0;
+            margin-bottom: 10px;
+        }
+        .recipe-twist {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(224, 122, 154, 0.1);
+            color: #E07A9A;
+            display: inline-block;
+        }
+        
+        /* Calendar */
+        .calendar-container {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            border: 2px solid #E2E8F0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+        .calendar-day.today {
+            border-color: #9F7AEA;
+            background: rgba(159, 122, 234, 0.1);
+        }
+        .calendar-layers {
+            display: flex;
+            gap: 2px;
+            margin-top: 5px;
+        }
+        .calendar-layer {
+            width: 8px;
+            height: 4px;
+            border-radius: 2px;
+        }
+        .layer-hormonal { background: #E07A9A; }
+        .layer-histamine { background: #9F7AEA; }
+        .layer-menopause { background: #ED8936; }
+        
+        /* Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .metric-item {
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+        }
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2D3748;
+            margin: 5px 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .recipes-grid {
+                grid-template-columns: 1fr;
+            }
+            .calendar-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-logo">Aegisens</div>
+        <h1 class="login-title">Dashboard Preview</h1>
+		<p class="login-subtitle">Early access to hormonal intelligence platform. Enter password to continue.</p>
+        
+        <div class="password-form">
+            <input type="password" class="password-input" id="passwordInput" placeholder="Enter access password" autocomplete="off">
+            <div class="error-message" id="errorMessage"></div>
+            <button class="login-btn" onclick="checkPassword()">Access Dashboard</button>
+        </div>
+        
+        <p style="color: #A0AEC0; margin-top: 25px; font-size: 0.9rem;">
+            For access: <a href="mailto:hello@aegisens.com" style="color: #9F7AEA;">hello@aegisens.com</a>
+        </p>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard-container" id="dashboardContainer">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="logo">Aegisens Dashboard</div>
+            <div class="user-greeting">
+                <h1>Hello, Anna! 🧚‍♀️</h1>
+                <p style="color: #718096;">Your energy today: <span style="color: #E07A9A; font-weight: 600;">7/10</span></p>
+            </div>
+            <button onclick="logout()" style="padding: 10px 20px; border: 2px solid #E2E8F0; border-radius: 50px; background: transparent; cursor: pointer;">
+                Log Out
+            </button>
+        </header>
+
+        <!-- Main Content -->
+        <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <!-- Left Column -->
+            <div>
+                <!-- Today's Recipes -->
+                <div class="card">
+                    <h2>⚡️ Today's Recipes</h2>
+                    <div class="recipes-grid" id="recipesGrid">
+                        <!-- Recipes loaded by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="card">
+                    <h3>Filter by Twist</h3>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                        <button class="filter-btn" onclick="filterRecipes('all')" style="padding: 8px 16px; border: 2px solid #E2E8F0; border-radius: 20px; background: transparent; cursor: pointer;">🌿 All</button>
+                        <button class="filter-btn" onclick="filterRecipes('spanish')" style="padding: 8px 16px; border: 2px solid #E2E8F0; border-radius: 20px; background: transparent; cursor: pointer;">🇪🇸 Spanish</button>
+                        <button class="filter-btn" onclick="filterRecipes('japanese')" style="padding: 8px 16px; border: 2px solid #E2E8F0; border-radius: 20px; background: transparent; cursor: pointer;">🇯🇵 Japanese</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Calendar -->
+                <div class="card">
+                    <h2>🗓️ Hormonal Calendar</h2>
+                    <div class="calendar-container" id="calendarContainer">
+                        <!-- Calendar loaded by JavaScript -->
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px; font-size: 0.9rem; color: #718096;">
+                        <div style="display: flex; align-items: center; gap: 5px;"><span style="display: inline-block; width: 12px; height: 12px; background: #E07A9A; border-radius: 50%;"></span> Hormonal</div>
+                        <div style="display: flex; align-items: center; gap: 5px;"><span style="display: inline-block; width: 12px; height: 12px; background: #9F7AEA; border-radius: 50%;"></span> Histamine</div>
+                        <div style="display: flex; align-items: center; gap: 5px;"><span style="display: inline-block; width: 12px; height: 12px; background: #ED8936; border-radius: 50%;"></span> Menopause</div>
+                    </div>
+                </div>
+				<!-- Metrics -->
+                <div class="card">
+                    <h2>📊 Your Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <div style="color: #718096; font-size: 0.9rem;">HRV</div>
+                            <div class="metric-value">68 ↗️</div>
+                            <div style="color: #A0AEC0; font-size: 0.8rem;">Good recovery</div>
+                        </div>
+                        <div class="metric-item">
+                            <div style="color: #718096; font-size: 0.9rem;">Sleep</div>
+                            <div class="metric-value">7.5h</div>
+                            <div style="color: #A0AEC0; font-size: 0.8rem;">Deep: 1.2h</div>
+                        </div>
+                        <div class="metric-item">
+                            <div style="color: #718096; font-size: 0.9rem;">Cycle Day</div>
+                            <div class="metric-value">21</div>
+                            <div style="color: #A0AEC0; font-size: 0.8rem;">Luteal phase</div>
+                        </div>
+                        <div class="metric-item">
+                            <div style="color: #718096; font-size: 0.9rem;">Voice Stress</div>
+                            <div class="metric-value">Low</div>
+                            <div style="color: #A0AEC0; font-size: 0.8rem;">Calm tone</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== AUTHENTICATION =====
+        const CORRECT_PASSWORD = "AegisensStealth2025";
+        
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const error = document.getElementById('errorMessage');
+            const value = input.value.trim();
+            
+            if (value === CORRECT_PASSWORD || value === 'alpaca') {
+                // Success
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboardContainer').style.display = 'block';
+                localStorage.setItem('aegisens-login', 'true');
+                
+                // Load dashboard data
+                loadRecipes();
+                initCalendar();
+            } else {
+                // Error
+                error.textContent = 'Incorrect password';
+                input.classList.add('error');
+                setTimeout(() => {
+                    error.textContent = '';
+                    input.classList.remove('error');
+                }, 3000);
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('aegisens-login');
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('dashboardContainer').style.display = 'none';
+        }
+        
+        // Auto-login if previously logged in
+        if (localStorage.getItem('aegisens-login') === 'true') {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboardContainer').style.display = 'block';
+            setTimeout(() => {
+                loadRecipes();
+                initCalendar();
+            }, 100);
+        }
+        
+        // ===== RECIPES =====
+        const recipesData = [
+            {
+                id: 1,
+                title: "MONTADITO DE AGUACATE",
+                subtitle: "Avocado Egg Mini Toast",
+                calories: 140,
+                time: 10,
+                twist: { icon: "🇪🇸", name: "Spanish Tapas" },
+                tags: ["hormonal-energy", "brain-fog"]
+            },
+            {
+                id: 2,
+                title: "SALMON AVOCADO ROLL",
+				subtitle: "Libido-Boost Sushi",
+                calories: 220,
+                time: 25,
+                twist: { icon: "🇯🇵", name: "Japanese Zen" },
+                tags: ["libido", "omega-3"]
+            },
+            {
+                id: 3,
+                title: "SWEET POTATO NACHOS",
+                subtitle: "American Diner Comfort",
+                calories: 280,
+                time: 35,
+                twist: { icon: "🇺🇸", name: "American Diner" },
+                tags: ["comfort-food", "cortisol-balancing"]
+            }
+        ];
+        
+        function loadRecipes() {
+            const container = document.getElementById('recipesGrid');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            recipesData.forEach(recipe => {
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                card.innerHTML = 
+                    <div class="recipe-title">${recipe.title}</div>
+                    <div class="recipe-subtitle">${recipe.subtitle}</div>
+                    <div class="recipe-meta">${recipe.calories} kcal • ${recipe.time} min</div>
+                    <div class="recipe-twist">${recipe.twist.icon} ${recipe.twist.name}</div>
+                ;
+                container.appendChild(card);
+            });
+        }
+        
+        function filterRecipes(type) {
+            // Simple filter for demo
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.style.background = 'transparent');
+            event.target.style.background = '#E07A9A';
+            event.target.style.color = 'white';
+            
+            loadRecipes(); // In real version would filter
+        }
+        
+        // ===== CALENDAR =====
+        function initCalendar() {
+            const container = document.getElementById('calendarContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            const today = new Date().getDate();
+            
+            for (let i = 1; i <= 28; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day';
+                if (i === today) day.classList.add('today');
+                
+                day.innerHTML = 
+                    <div style="font-weight: 600;">${i}</div>
+                    <div class="calendar-layers">
+                        ${i <= 7 ? '<div class="calendar-layer layer-hormonal"></div>' : ''}
+                        ${i >= 12 && i <= 16 ? '<div class="calendar-layer layer-histamine"></div>' : ''}
+                        ${i >= 20 ? '<div class="calendar-layer layer-menopause"></div>' : ''}
+                    </div>
+                ;
+                
+                container.appendChild(day);
+            }
+        }
+        
+        // ===== ENTER KEY SUPPORT =====
+        document.getElementById('passwordInput')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+        
+        // Focus on password input
+        setTimeout(() => {
+            document.getElementById('passwordInput')?.focus();
+        }, 500);
+    </script>
+</body>
+</html>dashb
