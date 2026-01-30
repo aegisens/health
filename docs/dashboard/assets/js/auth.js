@@ -19,7 +19,7 @@ function checkPassword() {
     const lockoutUntil = localStorage.getItem('aegisens_lockout_until');
     if (lockoutUntil && Date.now() < parseInt(lockoutUntil)) {
         const remaining = Math.ceil((parseInt(lockoutUntil) - Date.now()) / 1000);
-        errorMessage.textContent = Too many attempts. Try again in ${remaining} seconds.;
+        errorMessage.textContent = `Too many attempts. Try again in ${remaining} seconds.`;
         passwordInput.classList.add('error');
         return;
     }
@@ -52,7 +52,7 @@ function checkPassword() {
         if (loginAttempts >= MAX_ATTEMPTS) {
             const lockoutUntil = Date.now() + LOCKOUT_TIME;
             localStorage.setItem('aegisens_lockout_until', lockoutUntil.toString());
-            errorMessage.textContent = Too many incorrect attempts. Locked for 30 seconds.;
+            errorMessage.textContent = 'Too many incorrect attempts. Locked for 30 seconds.';
             passwordInput.disabled = true;
             
             setTimeout(() => {
@@ -92,25 +92,25 @@ function checkExistingAuth() {
 }
 
 // Enter key support
-document.getElementById('passwordInput')?.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        checkPassword();
-    }
-});
-// Focus password input on load
-window.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('passwordInput');
     if (passwordInput) {
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
         setTimeout(() => passwordInput.focus(), 100);
     }
     checkExistingAuth();
 });
 
-// Logout function (called from index.html)
+// Global logout function (matches index.html)
 window.logout = function() {
     if (confirm('Are you sure you want to log out?')) {
         localStorage.removeItem('aegisens-authenticated');
         localStorage.removeItem('aegisens_login_time');
+        localStorage.removeItem('aegisens_lockout_until');
         window.location.reload();
     }
 };
