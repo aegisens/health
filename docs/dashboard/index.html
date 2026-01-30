@@ -127,7 +127,7 @@
     }
 </style>
 
-<!-- MOBILE + KALENDARZ CSS - POMNIEJSZONY -->
+<!-- MOBILE + KALENDARZ CSS - POPRAWIONY, PEŁNY WIDOK -->
 <style>
     /* Reset i mobile-first */
     * {
@@ -142,26 +142,29 @@
         padding: 0;
     }
 
-    /* KALENDARZ - KOMPAKTOWY */
+    /* KALENDARZ - KOMPAKTOWY + PEŁNY */
     .calendar-grid {
         display: grid !important;
         grid-template-columns: repeat(7, 1fr);
-        grid-template-rows: repeat(6, auto);
+        grid-template-rows: repeat(6, 1fr); /* Równe wiersze */
         gap: 1px;
-        margin-top: 5px;
+        margin-top: 8px;
         max-width: 100%;
+        min-height: 220px; /* Gwarantowana wysokość */
         overflow: hidden;
     }
 
     .calendar-day-label {
         background: #f8f9fa;
         font-weight: bold;
-        padding: 4px;
+        padding: 3px;
         text-align: center;
         font-size: 10px;
         color: #666;
         border: 1px solid #e9ecef;
-        min-height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .calendar-day {
@@ -169,9 +172,9 @@
         border: 1px solid #e9ecef;
         position: relative;
         cursor: pointer;
-        display: flex;
+        display: flex !important;
         flex-direction: column;
-        padding: 2px !important;
+        padding: 1px !important;
         background: white;
         font-size: 11px;
     }
@@ -183,27 +186,31 @@
     .calendar-day.today {
         background: #e3f2fd !important;
         border-color: #2196f3;
+        font-weight: bold;
     }
 
     .calendar-day-number {
         font-weight: bold;
         font-size: 11px !important;
         margin-bottom: 1px;
-        line-height: 1;
+        line-height: 1.1;
+        flex-shrink: 0;
     }
 
     .calendar-layers {
         display: flex;
         flex-direction: column;
-        gap: 1px;
+        gap: 0;
         flex: 1;
-        min-height: 4px;
+        min-height: 6px;
+        justify-content: flex-end;
     }
 
     .calendar-layer {
         height: 2px !important;
         border-radius: 1px;
         flex: none;
+        min-height: 2px;
     }
 
     .layer-hormonal { background: #ff6b6b; }
@@ -219,6 +226,14 @@
         background: transparent;
     }
 
+    /* Kontener kalendarza */
+    .calendar-container {
+        max-width: 100% !important;
+        overflow: hidden !important;
+        padding: 0;
+        min-height: 250px;
+    }
+
     /* STAŁY HEADER KALENDARZA */
     .card-header {
         display: flex !important;
@@ -226,6 +241,7 @@
         align-items: center !important;
         flex-wrap: nowrap !important;
         gap: 10px;
+        margin-bottom: 8px;
     }
 
     .month-nav {
@@ -236,17 +252,9 @@
     }
 
     #currentMonth {
-        font-size: inherit !important;
+        font-size: 14px !important;
         margin: 0 !important;
         font-weight: 500 !important;
-        font-size: 14px;
-    }
-
-    /* Kontener kalendarza */
-    .calendar-container {
-        max-width: 100% !important;
-        overflow-x: hidden !important;
-        padding: 0 2px;
     }
 
     /* TELEFONY - do 768px */
@@ -277,23 +285,32 @@
             font-size: 1.3em !important;
         }
         
+        .calendar-grid {
+            min-height: 200px;
+            gap: 1px;
+        }
+        
         .calendar-day {
             min-height: 28px !important;
         }
         
         .calendar-day-label {
             font-size: 9px;
-            padding: 3px;
-            min-height: 22px;
+            padding: 2px;
         }
         
         .calendar-day-number {
             font-size: 10px !important;
         }
+        
+        .calendar-container {
+            min-height: 220px;
+        }
     }
 </style>
 </head>
 <body>
+
 
 
     <!-- LOGIN SCREEN -->
