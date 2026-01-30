@@ -142,47 +142,46 @@
     }
 
     /* KALENDARZ - SPECYFICZNE KLASY */
-    .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 1fr);
-    gap: 2px;        /* było 1px */
-    margin-top: 8px; /* było 5px */
-    max-width: 100%;
-    height: 300px;   /* było 200px */
+    .calendar-day-number {
+    font-weight: 600;
+    font-size: 15px;     /* +1px */
+    line-height: 1.1;
+    margin-bottom: 2px;
+    text-align: center;  /* WYŚRODKUJ */
+    flex: 0 0 auto;     /* Lepsze dopasowanie */
 }
 
 .calendar-day-label {
-    padding: 4px 6px;    /* było 2px 4px */
-    font-size: 14px;     /* było 10px */
-    min-height: 36px;    /* było 24px */
+    padding: 5px 6px;    /* +1px padding */
+    font-size: 15px;     /* +1px */
+    display: flex;
+    align-items: center;
+    justify-content: center;  /* WYŚRODKUJ dni tygodnia */
 }
 
 .calendar-day {
-    min-height: 42px;    /* było 28px */
-    padding: 3px;        /* było 2px */
-    font-size: 14px;     /* było 11px */
+    min-height: 45px;    /* +3px */
+    padding: 4px;        /* +1px */
+    display: flex;
+    justify-content: center;  /* Cały dzień wyśrodkowany */
+    align-items: flex-start;
 }
 
-.calendar-day-number {
-    font-size: 14px;     /* było 11px */
-    margin-bottom: 2px;  /* było 1px */
-}
-
-.calendar-layers {
-    min-height: 10px;    /* było 6px */
-}
-
-.calendar-layer {
-    height: 3px;         /* było 2px */
+.calendar-grid {
+    height: 320px;       /* +20px dla nowych rozmiarów */
+    gap: 2px;
 }
     /* MOBILE */
    @media (max-width: 768px) {
-    .calendar-grid {
-        height: 270px;  /* było 180px */
+    .calendar-day-number {
+        font-size: 13px;
     }
-    .calendar-day {
-        min-height: 38px;  /* było 26px */
+    .calendar-day-label {
+        font-size: 13px;
+        padding: 4px 5px;
+    }
+    .calendar-grid {
+        height: 290px;
     }
 }
 </style>
