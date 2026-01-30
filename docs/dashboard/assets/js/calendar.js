@@ -8,8 +8,11 @@ function initCalendar() {
     renderCalendar();
     
     // Add event listeners for navigation
-    document.getElementById('prevMonth')?.addEventListener('click', prevMonth);
-    document.getElementById('nextMonth')?.addEventListener('click', nextMonth);
+    const prevBtn = document.getElementById('prevMonth');
+    const nextBtn = document.getElementById('nextMonth');
+    
+    if (prevBtn) prevBtn.addEventListener('click', prevMonth);
+    if (nextBtn) nextBtn.addEventListener('click', nextMonth);
     
     // Set today's date
     highlightToday();
@@ -20,38 +23,57 @@ function renderCalendar() {
     const calendarContainer = document.getElementById('calendarContainer');
     const monthYearElement = document.getElementById('currentMonth');
     
-    if (!calendarContainer || !monthYearElement) return;
+    if (!calendarContainer || !monthYearElement) {
+        console.log('Calendar elements not found');
+        return;
+    }
     
-    // Update month/year display
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                       'July', 'August', 'September', 'October', 'November', 'December'];
-    monthYearElement.textContent = ${monthNames[currentMonth]} ${currentYear};
+    // Update month/year display (Polish names)
+    const monthNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
+                       'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+    monthYearElement.textContent = `${monthNames[currentMonth]} ${currentYear}`;
     
     // Clear container
-    calendarContainer.innerHTML = '';
+    calendarContainer.innerHTML = `
+        <div class="calendar-header">
+            <button id="prevMonth" class="calendar-nav-btn">‹</button>
+            <h3 id="currentMonth">${monthNames[currentMonth]} ${currentYear}</h3>
+            <button id="nextMonth" class="calendar-nav-btn">›</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid">
+            <div class="calendar-day-label">Pn</div>
+            <div class="calendar-day-label">Wt</div>
+            <div class="calendar-day-label">Śr</div>
+            <div class="calendar-day-label">Cz</div>
+            <div class="calendar-day-label">Pt</div>
+            <div class="calendar-day-label">Sb</div>
+            <div class="calendar-day-label">Nd</div>
+        </div>
+    `;
     
     // Get first day of month and total days
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay() || 7; // Polish week starts Monday
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     
-    // Add day labels (optional)
-    const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    dayLabels.forEach(label => {
-        const dayLabel = document.createElement('div');
-        dayLabel.className = 'calendar-day-label';
-        dayLabel.textContent = label;
-        calendarContainer.appendChild(dayLabel);
-    });
+    const grid = document.getElementById('calendarGrid');
     
     // Add empty cells for days before first day
-    for (let i = 0; i < firstDay; i++) {
-        calendarContainer.appendChild(createEmptyDay());
+    for (let i = 1; i < firstDay; i++) {
+        grid.appendChild(createEmptyDay());
     }
     
     // Add days of the month
     for (let day = 1; day <= daysInMonth; day++) {
-        calendarContainer.appendChild(createDayElement(day));
+        grid.appendChild(createDayElement(day));
     }
+    
+    // Re-attach event listeners
+    setTimeout(() => {
+        const prevBtn = document.getElementById('prevMonth');
+        const nextBtn = document.getElementById('nextMonth');
+        if (prevBtn) prevBtn.addEventListener('click', prevMonth);
+        if (nextBtn) nextBtn.addEventListener('click', nextMonth);
+    }, 100);
 }
 
 // Create an empty day cell
@@ -84,9 +106,8 @@ function createDayElement(dayNumber) {
     const layersContainer = document.createElement('div');
     layersContainer.className = 'calendar-layers';
     
-    // Simulate hormonal data based on day of cycle
-    // This is demo data - replace with real logic later
-    const dayOfCycle = (dayNumber % 28) + 1;
+    // Simulate hormonal data based on day of cycle (28-day cycle)
+    const dayOfCycle = (dayNumber % 28) || 28;
     
     // Hormonal layer (strong in days 1-7, 21-28)
     if ((dayOfCycle >= 1 && dayOfCycle <= 7) || (dayOfCycle >= 21 && dayOfCycle <= 28)) {
@@ -104,7 +125,7 @@ function createDayElement(dayNumber) {
     
     // Menopause layer (random for demo)
     if (Math.random() > 0.7) {
-		const menopauseLayer = document.createElement('div');
+        const menopauseLayer = document.createElement('div');
         menopauseLayer.className = 'calendar-layer layer-menopause';
         layersContainer.appendChild(menopauseLayer);
     }
@@ -117,37 +138,37 @@ function createDayElement(dayNumber) {
     });
     
     // Add tooltip
-    dayElement.title = Day ${dayNumber} - Click for details;
+    dayElement.title = `Dzień ${dayNumber} - Kliknij po szczegóły`;
     
     return dayElement;
 }
 
 // Show details for a specific day
 function showDayDetails(dayNumber) {
-    const dayOfCycle = (dayNumber % 28) + 1;
+    const dayOfCycle = (dayNumber % 28) || 28;
     let predictions = [];
     
     // Demo predictions based on day of cycle
     if (dayOfCycle <= 7) {
-        predictions.push('Menstrual phase: Higher iron needs');
+        predictions.push('Faza menstruacyjna: Wyższe zapotrzebowanie na żelazo');
     } else if (dayOfCycle <= 14) {
-        predictions.push('Follicular phase: Rising energy');
+        predictions.push('Faza folikularna: Rosnąca energia');
     } else if (dayOfCycle <= 21) {
-        predictions.push('Ovulation: Peak fertility');
+        predictions.push('Owulacja: Szczyt płodności');
     } else {
-        predictions.push('Luteal phase: Progesterone rising');
+        predictions.push('Faza lutealna: Wzrost progesteronu');
     }
     
     // Add random predictions for demo
     const allPredictions = [
-        'Low histamine day - safe for fermented foods',
-        'High histamine risk - avoid leftovers',
-        'Good day for intense exercise',
-        'Rest and recovery recommended',
-        'Brain fog risk elevated',
-        'Optimal day for creative work',
-        'Social energy high',
-        'Need for alone time'
+        'Niski poziom histaminy - bezpieczne fermentowane produkty',
+        'Wysokie ryzyko histaminy - unikaj resztek jedzenia',
+        'Dobry dzień na intensywny trening',
+        'Zalecany odpoczynek i regeneracja',
+        'Ryzyko mgły mózgowej podwyższone',
+        'Optymalny dzień na pracę kreatywną',
+        'Wysoka energia społeczna',
+        'Potrzeba czasu dla siebie'
     ];
     
     // Add 1-2 random predictions
@@ -159,17 +180,15 @@ function showDayDetails(dayNumber) {
         }
     }
     
-    // Show in a modal or alert
-    const predictionsText = predictions.map(p => • ${p}).join('\n');
-    alert(Day ${dayNumber} Predictions:\n\n${predictionsText}\n\nThis is demo data. Real predictions will come from Aegisens AI.);
+    // Show predictions
+    const predictionsText = predictions.map(p => `• ${p}`).join('\n');
+    alert(`Predykcje na dzień ${dayNumber}:\n\n${predictionsText}\n\nTo dane demo. Prawdziwe predykcje z AI Aegisens.`);
 }
 
 // Highlight today's date
 function highlightToday() {
     const today = new Date();
     if (currentYear === today.getFullYear() && currentMonth === today.getMonth()) {
-        // Today will already be highlighted via CSS class
-        // Scroll to today if possible
         setTimeout(() => {
             const todayElement = document.querySelector('.calendar-day.today');
             if (todayElement) {
@@ -187,6 +206,7 @@ function prevMonth() {
         currentYear--;
     }
     renderCalendar();
+    highlightToday();
 }
 
 // Navigate to next month
@@ -197,9 +217,10 @@ function nextMonth() {
         currentYear++;
     }
     renderCalendar();
+    highlightToday();
 }
 
-// Make functions available globally
+// Make functions globally available
 window.initCalendar = initCalendar;
 window.prevMonth = prevMonth;
 window.nextMonth = nextMonth;
