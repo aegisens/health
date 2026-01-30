@@ -31,6 +31,55 @@
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
 }
+/* Reset i mobile-first */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    max-width: 100vw;
+    overflow-x: hidden; /* blokuje poziomy scroll */
+    margin: 0;
+    padding: 0;
+}
+
+/* Mobile-first - do 768px (telefony + tablety) */
+@media (max-width: 768px) {
+    .container, .dashboardContainer {
+        padding: 10px !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+    
+    .recipe-card, .metric-card {
+        width: 100% !important;
+        margin-bottom: 15px !important;
+    }
+    
+    /* Nawigacja pionowa */
+    nav, .nav-menu {
+        flex-direction: column !important;
+    }
+    
+    /* Przyciski mniejsze */
+    .login-btn, button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px; /* Zwiększa obszar dotyku */
+    }
+    
+    /* Ukryj niepotrzebne elementy */
+    .desktop-only {
+        display: none !important;
+    }
+}
+
+/* Tablety */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 20px;
+    }
+}
 
 * {
     margin: 0;
