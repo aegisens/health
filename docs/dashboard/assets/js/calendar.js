@@ -1,92 +1,87 @@
-// ===== HORMONAL CALENDAR =====
+// ===== HORMONAL CALENDAR - PEŁNA KOMPATYBILNOŚĆ Z TWOIM HTML =====
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
 
-// Initialize calendar
+// Inicjalizacja kalendarza (używa istniejący HTML)
 function initCalendar() {
-    renderCalendar();
-    
-    // Add event listeners for navigation
+    // Użyj istniejących przycisków z HTML
     const prevBtn = document.getElementById('prevMonth');
     const nextBtn = document.getElementById('nextMonth');
     
     if (prevBtn) prevBtn.addEventListener('click', prevMonth);
     if (nextBtn) nextBtn.addEventListener('click', nextMonth);
     
-    // Set today's date
+    // Wyrenderuj kalendarz
+    renderCalendar();
+    
+    // Podświetl dzisiaj
     highlightToday();
 }
 
-// Render calendar for current month
+// Render kalendarza (używa TWÓJ header i legendę)
 function renderCalendar() {
     const calendarContainer = document.getElementById('calendarContainer');
+    const monthYearElement = document.getElementById('currentMonth');
     
-    if (!calendarContainer) {
-        console.log('Calendar container not found');
+    if (!calendarContainer || !monthYearElement) {
+        console.log('Brak elementów kalendarza');
         return;
     }
     
-    // Update month/year display (English names)
+    // Aktualizuj nazwę miesiąca w TWOIM headerze
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                        'July', 'August', 'September', 'October', 'November', 'December'];
+    monthYearElement.textContent = `${monthNames[currentMonth]} ${currentYear}`;
     
-    // Clear container and build full calendar
-    calendarContainer.innerHTML = `
-        <div class="calendar-header">
-            <button id="prevMonth" class="calendar-nav-btn">‹</button>
-            <h3 id="currentMonth">${monthNames[currentMonth]} ${currentYear}</h3>
-            <button id="nextMonth" class="calendar-nav-btn">›</button>
-        </div>
-        <div class="calendar-grid" id="calendarGrid">
-            <div class="calendar-day-label">Sun</div>
-            <div class="calendar-day-label">Mon</div>
-            <div class="calendar-day-label">Tue</div>
-            <div class="calendar-day-label">Wed</div>
-            <div class="calendar-day-label">Thu</div>
-            <div class="calendar-day-label">Fri</div>
-            <div class="calendar-day-label">Sat</div>
-        </div>
-    `;
+    // Usuń poprzednią siatkę (zachowaj header i legendę)
+    const existingGrid = calendarContainer.querySelector('.calendar-grid');
+    if (existingGrid) existingGrid.remove();
     
-    // Get first day of month and total days
+    // Stwórz nową siatkę
+    const grid = document.createElement('div');
+    grid.className = 'calendar-grid';
+    grid.id = 'calendarGrid';
+    
+    // Dni tygodnia
+    const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    dayLabels.forEach(label => {
+        const dayLabel = document.createElement('div');
+        dayLabel.className = 'calendar-day-label';
+        dayLabel.textContent = label;
+        grid.appendChild(dayLabel);
+    });
+    
+    // Oblicz dni
     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     
-    const grid = document.getElementById('calendarGrid');
-    
-    // Add empty cells for days before first day
+    // Puste dni na początku
     for (let i = 0; i < firstDay; i++) {
         grid.appendChild(createEmptyDay());
     }
     
-    // Add days of the month
+    // Dni miesiąca
     for (let day = 1; day <= daysInMonth; day++) {
         grid.appendChild(createDayElement(day));
     }
     
-    // Re-attach event listeners
-    setTimeout(() => {
-        const prevBtn = document.getElementById('prevMonth');
-        const nextBtn = document.getElementById('nextMonth');
-        if (prevBtn) prevBtn.addEventListener('click', prevMonth);
-        if (nextBtn) nextBtn.addEventListener('click', nextMonth);
-    }, 100);
+    calendarContainer.appendChild(grid);
 }
 
-// Create an empty day cell
+// Pusty dzień
 function createEmptyDay() {
     const emptyDay = document.createElement('div');
     emptyDay.className = 'calendar-day empty';
     return emptyDay;
 }
 
-// Create a day element with hormonal layers
+// Dzień z warstwami hormonalnymi
 function createDayElement(dayNumber) {
     const dayElement = document.createElement('div');
     dayElement.className = 'calendar-day';
     
-    // Check if today
+    // Podświetl dzisiaj
     const today = new Date();
     if (currentYear === today.getFullYear() && 
         currentMonth === today.getMonth() && 
@@ -94,34 +89,33 @@ function createDayElement(dayNumber) {
         dayElement.classList.add('today');
     }
     
-    // Add day number
+    // Numer dnia
     const dayNumberSpan = document.createElement('div');
     dayNumberSpan.className = 'calendar-day-number';
     dayNumberSpan.textContent = dayNumber;
     dayElement.appendChild(dayNumberSpan);
     
-    // Add hormonal layers (simulated data)
+    // Warstwy hormonalne
     const layersContainer = document.createElement('div');
     layersContainer.className = 'calendar-layers';
     
-    // Simulate hormonal data based on day of cycle (28-day cycle)
     const dayOfCycle = (dayNumber % 28) || 28;
     
-    // Hormonal layer (strong in days 1-7, 21-28)
+    // Warstwa hormonalna (dni 1-7, 21-28)
     if ((dayOfCycle >= 1 && dayOfCycle <= 7) || (dayOfCycle >= 21 && dayOfCycle <= 28)) {
         const hormonalLayer = document.createElement('div');
         hormonalLayer.className = 'calendar-layer layer-hormonal';
         layersContainer.appendChild(hormonalLayer);
     }
     
-    // Histamine layer (peaks around ovulation ~day 14)
+    // Histamina (owulacja ~dzień 14)
     if (Math.abs(dayOfCycle - 14) <= 3) {
         const histamineLayer = document.createElement('div');
         histamineLayer.className = 'calendar-layer layer-histamine';
         layersContainer.appendChild(histamineLayer);
     }
     
-    // Menopause layer (random for demo)
+    // Menopauza (losowo)
     if (Math.random() > 0.7) {
         const menopauseLayer = document.createElement('div');
         menopauseLayer.className = 'calendar-layer layer-menopause';
@@ -130,23 +124,21 @@ function createDayElement(dayNumber) {
     
     dayElement.appendChild(layersContainer);
     
-    // Add click event
+    // Kliknięcie = szczegóły
     dayElement.addEventListener('click', function() {
         showDayDetails(dayNumber);
     });
     
-    // Add tooltip
     dayElement.title = `Day ${dayNumber} - Click for details`;
     
     return dayElement;
 }
 
-// Show details for a specific day
+// Szczegóły dnia
 function showDayDetails(dayNumber) {
     const dayOfCycle = (dayNumber % 28) || 28;
     let predictions = [];
     
-    // Demo predictions based on day of cycle
     if (dayOfCycle <= 7) {
         predictions.push('Menstrual phase: Higher iron needs');
     } else if (dayOfCycle <= 14) {
@@ -157,7 +149,6 @@ function showDayDetails(dayNumber) {
         predictions.push('Luteal phase: Progesterone rising');
     }
     
-    // Add random predictions for demo
     const allPredictions = [
         'Low histamine day - safe for fermented foods',
         'High histamine risk - avoid leftovers',
@@ -169,7 +160,6 @@ function showDayDetails(dayNumber) {
         'Need for alone time'
     ];
     
-    // Add 1-2 random predictions
     const randomCount = Math.floor(Math.random() * 2) + 1;
     for (let i = 0; i < randomCount; i++) {
         const randomPred = allPredictions[Math.floor(Math.random() * allPredictions.length)];
@@ -178,12 +168,11 @@ function showDayDetails(dayNumber) {
         }
     }
     
-    // Show predictions
     const predictionsText = predictions.map(p => `• ${p}`).join('\n');
     alert(`Day ${dayNumber} Predictions:\n\n${predictionsText}\n\nThis is demo data. Real predictions will come from Aegisens AI.`);
 }
 
-// Highlight today's date
+// Podświetlenie dzisiaj
 function highlightToday() {
     const today = new Date();
     if (currentYear === today.getFullYear() && currentMonth === today.getMonth()) {
@@ -196,7 +185,7 @@ function highlightToday() {
     }
 }
 
-// Navigate to previous month
+// Poprzedni miesiąc
 function prevMonth() {
     currentMonth--;
     if (currentMonth < 0) {
@@ -207,7 +196,7 @@ function prevMonth() {
     highlightToday();
 }
 
-// Navigate to next month
+// Następny miesiąc
 function nextMonth() {
     currentMonth++;
     if (currentMonth > 11) {
@@ -218,7 +207,7 @@ function nextMonth() {
     highlightToday();
 }
 
-// Make functions globally available
+// Ustaw funkcje globalnie
 window.initCalendar = initCalendar;
 window.prevMonth = prevMonth;
 window.nextMonth = nextMonth;
