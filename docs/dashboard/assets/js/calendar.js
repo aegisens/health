@@ -21,19 +21,17 @@ function initCalendar() {
 // Render calendar for current month
 function renderCalendar() {
     const calendarContainer = document.getElementById('calendarContainer');
-    const monthYearElement = document.getElementById('currentMonth');
     
-    if (!calendarContainer || !monthYearElement) {
-        console.log('Calendar elements not found');
+    if (!calendarContainer) {
+        console.log('Calendar container not found');
         return;
     }
     
-    // Update month/year display (Polish names)
-    const monthNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
-                       'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
-    monthYearElement.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    // Update month/year display (English names)
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
     
-    // Clear container
+    // Clear container and build full calendar
     calendarContainer.innerHTML = `
         <div class="calendar-header">
             <button id="prevMonth" class="calendar-nav-btn">‹</button>
@@ -41,24 +39,24 @@ function renderCalendar() {
             <button id="nextMonth" class="calendar-nav-btn">›</button>
         </div>
         <div class="calendar-grid" id="calendarGrid">
-            <div class="calendar-day-label">Pn</div>
-            <div class="calendar-day-label">Wt</div>
-            <div class="calendar-day-label">Śr</div>
-            <div class="calendar-day-label">Cz</div>
-            <div class="calendar-day-label">Pt</div>
-            <div class="calendar-day-label">Sb</div>
-            <div class="calendar-day-label">Nd</div>
+            <div class="calendar-day-label">Sun</div>
+            <div class="calendar-day-label">Mon</div>
+            <div class="calendar-day-label">Tue</div>
+            <div class="calendar-day-label">Wed</div>
+            <div class="calendar-day-label">Thu</div>
+            <div class="calendar-day-label">Fri</div>
+            <div class="calendar-day-label">Sat</div>
         </div>
     `;
     
     // Get first day of month and total days
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay() || 7; // Polish week starts Monday
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     
     const grid = document.getElementById('calendarGrid');
     
     // Add empty cells for days before first day
-    for (let i = 1; i < firstDay; i++) {
+    for (let i = 0; i < firstDay; i++) {
         grid.appendChild(createEmptyDay());
     }
     
@@ -138,7 +136,7 @@ function createDayElement(dayNumber) {
     });
     
     // Add tooltip
-    dayElement.title = `Dzień ${dayNumber} - Kliknij po szczegóły`;
+    dayElement.title = `Day ${dayNumber} - Click for details`;
     
     return dayElement;
 }
@@ -150,25 +148,25 @@ function showDayDetails(dayNumber) {
     
     // Demo predictions based on day of cycle
     if (dayOfCycle <= 7) {
-        predictions.push('Faza menstruacyjna: Wyższe zapotrzebowanie na żelazo');
+        predictions.push('Menstrual phase: Higher iron needs');
     } else if (dayOfCycle <= 14) {
-        predictions.push('Faza folikularna: Rosnąca energia');
+        predictions.push('Follicular phase: Rising energy');
     } else if (dayOfCycle <= 21) {
-        predictions.push('Owulacja: Szczyt płodności');
+        predictions.push('Ovulation: Peak fertility');
     } else {
-        predictions.push('Faza lutealna: Wzrost progesteronu');
+        predictions.push('Luteal phase: Progesterone rising');
     }
     
     // Add random predictions for demo
     const allPredictions = [
-        'Niski poziom histaminy - bezpieczne fermentowane produkty',
-        'Wysokie ryzyko histaminy - unikaj resztek jedzenia',
-        'Dobry dzień na intensywny trening',
-        'Zalecany odpoczynek i regeneracja',
-        'Ryzyko mgły mózgowej podwyższone',
-        'Optymalny dzień na pracę kreatywną',
-        'Wysoka energia społeczna',
-        'Potrzeba czasu dla siebie'
+        'Low histamine day - safe for fermented foods',
+        'High histamine risk - avoid leftovers',
+        'Good day for intense exercise',
+        'Rest and recovery recommended',
+        'Brain fog risk elevated',
+        'Optimal day for creative work',
+        'Social energy high',
+        'Need for alone time'
     ];
     
     // Add 1-2 random predictions
@@ -182,7 +180,7 @@ function showDayDetails(dayNumber) {
     
     // Show predictions
     const predictionsText = predictions.map(p => `• ${p}`).join('\n');
-    alert(`Predykcje na dzień ${dayNumber}:\n\n${predictionsText}\n\nTo dane demo. Prawdziwe predykcje z AI Aegisens.`);
+    alert(`Day ${dayNumber} Predictions:\n\n${predictionsText}\n\nThis is demo data. Real predictions will come from Aegisens AI.`);
 }
 
 // Highlight today's date
