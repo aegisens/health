@@ -313,121 +313,106 @@
     <script src="assets/js/calendar.js"></script>
     <script src="assets/js/shopping-list.js"></script>
     
-  <script>
-    // ===== SIMPLE FIXED AUTH =====
-    const CORRECT_PASSWORD = "AegisensStealth2025";
-    
-    // Make function available globally IMMEDIATELY
-    window.checkPassword = function() {
-        console.log("checkPassword called!"); // Debug
-        const input = document.getElementById('passwordInput');
-        const error = document.getElementById('errorMessage');
-        
-        if (!input || !error) {
-            console.error("Elements not found!");
-            alert("System error. Please refresh.");
-            return;
-        }
-        
-        const value = input.value.trim();
-        console.log("Password attempt:", value);
-        
-        if (value === CORRECT_PASSWORD || value.toLowerCase() === 'alpaca') {
-            // SUCCESS - visual feedback
-            input.style.borderColor = "#48bb78";
-            error.textContent = "✓ Access granted!";
-            error.style.color = "#48bb78";
+    <script>
+        // Initialize dashboard after login
+        function initDashboard() {
+            // Load recipes
+            if (typeof loadRecipes === 'function') loadRecipes();
             
-            // Hide login, show dashboard
-            document.getElementById('loginScreen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('dashboardContainer').style.display = 'block';
-                document.getElementById('dashboardContainer').style.opacity = '1';
-                
-                // Load data
-                if (window.loadRecipes) loadRecipes();
-                if (window.initCalendar) initCalendar();
-                
-                // Save login
-                localStorage.setItem('aegisens-login', 'true');
-            }, 500);
+            // Load calendar
+            if (typeof initCalendar === 'function') initCalendar();
             
-        } else {
-            // FAILURE - visual feedback
-            input.style.borderColor = "#FC8181";
-            input.style.animation = 'shake 0.5s';
-            error.textContent = "✗ Incorrect password. Try: " + CORRECT_PASSWORD;
-            error.style.color = "#FC8181";
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
             
-            // Clear animation
-            setTimeout(() => {
-                input.style.animation = '';
-            }, 500);
-        }
-    };
-    document.getElementById('passwordInput')?.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        checkPassword();
-    }
-});
-    // ===== AUTO-SETUP =====
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log("DOM loaded, setting up...");
-        
-        // 1. Focus on input
-        const input = document.getElementById('passwordInput');
-        if (input) {
-            input.focus();
+            // Shuffle recipes button
+            const shuffleBtn = document.getElementById('shuffleRecipes');
+            if (shuffleBtn) {
+                shuffleBtn.addEventListener('click', shuffleRecipes);
+            }
             
-            // 2. Enter key support
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    console.log("Enter pressed");
-                    window.checkPassword();
-                }
-            });
+            // Update selected count
+            updateSelectedCount();
         }
-        
-        // 3. Auto-login if previously logged in
-        if (localStorage.getItem('aegisens-login') === 'true') {
-            console.log("Auto-login detected");
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('dashboardContainer').style.display = 'block';
-            if (window.loadRecipes) loadRecipes();
-            if (window.initCalendar) initCalendar();
+
+        // Theme toggle function
+        function toggleTheme() {
+            const darkModeCSS = document.getElementById('dark-mode-css');
+            const themeIcon = document.querySelector('.theme-icon');
+            
+            if (darkModeCSS.disabled) {
+                darkModeCSS.disabled = false;
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('aegisens-theme', 'dark');
+            } else {
+                darkModeCSS.disabled = true;
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('aegisens-theme', 'light');
+            }
         }
-        
-        // 4. Add shake animation if not present
-        if (!document.querySelector('#shake-style')) {
-            const style = document.createElement('style');
-            style.id = 'shake-style';
-            style.textContent = 
-                @keyframes shake {
-                    0%, 100% { transform: translateX(0); }
-                    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-                    20%, 40%, 60%, 80% { transform: translateX(5px); }
-                }
-            ;
-            document.head.appendChild(style);
+
+        // Check saved theme preference
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('aegisens-theme');
+            if (savedTheme === 'dark') {
+const darkModeCSS = document.getElementById('dark-mode-css');
+                const themeIcon = document.querySelector('.theme-icon');
+                darkModeCSS.disabled = false;
+                themeIcon.textContent = '☀️';
+            }
+        });
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('aegisens-authenticated');
+            window.location.reload();
         }
-        
-        console.log("Setup complete!");
-    });
-    
-    // ===== LOGOUT =====
-    window.logout = function() {
-        localStorage.removeItem('aegisens-login');
-        document.getElementById('dashboardContainer').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('dashboardContainer').style.display = 'none';
-            document.getElementById('loginScreen').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('loginScreen').style.opacity = '1';
-                document.getElementById('passwordInput').focus();
-            }, 50);
-        }, 300);
-    };
-</script>
+
+        // Update selected recipes count
+        function updateSelectedCount() {
+            const selected = document.querySelectorAll('.recipe-card.selected').length;
+            document.getElementById('selectedCount').textContent = selected;
+            document.getElementById('generateListBtn').disabled = selected === 0;
+        }
+
+        // Dummy functions for demo
+        function generateNewInsight() {
+            const insights = [
+                "Histamine levels predicted to rise tomorrow. Consider low-histamine foods today.",
+                "Your sleep quality correlates with afternoon caffeine intake. Try switching to herbal tea after 2 PM.",
+                "Voice patterns show improved stress resilience this week. Great job with the breathing exercises!",
+                "Cycle analysis suggests optimal time for creative work in the next 3 days.",
+                "Based on HRV trends, consider a light workout today instead of high intensity."
+            ];
+            document.getElementById('aiInsightText').textContent = 
+                insights[Math.floor(Math.random() * insights.length)];
+        }
+
+        function saveInsight() {
+            alert('Insight saved to your journal!');
+        }
+
+        function viewDetailedMetrics() {
+            alert('Detailed metrics view would open here in the full app.');
+        }
+
+        function showAllRecipes() {
+            alert('All recipes view would open here with filtering and search.');
+        }
+
+        function shuffleRecipes() {
+            if (typeof shuffleRecipesDisplay === 'function') {
+                shuffleRecipesDisplay();
+            }
+        }
+
+        // Initialize dashboard when login successful
+        window.addEventListener('login-success', function() {
+            setTimeout(initDashboard, 100);
+        });
+    </script>
 </body>
 </html>
