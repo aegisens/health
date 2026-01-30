@@ -366,7 +366,11 @@
             }, 500);
         }
     };
-    
+    document.getElementById('passwordInput')?.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        checkPassword();
+    }
+});
     // ===== AUTO-SETUP =====
     document.addEventListener('DOMContentLoaded', function() {
         console.log("DOM loaded, setting up...");
