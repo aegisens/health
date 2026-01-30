@@ -252,6 +252,36 @@
             font-size: 12px;
         }
     }
+    /* STAŁY HEADER KALENDARZA */
+.card-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 15px;
+}
+
+.month-nav {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px;
+    white-space: nowrap !important;
+}
+
+#currentMonth {
+    font-size: inherit !important;
+    margin: 0 !important;
+    font-weight: 500 !important;
+}
+
+.calendar-header, .month-nav {
+    flex-shrink: 0 !important;
+}
+
+/* Zapobiegaj reflow */
+.calendar-container {
+    min-height: 400px;
+}
 </style>
 </head>
 <body>
