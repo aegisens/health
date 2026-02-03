@@ -143,51 +143,78 @@
 
     /* KALENDARZ - SPECYFICZNE KLASY */
     .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 1fr);
-    gap: 2px;        /* było 1px */
-    margin-top: 8px; /* było 5px */
-    max-width: 100%;
-    height: 300px;   /* było 200px */
-    justify-items: center;
-    align-items: center;
-}
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        grid-template-rows: repeat(6, 1fr);
+        gap: 2px;        /* było 1px */
+        margin-top: 8px; /* było 5px */
+        max-width: 100%;
+        height: 300px;   /* było 200px */
+        justify-items: center;
+        align-items: center;
+    }
 
-.calendar-day-label {
-    padding: 4px 6px;    /* było 2px 4px */
-    font-size: 14px;     /* było 10px */
-    min-height: 36px;    /* było 24px */
-}
+    /* DODANE: KONTENER KALENDARZA - WYŚRODKOWANIE */
+    .calendar-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 10px;
+    }
 
-.calendar-day {
-    min-height: 42px;    /* było 28px */
-    padding: 3px;        /* było 2px */
-    font-size: 14px;     /* było 11px */
-}
+    /* DODANE: KARTA Z DNIAMI - WYŚRODKOWANIE */
+    .calendar-card {
+        width: 100%;
+        max-width: 800px; /* lub inna wartość, dostosuj do potrzeb */
+        margin: 0 auto;
+        padding: 15px;
+        background: #fff; /* lub kolor z Twojego designu */
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* opcjonalny cień */
+    }
 
-.calendar-day-number {
-    font-size: 14px;     /* było 11px */
-    margin-bottom: 2px;  /* było 1px */
-}
+    .calendar-day-label {
+        padding: 4px 6px;    /* było 2px 4px */
+        font-size: 14px;     /* było 10px */
+        min-height: 36px;    /* było 24px */
+    }
 
-.calendar-layers {
-    min-height: 10px;    /* było 6px */
-}
+    .calendar-day {
+        min-height: 42px;    /* było 28px */
+        padding: 3px;        /* było 2px */
+        font-size: 14px;     /* było 11px */
+    }
 
-.calendar-layer {
-    height: 3px;         /* było 2px */
-}
+    .calendar-day-number {
+        font-size: 14px;     /* było 11px */
+        margin-bottom: 2px;  /* było 1px */
+    }
+
+    .calendar-layers {
+        min-height: 10px;    /* było 6px */
+    }
+
+    .calendar-layer {
+        height: 3px;         /* było 2px */
+    }
 
     /* MOBILE */
-   @media (max-width: 768px) {
-    .calendar-grid {
-        height: 270px;  /* było 180px */
+    @media (max-width: 768px) {
+        .calendar-grid {
+            height: 270px;  /* było 180px */
+        }
+        .calendar-day {
+            min-height: 38px;  /* było 26px */
+        }
+        
+        /* DODANE: RESPONSYWNOŚĆ KARTY */
+        .calendar-card {
+            max-width: 95%;
+            padding: 10px;
+            margin: 0 auto;
+        }
     }
-    .calendar-day {
-        min-height: 38px;  /* było 26px */
-    }
-}
 </style>
 </head>
 <body>
