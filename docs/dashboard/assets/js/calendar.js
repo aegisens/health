@@ -41,8 +41,8 @@ function renderCalendar() {
     }
     
     // Aktualizuj nazwę miesiąca
-    const monthNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
-                       'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
     
     // POPRAWIONE: Poprawna składnia
     monthYearElement.textContent = monthNames[currentMonth] + ' ' + currentYear;
@@ -56,7 +56,7 @@ function renderCalendar() {
     grid.className = 'calendar-grid';
     
     // Dni tygodnia
-    const dayLabels = ['Nd', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb'];
+    const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     dayLabels.forEach(label => {
         const dayLabel = document.createElement('div');
         dayLabel.className = 'calendar-day-label';
@@ -149,7 +149,7 @@ function createDayElement(dayNumber) {
     });
     
     // Tooltip
-    dayElement.title = 'Dzień ' + dayNumber + ' (Cykl: ' + dayOfCycle + ') - Kliknij po szczegóły';
+    dayElement.title = 'Day ' + dayNumber + ' (Cycle: ' + dayOfCycle + ') - Click for details';
     
     return dayElement;
 }
@@ -161,42 +161,42 @@ function showDayDetails(dayNumber, dayOfCycle) {
     
     // Faza cyklu
     if (dayOfCycle <= 5) {
-        phaseName = 'Miesiączka';
-        predictions.push('• Faza miesiączki: Potrzebujesz więcej żelaza');
+        phaseName = 'Menstruation';
+        predictions.push('• Menstruation phase: You need more iron');
     } else if (dayOfCycle <= 12) {
-        phaseName = 'Folikularna';
-        predictions.push('• Faza folikularna: Rośnie energia');
+        phaseName = 'Follicular';
+        predictions.push('• Follicular phase: Energy is rising');
     } else if (dayOfCycle <= 15) {
-        phaseName = 'Owulacja';
-        predictions.push('• Owulacja: Szczyt płodności');
+        phaseName = 'Ovulation';
+        predictions.push('• Ovulation: Peak fertility');
     } else {
-        phaseName = 'Lutealna';
-        predictions.push('• Faza lutealna: Progesteron rośnie');
+        phaseName = 'Luteal';
+        predictions.push('• Luteal phase: Progesterone is rising');
     }
     
     // Specjalne alerty dla dni
     if (dayOfCycle === 14) {
-        predictions.push('• 🥚 Dzień owulacji - największa płodność');
+        predictions.push('• 🥚 Ovulation day - highest fertility');
     }
     if (dayOfCycle >= 18 && dayOfCycle <= 24) {
-        predictions.push('• ⚠️ Uwaga na histaminę (faza lutealna)');
+        predictions.push('• ⚠️ Watch for histamine (luteal phase)');
     }
     if (dayOfCycle === 28 || dayOfCycle === 1) {
-        predictions.push('• 🔄 Przejście do nowego cyklu');
+        predictions.push('• 🔄 Transition to new cycle');
     }
     
     // Podpowiedzi dietetyczne
     const foodTips = {
-        'Miesiączka': 'Ciepłe posiłki, bogate w żelazo (np. polski bigos!)',
-        'Folikularna': 'Świeże warzywa, białko, eksperymentuj z nowymi smakami',
-        'Owulacja': 'Lekkie posiłki, bogate w przeciwutleniacze',
-        'Lutealna': 'Ciepłe zupy, magnez (orzechy, gorzka czekolada), unikaj histaminy'
+        'Menstruation': 'Warm meals, rich in iron (e.g., traditional stew!)',
+        'Follicular': 'Fresh vegetables, protein, experiment with new flavors',
+        'Ovulation': 'Light meals, rich in antioxidants',
+        'Luteal': 'Warm soups, magnesium (nuts, dark chocolate), avoid histamine'
     };
     
-    predictions.push('• 🍲 ' + (foodTips[phaseName] || 'Słuchaj swojego ciała'));
+    predictions.push('• 🍲 ' + (foodTips[phaseName] || 'Listen to your body'));
     
     const predictionsText = predictions.join('\n');
-    alert('📅 Dzień ' + dayNumber + ' (Cykl: ' + dayOfCycle + ')\n📊 Faza: ' + phaseName + '\n\n💡 Podpowiedzi:\n' + predictionsText + '\n\n✨ To dane demonstracyjne. Prawdziwe przewidywania będą z AI Aegisens!');
+    alert('📅 Day ' + dayNumber + ' (Cycle: ' + dayOfCycle + ')\n📊 Phase: ' + phaseName + '\n\n💡 Tips:\n' + predictionsText + '\n\n✨ This is demo data. Real predictions will come from Aegisens AI!');
 }
 
 // Podświetlenie dzisiaj
