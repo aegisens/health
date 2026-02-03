@@ -1,13 +1,18 @@
-// ===== HORMONAL CALENDAR - PEŁNA KOMPATYBILNOŚĆ Z TWOIM HTML =====
+// ===== HORMONAL CALENDAR - POPRAWIONY =====
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
 
-// Inicjalizacja kalendarza (używa istniejący HTML)
+// Inicjalizacja kalendarza
 function initCalendar() {
+    console.log('calendar.js: initCalendar() wywołana');
+    
     // Użyj istniejących przycisków z HTML
     const prevBtn = document.getElementById('prevMonth');
     const nextBtn = document.getElementById('nextMonth');
+    
+    console.log('calendar.js: prevBtn znaleziony:', !!prevBtn);
+    console.log('calendar.js: nextBtn znaleziony:', !!nextBtn);
     
     if (prevBtn) prevBtn.addEventListener('click', prevMonth);
     if (nextBtn) nextBtn.addEventListener('click', nextMonth);
@@ -19,33 +24,39 @@ function initCalendar() {
     highlightToday();
 }
 
-// Render kalendarza (używa TWÓJ header i legendę)
+// Render kalendarza
 function renderCalendar() {
+    console.log('calendar.js: renderCalendar() wywołana');
+    
     const calendarContainer = document.getElementById('calendarContainer');
     const monthYearElement = document.getElementById('currentMonth');
     
-    // POPRAWIONE: Dodano && zamiast ! - sprawdza czy oba elementy istnieją
+    console.log('calendar.js: calendarContainer:', calendarContainer);
+    console.log('calendar.js: monthYearElement:', monthYearElement);
+    
     if (!calendarContainer || !monthYearElement) {
-        console.log('Brak elementów kalendarza');
+        console.error('calendar.js: Brak wymaganych elementów w HTML!');
+        console.error('calendar.js: Potrzebujesz: <div id="calendarContainer"> i <span id="currentMonth">');
         return;
     }
     
-    // Aktualizuj nazwę miesiąca w TWOIM headerze
+    // Aktualizuj nazwę miesiąca
     const monthNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
-                       'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień']; // Polskie nazwy!
-    monthYearElement.textContent = ${monthNames[currentMonth]} ${currentYear};
+                       'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
     
-    // Usuń poprzednią siatkę (zachowaj header i legendę)
+    // POPRAWIONE: Poprawna składnia
+    monthYearElement.textContent = monthNames[currentMonth] + ' ' + currentYear;
+    
+    // Usuń poprzednią siatkę
     const existingGrid = calendarContainer.querySelector('.calendar-grid');
     if (existingGrid) existingGrid.remove();
     
     // Stwórz nową siatkę
     const grid = document.createElement('div');
     grid.className = 'calendar-grid';
-    grid.id = 'calendarGrid';
     
     // Dni tygodnia
-    const dayLabels = ['Nd', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb']; // Polskie skróty
+    const dayLabels = ['Nd', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb'];
     dayLabels.forEach(label => {
         const dayLabel = document.createElement('div');
         dayLabel.className = 'calendar-day-label';
@@ -59,7 +70,9 @@ function renderCalendar() {
     
     // Puste dni na początku
     for (let i = 0; i < firstDay; i++) {
-        grid.appendChild(createEmptyDay());
+        const emptyDay = document.createElement('div');
+        emptyDay.className = 'calendar-day empty';
+        grid.appendChild(emptyDay);
     }
     
     // Dni miesiąca
@@ -68,6 +81,7 @@ function renderCalendar() {
     }
     
     calendarContainer.appendChild(grid);
+    console.log('calendar.js: Kalendarz wyrenderowany');
 }
 
 // Pusty dzień
@@ -100,24 +114,24 @@ function createDayElement(dayNumber) {
     const layersContainer = document.createElement('div');
     layersContainer.className = 'calendar-layers';
     
-    // POPRAWIONE: Poprawna formuła dla dnia cyklu (1-28)
-    const dayOfCycle = ((dayNumber - 1) % 28) + 1; // Dni cyklu od 1 do 28
+    // Dni cyklu od 1 do 28
+    const dayOfCycle = ((dayNumber - 1) % 28) + 1;
     
-    // Warstwa hormonalna (folikularna i lutealna)
+    // Warstwa hormonalna
     if ((dayOfCycle >= 6 && dayOfCycle <= 12) || (dayOfCycle >= 21 && dayOfCycle <= 28)) {
         const hormonalLayer = document.createElement('div');
         hormonalLayer.className = 'calendar-layer layer-hormonal';
         layersContainer.appendChild(hormonalLayer);
     }
     
-    // Histamina (lutealna faza - dni 18-24)
+    // Histamina
     if (dayOfCycle >= 18 && dayOfCycle <= 24) {
         const histamineLayer = document.createElement('div');
         histamineLayer.className = 'calendar-layer layer-histamine';
         layersContainer.appendChild(histamineLayer);
     }
     
-    // Menopauza (losowo 30% dni)
+    // Menopauza
     if (Math.random() > 0.7) {
         const menopauseLayer = document.createElement('div');
         menopauseLayer.className = 'calendar-layer layer-menopause';
@@ -134,13 +148,13 @@ function createDayElement(dayNumber) {
         showDayDetails(dayNumber, dayOfCycle);
     });
     
-    // Tooltip z informacją
-    dayElement.title = Dzień ${dayNumber} (Cykl: ${dayOfCycle}) - Kliknij po szczegóły;
+    // Tooltip
+    dayElement.title = 'Dzień ' + dayNumber + ' (Cykl: ' + dayOfCycle + ') - Kliknij po szczegóły';
     
     return dayElement;
 }
 
-// Szczegóły dnia (POPRAWIONE - przyjmuje dzień cyklu)
+// Szczegóły dnia
 function showDayDetails(dayNumber, dayOfCycle) {
     let predictions = [];
     let phaseName = '';
@@ -171,7 +185,7 @@ function showDayDetails(dayNumber, dayOfCycle) {
         predictions.push('• 🔄 Przejście do nowego cyklu');
     }
     
-    // Generowanie podpowiedzi dietetycznych
+    // Podpowiedzi dietetyczne
     const foodTips = {
         'Miesiączka': 'Ciepłe posiłki, bogate w żelazo (np. polski bigos!)',
         'Folikularna': 'Świeże warzywa, białko, eksperymentuj z nowymi smakami',
@@ -179,10 +193,10 @@ function showDayDetails(dayNumber, dayOfCycle) {
         'Lutealna': 'Ciepłe zupy, magnez (orzechy, gorzka czekolada), unikaj histaminy'
     };
     
-    predictions.push(• 🍲 ${foodTips[phaseName] || 'Słuchaj swojego ciała'});
+    predictions.push('• 🍲 ' + (foodTips[phaseName] || 'Słuchaj swojego ciała'));
     
     const predictionsText = predictions.join('\n');
-    alert(📅 Dzień ${dayNumber} (Cykl: ${dayOfCycle})\n📊 Faza: ${phaseName}\n\n💡 Podpowiedzi:\n${predictionsText}\n\n✨ To dane demonstracyjne. Prawdziwe przewidywania będą z AI Aegisens!);
+    alert('📅 Dzień ' + dayNumber + ' (Cykl: ' + dayOfCycle + ')\n📊 Faza: ' + phaseName + '\n\n💡 Podpowiedzi:\n' + predictionsText + '\n\n✨ To dane demonstracyjne. Prawdziwe przewidywania będą z AI Aegisens!');
 }
 
 // Podświetlenie dzisiaj
@@ -220,7 +234,18 @@ function nextMonth() {
     highlightToday();
 }
 
-// Ustaw funkcje globalnie
+// ===== WAŻNE: AUTOSTART =====
+// DODAJ TO NA SAMYM KOŃCU PLIKU calendar.js:
+
+// Opcja 1: Gdy DOM się załaduje
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('calendar.js: DOM załadowany - uruchamiam initCalendar()');
+    initCalendar();
+});
+
+// Opcja 2: Ręczne wywołanie z poziomu HTML
 window.initCalendar = initCalendar;
 window.prevMonth = prevMonth;
 window.nextMonth = nextMonth;
+
+console.log('calendar.js: Plik załadowany pomyślnie');
