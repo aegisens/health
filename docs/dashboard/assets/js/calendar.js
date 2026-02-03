@@ -24,15 +24,16 @@ function renderCalendar() {
     const calendarContainer = document.getElementById('calendarContainer');
     const monthYearElement = document.getElementById('currentMonth');
     
+    // POPRAWIONE: Dodano && zamiast ! - sprawdza czy oba elementy istnieją
     if (!calendarContainer || !monthYearElement) {
         console.log('Brak elementów kalendarza');
         return;
     }
     
     // Aktualizuj nazwę miesiąca w TWOIM headerze
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                       'July', 'August', 'September', 'October', 'November', 'December'];
-    monthYearElement.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    const monthNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
+                       'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień']; // Polskie nazwy!
+    monthYearElement.textContent = ${monthNames[currentMonth]} ${currentYear};
     
     // Usuń poprzednią siatkę (zachowaj header i legendę)
     const existingGrid = calendarContainer.querySelector('.calendar-grid');
@@ -44,7 +45,7 @@ function renderCalendar() {
     grid.id = 'calendarGrid';
     
     // Dni tygodnia
-    const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayLabels = ['Nd', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb']; // Polskie skróty
     dayLabels.forEach(label => {
         const dayLabel = document.createElement('div');
         dayLabel.className = 'calendar-day-label';
@@ -99,77 +100,89 @@ function createDayElement(dayNumber) {
     const layersContainer = document.createElement('div');
     layersContainer.className = 'calendar-layers';
     
-    const dayOfCycle = (dayNumber % 28) || 28;
+    // POPRAWIONE: Poprawna formuła dla dnia cyklu (1-28)
+    const dayOfCycle = ((dayNumber - 1) % 28) + 1; // Dni cyklu od 1 do 28
     
-    // Warstwa hormonalna (dni 1-7, 21-28)
-    if ((dayOfCycle >= 1 && dayOfCycle <= 7) || (dayOfCycle >= 21 && dayOfCycle <= 28)) {
+    // Warstwa hormonalna (folikularna i lutealna)
+    if ((dayOfCycle >= 6 && dayOfCycle <= 12) || (dayOfCycle >= 21 && dayOfCycle <= 28)) {
         const hormonalLayer = document.createElement('div');
         hormonalLayer.className = 'calendar-layer layer-hormonal';
         layersContainer.appendChild(hormonalLayer);
     }
     
-    // Histamina (owulacja ~dzień 14)
-    if (Math.abs(dayOfCycle - 14) <= 3) {
+    // Histamina (lutealna faza - dni 18-24)
+    if (dayOfCycle >= 18 && dayOfCycle <= 24) {
         const histamineLayer = document.createElement('div');
         histamineLayer.className = 'calendar-layer layer-histamine';
         layersContainer.appendChild(histamineLayer);
     }
     
-    // Menopauza (losowo)
+    // Menopauza (losowo 30% dni)
     if (Math.random() > 0.7) {
         const menopauseLayer = document.createElement('div');
         menopauseLayer.className = 'calendar-layer layer-menopause';
         layersContainer.appendChild(menopauseLayer);
     }
     
-    dayElement.appendChild(layersContainer);
+    // Dodaj kontener warstw tylko jeśli są jakieś warstwy
+    if (layersContainer.children.length > 0) {
+        dayElement.appendChild(layersContainer);
+    }
     
     // Kliknięcie = szczegóły
     dayElement.addEventListener('click', function() {
-        showDayDetails(dayNumber);
+        showDayDetails(dayNumber, dayOfCycle);
     });
     
-    dayElement.title = `Day ${dayNumber} - Click for details`;
+    // Tooltip z informacją
+    dayElement.title = Dzień ${dayNumber} (Cykl: ${dayOfCycle}) - Kliknij po szczegóły;
     
     return dayElement;
 }
 
-// Szczegóły dnia
-function showDayDetails(dayNumber) {
-    const dayOfCycle = (dayNumber % 28) || 28;
+// Szczegóły dnia (POPRAWIONE - przyjmuje dzień cyklu)
+function showDayDetails(dayNumber, dayOfCycle) {
     let predictions = [];
+    let phaseName = '';
     
-    if (dayOfCycle <= 7) {
-        predictions.push('Menstrual phase: Higher iron needs');
-    } else if (dayOfCycle <= 14) {
-        predictions.push('Follicular phase: Rising energy');
-    } else if (dayOfCycle <= 21) {
-        predictions.push('Ovulation: Peak fertility');
+    // Faza cyklu
+    if (dayOfCycle <= 5) {
+        phaseName = 'Miesiączka';
+        predictions.push('• Faza miesiączki: Potrzebujesz więcej żelaza');
+    } else if (dayOfCycle <= 12) {
+        phaseName = 'Folikularna';
+        predictions.push('• Faza folikularna: Rośnie energia');
+    } else if (dayOfCycle <= 15) {
+        phaseName = 'Owulacja';
+        predictions.push('• Owulacja: Szczyt płodności');
     } else {
-        predictions.push('Luteal phase: Progesterone rising');
+        phaseName = 'Lutealna';
+        predictions.push('• Faza lutealna: Progesteron rośnie');
     }
     
-    const allPredictions = [
-        'Low histamine day - safe for fermented foods',
-        'High histamine risk - avoid leftovers',
-        'Good day for intense exercise',
-        'Rest and recovery recommended',
-        'Brain fog risk elevated',
-        'Optimal day for creative work',
-        'Social energy high',
-        'Need for alone time'
-    ];
-    
-    const randomCount = Math.floor(Math.random() * 2) + 1;
-    for (let i = 0; i < randomCount; i++) {
-        const randomPred = allPredictions[Math.floor(Math.random() * allPredictions.length)];
-        if (!predictions.includes(randomPred)) {
-            predictions.push(randomPred);
-        }
+    // Specjalne alerty dla dni
+    if (dayOfCycle === 14) {
+        predictions.push('• 🥚 Dzień owulacji - największa płodność');
+    }
+    if (dayOfCycle >= 18 && dayOfCycle <= 24) {
+        predictions.push('• ⚠️ Uwaga na histaminę (faza lutealna)');
+    }
+    if (dayOfCycle === 28 || dayOfCycle === 1) {
+        predictions.push('• 🔄 Przejście do nowego cyklu');
     }
     
-    const predictionsText = predictions.map(p => `• ${p}`).join('\n');
-    alert(`Day ${dayNumber} Predictions:\n\n${predictionsText}\n\nThis is demo data. Real predictions will come from Aegisens AI.`);
+    // Generowanie podpowiedzi dietetycznych
+    const foodTips = {
+        'Miesiączka': 'Ciepłe posiłki, bogate w żelazo (np. polski bigos!)',
+        'Folikularna': 'Świeże warzywa, białko, eksperymentuj z nowymi smakami',
+        'Owulacja': 'Lekkie posiłki, bogate w przeciwutleniacze',
+        'Lutealna': 'Ciepłe zupy, magnez (orzechy, gorzka czekolada), unikaj histaminy'
+    };
+    
+    predictions.push(• 🍲 ${foodTips[phaseName] || 'Słuchaj swojego ciała'});
+    
+    const predictionsText = predictions.join('\n');
+    alert(📅 Dzień ${dayNumber} (Cykl: ${dayOfCycle})\n📊 Faza: ${phaseName}\n\n💡 Podpowiedzi:\n${predictionsText}\n\n✨ To dane demonstracyjne. Prawdziwe przewidywania będą z AI Aegisens!);
 }
 
 // Podświetlenie dzisiaj
